@@ -173,6 +173,25 @@ td .num{font-family:var(--mono);font-size:12.5px}
 .evfoot .lb{font-family:var(--disp);font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-right:5px}
 .noev{background:var(--vermelho-soft);color:var(--vermelho);border:1px dashed #E3B7B3;padding:6px 9px;border-radius:6px;font-size:12px}
 
+/* prints anexados */
+.prints{display:flex;gap:8px;flex-wrap:wrap;margin:9px 0 2px}
+.pth{padding:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--line2);cursor:zoom-in;position:relative;line-height:0;transition:.15s}
+.pth:hover{border-color:var(--tinto);transform:translateY(-1px)}
+.pth img{width:84px;height:84px;object-fit:cover;display:block}
+.pth .pcap{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.62);color:#fff;font-size:9px;line-height:1.25;padding:3px 4px;text-align:left;max-height:26px;overflow:hidden}
+.pchip{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:8px;padding:6px;background:var(--card)}
+.pchip img{width:56px;height:56px;object-fit:cover;border-radius:5px;display:block;cursor:zoom-in}
+.pchip input{border:1px solid var(--line);border-radius:5px;padding:4px 6px;font-size:11.5px;width:150px;background:var(--paper);color:inherit}
+.pchip .px{border:0;background:none;color:var(--vermelho);cursor:pointer;font-size:11.5px;padding:2px 4px}
+.medidor{height:6px;border-radius:20px;background:var(--line2);overflow:hidden;min-width:120px;flex:1}
+.medidor i{display:block;height:100%;background:var(--verde);transition:.3s}
+.medidor.q i{background:var(--ambar)}
+.medidor.r i{background:var(--vermelho)}
+.lbox{position:fixed;inset:0;z-index:200;background:rgba(15,12,10,.9);display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:20px}
+.lbox.on{display:flex}
+.lbox img{max-width:min(96vw,1100px);max-height:80vh;border-radius:8px;background:#fff}
+.lbox .lbinfo{color:#fff;font-size:12.5px;text-align:center;max-width:760px;line-height:1.5}
+
 /* drawer + modal */
 .ov{position:fixed;inset:0;background:rgba(25,20,17,.35);z-index:100;opacity:0;pointer-events:none;transition:.2s}
 .ov.on{opacity:1;pointer-events:auto}
@@ -181,7 +200,12 @@ td .num{font-family:var(--mono);font-size:12.5px}
 .dh{padding:16px 20px;border-bottom:1px solid var(--line);background:var(--card);display:flex;align-items:flex-start;gap:12px}
 .dh h3{margin:0;font-family:var(--disp);font-size:15px;font-weight:700}
 .dh p{margin:3px 0 0;font-size:12px;color:var(--ink3)}
-.db{overflow:auto;flex:1;padding:0}
+.db{overflow-y:auto;overflow-x:hidden;flex:1;padding:0;display:block;width:100%;min-width:0}
+.drawer{overflow-x:hidden}
+.db>*,.grp,.grpB,.evrow,.atacar{box-sizing:border-box;max-width:100%;min-width:0}
+.evrow,.grpH,.evtop,.evmeta,.quote,.evfoot{min-width:0}
+.quote,.evmeta,.grpH b{overflow-wrap:anywhere}
+.drStats{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .modal{position:fixed;z-index:101;top:50%;left:50%;transform:translate(-50%,-48%) scale(.98);width:min(720px,calc(100% - 32px));max-height:88vh;background:var(--paper);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:.2s}
 .modal.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
 .mb{overflow:auto;padding:18px 20px}
@@ -231,7 +255,8 @@ nav.tabs button.on{background:linear-gradient(180deg,#fff,var(--tinto-soft))}
 .atacar b{font-weight:600}
 .atacar .lj{font-size:11.5px;color:var(--ink2);display:block}
 .grp{border-top:1px solid var(--line)}
-.grpH{display:flex;align-items:center;gap:9px;padding:10px 20px;background:var(--paper);position:sticky;top:47px;z-index:2;cursor:pointer;border-left:4px solid var(--line)}
+.grpH{display:flex;align-items:center;gap:9px;padding:10px 16px;background:var(--paper);cursor:pointer;border-left:4px solid var(--line);flex-wrap:wrap}
+.grpH b{flex:1 1 140px;min-width:0}
 .grp.neg .grpH{border-left-color:var(--vermelho);background:linear-gradient(90deg,var(--vermelho-soft),var(--paper) 60%)}
 .grp.pos .grpH{border-left-color:var(--verde);background:linear-gradient(90deg,var(--verde-soft),var(--paper) 60%)}
 .grp.mid .grpH{border-left-color:var(--ambar);background:linear-gradient(90deg,var(--ambar-soft),var(--paper) 60%)}
@@ -314,6 +339,17 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
 .two{grid-template-columns:1fr 1fr}
 .three{grid-template-columns:repeat(3,1fr)}
 @media(max-width:980px){.two,.three{grid-template-columns:1fr}.nps{grid-template-columns:1fr}.npsL{border-right:none;border-bottom:1px solid var(--line2)}.filters{position:static}}
+@media(max-width:700px){
+  .drStats{padding:10px 14px;gap:6px}
+  .st{min-width:0;flex:1 1 88px;padding:5px 8px}
+  .st b{font-size:16px}
+  .drChips,.drTags{padding:8px 14px}
+  .evrow{padding:11px 14px}
+  .atacar{margin:12px 14px;padding:11px 12px}
+  .dh{padding:13px 14px}
+  .evtop{gap:6px}
+  .evmeta{font-size:10.5px;line-height:1.5}
+}
 @media(max-width:640px){.form{grid-template-columns:1fr}.wrap{padding:0 14px}.npsBig{font-size:58px}}
 @media print{header{position:static}.hact,nav.tabs,.filters{display:none}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -341,7 +377,10 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
     <nav class="tabs" id="tabs">
       <button data-t="panorama" class="on">📊 Panorama</button>
       <button data-t="ifood">🛵 iFood <b id="tbIf">0</b></button>
+      <button data-t="google">🔎 Google <b id="tbGo">0</b></button>
+      <button data-t="insta">📱 Instagram <b id="tbIg">0</b></button>
       <button data-t="sac">📋 SAC salão <b id="tbSac">0</b></button>
+      <button data-t="trip">🦉 TripAdvisor <b id="tbTr">0</b></button>
       <button data-t="evidencias">🧾 Evidências <b id="tbEv">0</b></button>
       <button data-t="acoes">✅ Plano de ação <b id="tbAc">0</b></button>
       <button data-t="historico">📈 Histórico</button>
@@ -457,34 +496,6 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
     </div>
 
     <div class="sec">
-      <h2>🔎 Google — snapshot da rede</h2>
-      <div class="howto">
-        <b>O que fazer aqui</b>
-        <span><i>1</i> Toda semana, atualizar nota e nº de avaliações de cada loja — o painel calcula o movimento</span>
-        <span><i>2</i> Olhar quem está abaixo de 4,0 e quem caiu desde a última leitura</span>
-        <span><i>3</i> Reivindicar as fichas do TripAdvisor que estão sem dono</span>
-      </div>
-      <p class="sub">Nota e volume acumulados lidos direto da ficha de cada unidade. Esta é a foto que vira linha de base: na próxima leitura, a diferença de volume mostra quantas avaliações entraram e a diferença de nota mostra para onde a reputação andou.</p>
-      <div class="card" style="margin-bottom:14px"><div class="cb" style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end">
-        <div class="fld"><label>Referência do snapshot</label><input type="date" id="gSnapData" style="border:1px solid var(--line);border-radius:7px;padding:8px 10px"></div>
-        <div style="flex:1;min-width:220px;font-size:12.5px;color:var(--ink2)">A coluna “Lido em” guarda a data real da leitura de cada ficha — as 11 primeiras saíram em 17/08 e as 5 últimas em 18/08. Nota e nº de avaliações são editáveis na tabela: na semana que vem você atualiza os valores e o painel calcula o movimento. O nº da unidade também é editável — preencha para o painel exibir “Biggs 07 · Centro”.</div>
-      </div></div>
-      <div class="grid kpis" id="gKpis" style="margin-bottom:14px"></div>
-      <div class="card"><div class="tblwrap" style="max-height:none"><table id="tbGoogle"></table></div></div>
-    </div>
-    <div class="sec">
-      <h2>🦉 TripAdvisor — presença e reputação</h2>
-      <p class="sub">Snapshot de 18/08. Nenhum comentário novo no período, então este canal não gera evidência nesta semana — só posição. O TripAdvisor usa escala Excelente a Horrível, e como a distribuição é pública dá para converter em NPS-e sem estimativa.</p>
-      <div class="card" style="margin-bottom:14px"><div class="cb" id="tripResumo"></div></div>
-      <div class="card"><div class="tblwrap" style="max-height:none"><table id="tbTrip"></table></div></div>
-    </div>
-
-    <div class="sec">
-      <h2>🏷️ Tópicos que o Google destaca</h2>
-      <p class="sub">Palavras que o Google extrai do acervo inteiro de avaliações — não só da semana. Termos negativos aparecem em vermelho: eles indicam o que já virou padrão na percepção pública da loja.</p>
-      <div class="card"><div class="cb" id="gTags"></div></div>
-    </div>
-    <div class="sec">
       <h2>🔍 Leitura do CX</h2>
       <p class="sub">Análise gerada a partir dos registros filtrados.</p>
       <div class="card"><div class="reads" id="leitura"></div></div>
@@ -498,6 +509,66 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
       <h2>🔁 Problemas recorrentes</h2>
       <p class="sub">Temas de reclamação presentes em 2 ou mais semanas. Ignora o filtro de semana.</p>
       <div class="card"><div class="tblwrap"><table id="tbRecorrentes"></table></div></div>
+    </div>
+  </div>
+
+  <!-- ============ GOOGLE ============ -->
+  <div id="v-google" hidden>
+    <div class="sec">
+      <h2>🔎 Google — snapshot da rede</h2>
+      <div class="howto">
+        <b>O que fazer aqui</b>
+        <span><i>1</i> Toda semana, atualizar nota e nº de avaliações de cada loja — o painel calcula o movimento</span>
+        <span><i>2</i> Olhar quem está abaixo de 4,0 e quem caiu desde a última leitura</span>
+        <span><i>3</i> Conferir a data da captura do print antes de converter “x dias atrás” em data</span>
+      </div>
+      <p class="sub">Nota e volume acumulados lidos direto da ficha de cada unidade. Esta é a foto que vira linha de base: na próxima leitura, a diferença de volume mostra quantas avaliações entraram e a diferença de nota mostra para onde a reputação andou.</p>
+      <div class="card" style="margin-bottom:14px"><div class="cb" style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end">
+        <div class="fld"><label>Referência do snapshot</label><input type="date" id="gSnapData" style="border:1px solid var(--line);border-radius:7px;padding:8px 10px"></div>
+        <div style="flex:1;min-width:220px;font-size:12.5px;color:var(--ink2)">A coluna “Lido em” guarda a data real da leitura de cada ficha. <span id="gLeituras"></span> Nota e nº de avaliações são editáveis na tabela: na semana que vem você atualiza os valores e o painel calcula o movimento. O nº da unidade também é editável — preencha para o painel exibir “Biggs 07 · Centro”.</div>
+      </div></div>
+      <div class="grid kpis" id="gKpis" style="margin-bottom:14px"></div>
+      <div class="card"><div class="tblwrap" style="max-height:none"><table id="tbGoogle"></table></div></div>
+    </div>
+    <div class="sec">
+      <h2>🏷️ Tópicos que o Google destaca</h2>
+      <p class="sub">Palavras que o Google extrai do acervo inteiro de avaliações — não só da semana. Termos negativos aparecem em vermelho: eles indicam o que já virou padrão na percepção pública da loja.</p>
+      <div class="card"><div class="cb" id="gTags"></div></div>
+    </div>
+  </div>
+
+  <!-- ============ INSTAGRAM ============ -->
+  <div id="v-insta" hidden>
+    <div class="sec">
+      <h2>📱 Instagram — directs e comentários</h2>
+      <div class="howto">
+        <b>O que fazer aqui</b>
+        <span><i>1</i> Todo caso que virou conversa precisa de ação, responsável e prazo — não só de resposta</span>
+        <span><i>2</i> Quem já mandou telefone não pode ser mandado para outro canal de novo</span>
+        <span><i>3</i> Conferir a data da captura do print: o Instagram mostra “23 h”, “3 d”, “ONTEM”</span>
+      </div>
+      <p class="sub">Este canal não tem nota, então ele não entra na média da semana — entra como evidência e como caso a tratar. É também o canal onde o cliente chega depois de já ter reclamado em outro lugar, e por isso o que mais mostra falha de pós-venda.</p>
+      <div class="grid kpis" id="igKpis" style="margin-bottom:14px"></div>
+      <div class="banner info" id="igAviso"></div>
+    </div>
+    <div class="sec grid two">
+      <div class="card"><div class="ch"><h3>😠 Reclamações e sugestões</h3><span class="hint">clique para ler</span></div><div class="cb"><div class="hbars" id="igTemasNeg"></div></div></div>
+      <div class="card"><div class="ch"><h3>💚 Elogios</h3><span class="hint">clique para ler</span></div><div class="cb"><div class="hbars" id="igTemasPos"></div></div></div>
+    </div>
+    <div class="sec">
+      <h2>🧾 Todos os registros do canal</h2>
+      <p class="sub">Ignora o filtro de semana — o Instagram tem poucos casos e todos precisam ficar à vista até serem fechados. Clique no registro para editar ação, responsável, prazo e status.</p>
+      <div class="db" id="igLista"></div>
+    </div>
+  </div>
+
+  <!-- ============ TRIPADVISOR ============ -->
+  <div id="v-trip" hidden>
+    <div class="sec">
+      <h2>🦉 TripAdvisor — presença e reputação</h2>
+      <p class="sub">Snapshot de 18/08. Nenhum comentário novo no período, então este canal não gera evidência nesta semana — só posição. O TripAdvisor usa escala Excelente a Horrível, e como a distribuição é pública dá para converter em NPS-e sem estimativa.</p>
+      <div class="card" style="margin-bottom:14px"><div class="cb" id="tripResumo"></div></div>
+      <div class="card"><div class="tblwrap" style="max-height:none"><table id="tbTrip"></table></div></div>
     </div>
   </div>
 
@@ -551,6 +622,19 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
 
   <!-- ============ EVIDÊNCIAS ============ -->
   <div id="v-evidencias" hidden>
+    <div class="sec">
+      <h2>📎 Galeria de prints da semana</h2>
+      <p class="sub">Para print que não é de um caso específico: ficha do Google, painel do iFood, anúncio, tela de pedido. O print de um cliente vai anexado no registro dele, em <b>editar</b>. As imagens são reduzidas e comprimidas na hora de anexar e ficam gravadas no navegador — <b>exporte o JSON para não perder</b>.</p>
+      <div class="card" style="margin-bottom:14px"><div class="cb">
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:11px">
+          <input type="file" id="galIn" accept="image/*" multiple hidden>
+          <button class="btn pri" type="button" id="galBt">📎 anexar print na semana</button>
+          <span style="font-size:12px;color:var(--ink2)" id="galSem"></span>
+          <span style="flex:1;min-width:130px;display:flex;align-items:center;gap:8px"><span class="medidor" id="galMed"><i style="width:0%"></i></span><span class="mono" style="font-size:11px;color:var(--ink2);white-space:nowrap" id="galEsp"></span></span>
+        </div>
+        <div class="prints" id="galLista" style="margin:0"></div>
+      </div></div>
+    </div>
     <div class="sec">
       <h2>🧾 Evidências</h2>
       <p class="sub">Cada linha é uma manifestação real de cliente, com o relato na íntegra e o link para a origem (print, avaliação, áudio, foto do card).</p>
@@ -651,6 +735,7 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
   <div class="dh"><div style="flex:1"><h3 id="drTitulo">Evidências</h3><p id="drSub"></p></div><button class="btn gh" id="drFechar">Fechar</button></div>
   <div class="drStats" id="drStats"></div>
   <div class="drChips" id="drChips"></div>
+  <div class="drTags drCanais" id="drCanais"></div>
   <div class="drTags" id="drTags"></div>
   <div class="db" id="drBody"></div>
 </div>
@@ -667,6 +752,14 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
       <div class="fld"><label>Nota</label><input type="number" id="mNota" step="1" min="0" max="10"><span class="help" id="mNotaHelp">escala conforme o canal</span></div>
       <div class="fld fl"><label>Relato do cliente <span class="req">*</span></label><textarea id="mVerbatim" placeholder="Cole o texto exatamente como o cliente escreveu ou falou."></textarea></div>
       <div class="fld"><label>Origem / print</label><input id="mLink" placeholder="link do print, avaliação ou pasta"></div>
+      <div class="fld fl"><label>Prints anexados</label>
+        <div class="prints" id="mPrints" style="margin:0 0 8px"></div>
+        <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">
+          <input type="file" id="mPrintIn" accept="image/*" multiple hidden>
+          <button class="btn" type="button" id="mPrintBt">📎 anexar print</button>
+          <span class="help" id="mPrintHelp" style="margin:0"></span>
+        </div>
+      </div>
       <div class="fld"><label>Cliente</label><input id="mCliente" placeholder="nome ou identificação"></div>
       <div class="fld fl"><label>Ação tomada</label><input id="mAcao" placeholder="o que já foi feito ou será feito"></div>
       <div class="fld"><label>Responsável</label><input id="mResp"></div>
@@ -678,6 +771,13 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
 </div>
 
 <input type="file" id="fileIn" accept="application/json" hidden>
+
+<div class="lbox" id="lbox">
+  <img id="lboxImg" alt="print anexado">
+  <div class="lbinfo" id="lboxInfo"></div>
+  <button class="btn" id="lboxX">fechar</button>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -686,18 +786,20 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
    CX | SAL Restaurantes — biblioteca Ragga
    Arquivo único. Sem framework, sem servidor.
    ============================================================ */
-const KEY='cxSal_v23';
+const KEY='cxSal_v32';
+/* chave anterior: se você já editou algo na v31, a v32 aproveita em vez de recomeçar */
+const KEY_ANT='cxSal_v31';
 
 const CANAIS=[
- {id:'sac',   cor:'#E96821', n:'📋 SAC / QR Code das lojas', esc:'nps',  desc:'Avaliações, reclamações, elogios e sugestões.'},
- {id:'ifood', cor:'#EA1D2C', n:'🛵 iFood (Marketplace)',     esc:'star', desc:'Avaliações e reclamações.'},
- {id:'zap',   cor:'#128C7E', n:'💬 WhatsApp / Telefone',     esc:'nps',  desc:'Avaliações, reclamações, elogios e sugestões.'},
- {id:'social',cor:'#C13584', n:'📱 Redes Sociais',           esc:'none', desc:'Instagram, Facebook e TikTok — comentários e percepções.'},
- {id:'card',  cor:'#7A6A5F', n:'🗳️ Card físico (urna)',      esc:'nps',  desc:'Cards preenchidos na loja e depositados na urna.'},
- {id:'lider', cor:'#2A5C8A', n:'🧑‍💼 Relatório das lideranças',esc:'none', desc:'Percepções recebidas direto na loja.'},
- {id:'google',cor:'#4285F4', n:'🔎 Google',                  esc:'star', desc:'Avaliações e reclamações.'},
- {id:'trip',  cor:'#00AA6C', n:'🦉 TripAdvisor',             esc:'star', desc:'Avaliações e reclamações.'},
- {id:'99',    cor:'#FFC72C', n:'🚗 99 Food (Marketplace)',   esc:'star', desc:'Avaliações e reclamações.'}
+ {id:'sac',   cor:'#E96821', n:'📋 SAC / QR Code das lojas', curto:'📋 SAC / QR',    esc:'nps',  desc:'Avaliações, reclamações, elogios e sugestões.'},
+ {id:'ifood', cor:'#EA1D2C', n:'🛵 iFood (Marketplace)',     curto:'🛵 iFood',       esc:'star', desc:'Avaliações e reclamações.'},
+ {id:'zap',   cor:'#128C7E', n:'💬 WhatsApp / Telefone',     curto:'💬 WhatsApp',    esc:'nps',  desc:'Avaliações, reclamações, elogios e sugestões.'},
+ {id:'social',cor:'#C13584', n:'📱 Redes Sociais',           curto:'📱 Instagram',   esc:'none', desc:'Instagram, Facebook e TikTok — comentários e percepções.'},
+ {id:'card',  cor:'#7A6A5F', n:'🗳️ Card físico (urna)',      curto:'🗳️ Card físico', esc:'nps',  desc:'Cards preenchidos na loja e depositados na urna.'},
+ {id:'lider', cor:'#2A5C8A', n:'🧑‍💼 Relatório das lideranças',curto:'🧑‍💼 Lideranças', esc:'none', desc:'Percepções recebidas direto na loja.'},
+ {id:'google',cor:'#4285F4', n:'🔎 Google',                  curto:'🔎 Google',      esc:'star', desc:'Avaliações e reclamações.'},
+ {id:'trip',  cor:'#00AA6C', n:'🦉 TripAdvisor',             curto:'🦉 TripAdvisor', esc:'star', desc:'Avaliações e reclamações.'},
+ {id:'99',    cor:'#FFC72C', n:'🚗 99 Food (Marketplace)',   curto:'🚗 99 Food',     esc:'star', desc:'Avaliações e reclamações.'}
 ];
 const TIPOS=[{id:'reclamacao',n:'😠 Reclamação',c:'rec'},{id:'elogio',n:'💚 Elogio',c:'elo'},{id:'sugestao',n:'💡 Sugestão',c:'sug'},{id:'avaliacao',n:'⭐ Avaliação',c:'ava'}];
 const STATUS=[{id:'aberto',n:'🔴 Aberto',c:'ab'},{id:'andamento',n:'🟡 Em andamento',c:'an'},{id:'resolvido',n:'🟢 Resolvido',c:'re'}];
@@ -733,23 +835,32 @@ const UN_PADRAO=[
  {ap:'Winston Churchill / Zona Norte',marca:'Biggs',num:'04',end:'Av. Winston Churchill, 465 — Fugman'},
  {ap:'Zona Sul / Igapó',     marca:'Biggs',num:'05',end:'Av. Portugal, 1078 — Igapó · clientes também chamam de “Biggs da 10 de Dezembro”'},
  {ap:'Higienópolis',         marca:'Biggs',num:'06',end:'Av. Higienópolis, 1575 — Jd. Higienópolis'},
- {ap:'Jamil Scaff',          marca:'Biggs',num:'07',conf:0,end:'Av. Jamil Scaff · iFood: Zona Leste'},
- {ap:'Pizzas e Massas / Pará',marca:'Biggs',num:'08',end:'Pará esquina com a Paranaguá'},
- {ap:'Street / Paranaguá',   marca:'Biggs',num:'09',conf:0,end:'Av. Paranaguá · iFood: Pastel Centro'},
+ {ap:'Jamil Scaff',          marca:'Biggs',num:'07',conf:0,end:'Av. Jamil Scaff, 1889 — Antares · iFood: Zona Leste'},
+ {ap:'Pizzas e Massas',      marca:'Biggs',num:'08',end:'Pará esquina com a Paranaguá · rodízio de pizza · mesmo ponto do Biggs 09'},
+ {ap:'Street',               marca:'Biggs',num:'09',end:'Av. Paranaguá · mesmo ponto do Biggs 08, operação separada'},
  {ap:'Mercado 88',           marca:'Biggs',num:'10',end:'Av. das Maritacas, 1546 — Indusville'},
- {ap:'Santo Amaro',          marca:'Biggs',num:'11',end:'Santo Amaro'},
+ {ap:'Santo Amaro',          marca:'Biggs',num:'11',end:'Av. Pedro Viriato P. de Souza, 164 — Centro, Cambé'},
  {ap:'Saul Elkind',          marca:'Biggs',num:'12',end:'Av. Saul Elkind, 1818 — Cinco Conjuntos'},
  {ap:'Arthur Thomas',        marca:'Biggs',num:'13',end:'Av. Arthur Thomas, 1248 — Rodocentro'},
  {ap:'Maringá 1730',marca:'Isaías',num:'01',end:'Av. Maringá, 1730 — Vitória'},
  {ap:'Alphaville', marca:'Isaías',num:'02',end:'R. das Palmeiras, 254 — Terra Bonita'},
  {ap:'Madre',      marca:'Isaías',num:'03',end:'Av. Me. Leônia Milito, 1139 — Bela Suíça'},
  {ap:"Rob's",marca:"Rob's",num:'',end:'unidade única'},
- {ap:'Mapoli',marca:'Mapoli',num:'',end:'sem ficha de Google nesta rodada'}
+ {ap:'Mapoli',marca:'Mapoli',num:'',end:'sem ficha de Google nesta rodada'},
+ /* Os 4 bairros vêm do anúncio oficial da Dell Iris ("aberta nos 4 bairros de Londrina: Gleba Palhano,
+    Centro, Aeroporto e Zona Norte"), lido no print do Instagram da cliente Victória em 27/08.
+    ATENÇÃO: qual merchant opera em qual bairro NÃO está confirmado — o pareamento abaixo é provisório
+    e está marcado "a confirmar". Até a Amanda fechar o de-para, não leia o número de uma linha
+    como sendo o desempenho daquele bairro. */
+ {ap:'Dell Iris · Gleba Palhano',marca:'Dell Iris',num:'',dark:1,conf:0,end:'dark kitchen · merchant 665daa81 · bairro provisório: o anúncio lista Gleba Palhano, Centro, Aeroporto e Zona Norte, mas qual merchant é qual bairro não está confirmado · loja anfitriã a confirmar'},
+ {ap:'Dell Iris · Centro',marca:'Dell Iris',num:'',dark:1,conf:0,end:'dark kitchen · merchant faaba7c0 · bairro provisório: o anúncio lista Gleba Palhano, Centro, Aeroporto e Zona Norte, mas qual merchant é qual bairro não está confirmado · loja anfitriã a confirmar'},
+ {ap:'Dell Iris · Aeroporto',marca:'Dell Iris',num:'',dark:1,conf:0,end:'dark kitchen · merchant 20480e5b · bairro provisório: o anúncio lista Gleba Palhano, Centro, Aeroporto e Zona Norte, mas qual merchant é qual bairro não está confirmado · loja anfitriã a confirmar'},
+ {ap:'Dell Iris · Zona Norte',marca:'Dell Iris',num:'',dark:1,conf:0,end:'dark kitchen · merchant 62a7d9c7 · bairro provisório: o anúncio lista Gleba Palhano, Centro, Aeroporto e Zona Norte, mas qual merchant é qual bairro não está confirmado · loja anfitriã a confirmar'}
 ];
 const TEMAS_PADRAO=["Tempo de espera","Temperatura do produto","Sabor / padrão do produto","Pedido errado / item faltando","Atendimento da equipe","Limpeza e ambiente","Embalagem / transporte","Preço x porção","Entrega (marketplace)","Cardápio / disponibilidade","Reserva e fila","Cobrança / pagamento","Rodízio — reposição","Regras da loja / disponibilidade de bebida","Corpo estranho no alimento","Preço divergente / taxa de serviço","Retorno ao cliente (pós-venda)","Estrutura / espaço kids"];
 
 /* ---------- estado ---------- */
-let DB=null, filtros={semana:'',unidade:'',canal:'',tipo:'',tema:'',status:'',busca:''}, aba='panorama', editId=null, fileHandle=null;
+let DB=null, filtros={semana:'',unidade:'',canal:'',tipo:'',tema:'',status:'',busca:''}, aba='panorama', editId=null, fileHandle=null, printsEdit=[];
 
 /* ---------- utilidades ---------- */
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -763,9 +874,9 @@ function fmtData(iso){if(!iso)return'—';const d=new Date(iso+'T12:00:00');cons
 const canal=id=>CANAIS.find(c=>c.id===id)||{n:id,esc:'none'};
 const un=ap=>(DB&&DB.unidades||[]).find(u=>u.ap===ap)||{ap:ap,marca:'',num:'',end:''};
 function nomeUn(ap){if(!ap||ap==='Sem classificação')return 'unidade não identificada';const u=un(ap);
-  if(u.marca===ap)return ap;
+  if(u.marca===ap||ap.indexOf(u.marca)===0)return (u.num?u.marca+' '+u.num+' · '+ap.replace(u.marca,'').replace(/^[\s·]+/,''):ap);
   return (u.marca?u.marca+' ':'')+(u.num?u.num+' · ':'')+ap;}
-const bdConf=ap=>un(ap).conf===0?' <span class="bd an" title="vínculo iFood x ficha do Google ainda não confirmado">a confirmar</span>':'';
+const bdConf=ap=>un(ap).conf===0?' <span class="bd an" title="vínculo ainda não confirmado — ver a observação da unidade na aba Configurar">a confirmar</span>':'';
 const tipo=id=>TIPOS.find(t=>t.id===id)||{n:id,c:'ava'};
 const stat=id=>STATUS.find(s=>s.id===id)||{n:id,c:'off'};
 const semanaAnterior=s=>{const d=new Date(s+'T12:00:00');d.setDate(d.getDate()-7);return d.toISOString().slice(0,10);};
@@ -774,11 +885,20 @@ function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clea
 /* ---------- persistência ---------- */
 let podeSalvar=true;
 function salvar(){
-  try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){podeSalvar=false;}
+  try{localStorage.setItem(KEY,JSON.stringify(DB));podeSalvar=true;}
+  catch(e){
+    podeSalvar=false;
+    toast('O navegador recusou a gravação — provavelmente falta espaço. Exporte o JSON AGORA e remova prints antigos.');
+  }
   chipSessao();
 }
 function carregar(){
-  try{const raw=localStorage.getItem(KEY);if(raw){DB=JSON.parse(raw);return true;}}catch(e){podeSalvar=false;}
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(raw){DB=JSON.parse(raw);return true;}
+    const ant=localStorage.getItem(KEY_ANT);
+    if(ant){DB=JSON.parse(ant);salvar();toast('Trouxe o que estava salvo na versão anterior do painel.');return true;}
+  }catch(e){podeSalvar=false;}
   return false;
 }
 function chipSessao(){
@@ -787,18 +907,26 @@ function chipSessao(){
   c.className='chip ok';c.textContent='salvo · sessão '+(DB.sessoes||1);
 }
 
-/* ---------- dados: snapshot Google — posição 17/08/2026 ---------- */
-/* Transcrito dos prints das fichas do Google enviados em 17/08.
-   Datas calculadas a partir do "x dias atrás" exibido pelo Google naquele dia. */
+/* ---------- dados: snapshot Google — última posição lida em 27/08/2026 ---------- */
+/* Transcrito dos prints das fichas do Google. Cada lote traz a data da captura no comentário
+   do bloco; as datas das avaliações são calculadas a partir do "x dias atrás" exibido pelo
+   Google NA DATA DA CAPTURA, nunca na data em que o dado foi digitado. */
 function seed(){
   const G=(ap,d,nt,tp,tm,cl,v)=>({id:uid(),data:d,canal:'google',unidade:ap,tipo:tp,tema:tm||'',nota:nt,
     verbatim:v||'',link:'Google — ficha da unidade (print 17/08)',cliente:cl||'',acao:'',resp:'',prazo:'',status:'aberto'});
+  /* mesma coisa que G, mas registra a data do print no campo de origem */
+  const GP=pr=>(ap,d,nt,tp,tm,cl,v)=>Object.assign(G(ap,d,nt,tp,tm,cl,v),{link:'Google — ficha da unidade (print '+pr+')'});
+  const G27=GP('27/08');
   const SOC=(ap,d,nt,tp,tm,cl,v)=>({id:uid(),data:d,canal:'social',unidade:ap,tipo:tp,tema:tm||'',nota:null,
     verbatim:v||'',link:'Instagram — direct/comentário (print 18/08)',cliente:cl||'',acao:'',resp:'',prazo:'',status:'aberto'});
+  /* mesma coisa que SOC, com a origem do print própria */
+  const IG27=(ap,d,tp,tm,cl,v,ex)=>Object.assign(SOC(ap,d,null,tp,tm,cl,v),
+    {link:'Instagram — direct/comentário (prints enviados em 27/08, capturas da semana 17 a 23/08)'},ex||{});
   const MAR='Maringá / Aterro Igapó', AER='Aeroporto', CEN='Centro', WC='Winston Churchill / Zona Norte',
-        ZS='Zona Sul / Igapó', JS='Jamil Scaff', HIG='Higienópolis', PAR='Pizzas e Massas / Pará',
-        SAM='Santo Amaro', STR='Street / Paranaguá', M88='Mercado 88',
-        SEK='Saul Elkind', ATH='Arthur Thomas', ISM='Maringá 1730', ISA='Alphaville', ISD='Madre';
+        ZS='Zona Sul / Igapó', JS='Jamil Scaff', HIG='Higienópolis', PAR='Pizzas e Massas',
+        SAM='Santo Amaro', STR='Street', M88='Mercado 88',
+        SEK='Saul Elkind', ATH='Arthur Thomas', ISM='Maringá 1730', ISA='Alphaville', ISD='Madre',
+        ROB="Rob's", MAP='Mapoli';
   const regs=[
     /* --- Maringá / Aterro Igapó --- */
     G(MAR,'2026-08-15',5,'elogio','Sabor / padrão do produto','Robson Comfios Representações','Comida boa, atendimento bom e ambiente agradável. Sempre vou pela promoção do dia, mas descubro muitas outras opções que me surpreende. Eu recomendo.'),
@@ -891,19 +1019,99 @@ function seed(){
     /* --- Isaías Madre (print 18/08) --- */
     G(ISD,'2026-08-17',5,'elogio','Atendimento da equipe','Renato Ruela','Experiência excelente. (Comida 5/5 · Serviço 5/5 · Ambiente 5/5 · silencioso, fácil de conversar · espera de 10 a 30 min)'),
     G(ISD,'2026-08-11',5,'avaliacao','','Ricardo Leal',''),
+    /* ===== Google — prints de 25/08 (Biggs 01, 02, 03) e 26/08 (Biggs 04, 05) =====
+       Datas calculadas a partir do "x dias atrás" na data da captura.
+       Avaliações que já constavam do print de 17/08 não foram duplicadas. */
+    /* --- semana 17 a 23/08 --- */
+    G(MAR,'2026-08-22',5,'elogio','Atendimento da equipe','Mary Ane Alves Macedo','Melhor equipe, melhor atendimento e melhor lanche! Sou sempre mto bem atendida, da atendente no whatsapp ao entregador. Amo os bilhetinhos que enviam! Um mimo, um carinho, um diferencial! Recomendo em TDS os sentidos'),
+    G(MAR,'2026-08-22',5,'avaliacao','','Cristiano Rodrigues',''),
+    G(MAR,'2026-08-18',4,'avaliacao','','SiuL',''),
+    G(AER,'2026-08-18',5,'avaliacao','','Viviane De Souza Ortiz',''),
+    G(AER,'2026-08-18',5,'avaliacao','','Tiago Roberto Pinto',''),
+    G(AER,'2026-08-18',5,'avaliacao','','Fernando Rossato',''),
+    G(CEN,'2026-08-23',5,'elogio','Atendimento da equipe','Pietro Ferreira Salamon','Cara, q lugar incrivel com um ótimo atendimento. O Fabricio me atendeu mt bem'),
+    G(CEN,'2026-08-23',5,'elogio','Atendimento da equipe','Nicolas De Souza Trajano','Muito bom, atendimento do Fabrício'),
+    G(WC,'2026-08-23',5,'avaliacao','','sthefani rubi',''),
+    G(WC,'2026-08-23',3,'reclamacao','Corpo estranho no alimento','Amanda Gomes','Fui por indicação e me decepcionei. Encontrei uma lagarta na salada durante o almoço. A atendente apenas recolheu o prato sem pedir desculpas ou dar qualquer explicação. A panqueca chegou morna/fria (o queijo nem derreteu) e ainda esqueceram o acompanhamento de arroz que disseram que viria. Embora a massa e o molho branco sejam bons, a falta de higiene e o atendimento atrapalham a refeição. Não voltaria nessa unidade. (Comida 3/5 · Serviço 3/5 · Ambiente 4/5 · avaliação com foto)'),
+    G(WC,'2026-08-22',5,'avaliacao','','Tech System Sistema de Segurança',''),
+    G(WC,'2026-08-22',1,'avaliacao','','Thiago Alvarado','Avaliação de 1 estrela sem comentário público (refeição no local, almoço, R$ 80–100).'),
+    G(WC,'2026-08-21',5,'elogio','Atendimento da equipe','Túlio Guimarães Silva','Primeira experiência no local foi positiva. Fui bem atendido, meu prato veio rápido. A panqueca estava muito boa, com muito recheio, capricho mesmo. O restaurante tem muitas opções de pratos, preciso voltar para experimentar outros. (Comida 5/5 · Serviço 5/5 · Ambiente 4/5)'),
+    /* --- semana 24 a 30/08 (em curso) --- */
+    G(MAR,'2026-08-25',5,'elogio','Sabor / padrão do produto','Sophie Martins','Ótimo'),
+    G(MAR,'2026-08-24',5,'avaliacao','','Izaias Vieira',''),
+    G(MAR,'2026-08-24',1,'avaliacao','','Paulo Alexandre Machado','Avaliação de 1 estrela sem comentário público (com foto).'),
+    G(MAR,'2026-08-24',5,'elogio','Preço x porção','marcelo pessoa','Combos muito top e com preço justo'),
+    G(MAR,'2026-08-24',4,'avaliacao','','Renan Felipe Martini',''),
+    G(AER,'2026-08-24',5,'avaliacao','','Marcos Souza',''),
+    G(CEN,'2026-08-24',1,'reclamacao','Limpeza e ambiente','Tatiane Gil','Fui hoje com o meu esposo na hora do almoço. Sentei na varanda e simplesmente está imunda, com teia de aranha. Como é possível uma lanchonete ser tão suja. O atendimento dos garçons foi maravilhoso, fomos muito bem atendidos. Mas na hora de pagar a conta no caixa foi horrível. A caixa nos tratou muito mal, não nos cumprimentou, estava o tempo todo de cara fechada, nunca tive um atendimento péssimo igual de hoje. Se quiserem conferir nas câmeras segue o horário do atendimento no caixa: 12:40. (Comida 5/5 · Serviço 1/5 · Ambiente 1/5 · avaliação com foto da teia de aranha · cliente citou a operadora de caixa pelo nome)'),
+    G(CEN,'2026-08-24',5,'elogio','Atendimento da equipe','Vitor Bergonsini Pereira','Ambiente agradável, comida saborosa e atendimento de primeira. Jenilson foi super atencioso e simpático com a minha família, nota mil! (Comida 5/5 · Serviço 5/5 · Ambiente 5/5)'),
+    G(CEN,'2026-08-24',5,'elogio','Atendimento da equipe','Aline Maximo','Ambiente muito bom, atendimento excelente. Garçom Fabrício super prestativo, atencioso! (Comida 5/5 · Serviço 5/5 · Ambiente 5/5 · espera até 10 minutos)'),
+    G(CEN,'2026-08-24',5,'elogio','Atendimento da equipe','Ana Elisa Ramos','Ambiente maravilhoso, melhor Biggs de Londrina, atendente Fabrício muito atencioso!!!'),
+    G(CEN,'2026-08-24',5,'avaliacao','','Emerson nunes da silva',''),
+    G(ZS,'2026-08-24',5,'avaliacao','','Leandro Vieira',''),
+    /* ===== Google — prints de 26/08 (Biggs 05 a 12) ===== */
+    /* --- semana 17 a 23/08 --- */
+    G(ZS,'2026-08-22',1,'reclamacao','Sabor / padrão do produto','Philip Lee','A comida estava horrível. Comi metade do hambúrguer porque estava com fome e tenho padrões baixos. O serviço foi lento, mesmo sendo os únicos clientes. Um negócio decadente que talvez já tenha sido bom, mas infelizmente, não existe mais. (Comida 1/5 · Serviço 3/5 · Ambiente 3/5 · avaliação traduzida do inglês pelo Google)'),
+    G(ZS,'2026-08-19',1,'reclamacao','Tempo de espera','Maria Oliveira','Realmente comida de demorada. (Comida 4/5 · Serviço 2/5 · Ambiente 3/5)'),
+    G(HIG,'2026-08-23',5,'avaliacao','','Cherly Christina Zankin Martins de Oliveira',''),
+    G(HIG,'2026-08-22',5,'avaliacao','','Suzana Su',''),
+    G(HIG,'2026-08-21',5,'avaliacao','','Willian Belizario',''),
+    G(HIG,'2026-08-19',5,'elogio','Atendimento da equipe','Naquiture Duff','Os funcionários são perfeitos, super atenciosos, nota 1000, parabéns pelo atendimento, indico demais. Valdinei e a moça que começou hoje me atenderam bem demais'),
+    G(JS,'2026-08-20',5,'avaliacao','','Ana Paula Silva',''),
+    G(PAR,'2026-08-20',5,'avaliacao','','Vania Vaz',''),
+    G(SAM,'2026-08-23',3,'reclamacao','Atendimento da equipe','Guilherme Henrique Silva','Fomos na quarta-feira à noite e sentamos no ambiente externo. Ao chamar um atendente, veio uma moça sem o cardápio e disse: oi, bem grosseiro. Pedimos o cardápio e ao trazer nem deu tempo de olhar as opções, ela já falou: não vai pedir ainda? Uma pena ser mal atendido em um local que gostamos muito! Em relação ao lanche, pedimos dois combos de duplo frango, um dos lanches veio quase sem frango, precisam melhorar o padrão. Combo aniversariante estava uma delícia!!! (Comida 4/5 · Serviço 1/5 · Ambiente 5/5)'),
+    /* --- semana 24 a 30/08 (em curso) --- */
+    G(STR,'2026-08-24',1,'reclamacao','Rodízio — reposição','louise beatriz Rocha','Fui lá comer ontem pizza massa fina, com gosto que tinha resquentado e sem queijo, só tinha tomate e molho. As pizzas doces estão boas, mas sem gosto também. Demorou pra sair as coisas. O menino falou que ia sair rápido, mas demorou bastante. (Comida 1/5 · Serviço 1/5 · Ambiente 1/5)'),
+    G(PAR,'2026-08-25',1,'reclamacao','Tempo de espera','Itan Sato','Demora pra entregar a pizza, pizza de catupiri estava estranha. (Comida 2/5 · Serviço 2/5 · Ambiente 2/5)'),
+    G(M88,'2026-08-24',5,'avaliacao','','Levi',''),
     /* ===== Instagram — directs e comentários (prints de 18/08) ===== */
     Object.assign(SOC('','2026-08-12',null,'reclamacao','Tempo de espera','Gaby (@gaby...) — Instagram Direct','eu pedi uma pizza demorou em torno de 2:30 pra entregar. quando entregou veio seca, pessima, dura e por fim FRIA. sempre compro com vcs mas dessa vez não deu nem pra comer, foi pro lixo. [Primeiro contato da cliente: 19/07 às 15:15, dizendo que a loja pediu para ela entrar em contato pela avaliação do iFood. A resposta do CX saiu em 12/08 — 24 dias depois.]'),{acao:'Respondida por direct; cliente enviou telefone (43) 98453-9663; equipe comercial acionada',resp:'CX',status:'andamento'}),
     Object.assign(SOC('','2026-08-17',null,'reclamacao','Temperatura do produto','maisa_oro... — Instagram Direct','Pedi uma pizza pelo ifood e não gostei. Fria, pouco recheio. Me arrependi de ter comprado. [Cliente diz que o iFood pediu para mandar mensagem pelo Instagram.]'),{acao:'Solicitado telefone para contato — aguardando retorno da cliente',resp:'CX',status:'andamento'}),
     SOC('','2026-08-18',null,'elogio','Atendimento da equipe','Adriano N. — Instagram Direct','Rodízio de vcs foi delicioso, além do bom humor dos garçons. Eles foram muito atenciosos e educados.'),
     Object.assign(SOC('Zona Sul / Igapó','2026-08-17',null,'reclamacao','Corpo estranho no alimento','pietsiaki_ — Instagram Direct','Gostaria de fazer uma reclamação. Fui ao Biggs hoje da 10 de dezembro, minha mulher pediu uma salada Cezar. De primeira veio em um prato que estava com um lascado, achamos que era uma coisa antiga, mas quando ela começou a comer, viu que tinha pedaços do prato junto na comida! Conversamos com o gerente que foi bem atencioso e fez outro prato pra nós, pedimos pra viagem. Agora mesmo ela estava acabando de comer e tinha UM CAROÇO DE AZEITONA, mastigado junto com a comida, essa salada não vem com azeitona, agora ela está passando mal de NOJO do que aconteceu! [Cliente enviou vídeo do prato e telefone de contato.]'),{acao:'Gerente trocou o prato na hora. Caso ainda sem tratativa formal: segurança alimentar, cliente passou mal. Precisa de apuração na cozinha, retorno ao cliente e resposta formal. Unidade confirmada pela Amanda: Biggs 05.',resp:'',status:'aberto'}),
-    Object.assign(SOC('Pizzas e Massas / Pará','2026-08-17',null,'reclamacao','Retorno ao cliente (pós-venda)','Edmilson (@ebeckman...) — Instagram Direct','Sou Edmilson. Fiz uma reclamação no sábado em um pedido de pizza. [Print da resposta da loja no iFood, às 02:05, pedindo que ele procurasse o Instagram ou o telefone. O cliente veio pelo Instagram e o CX pediu o telefone de novo — o cliente já está no terceiro canal para a mesma reclamação.]'),{acao:'Cliente enviou telefone (91) 98485-4950 — encaminhar para tratativa e fechar o ciclo sem pedir novo canal',resp:'CX',status:'andamento'}),
-    SOC('','2026-08-17',null,'reclamacao','Preço divergente / taxa de serviço','coaresmatatiane — comentário no post do rodízio','Nao gostei, pizza sao boas, mais infelizmente as entradas vc tem q solicitar, e ainda nao é la grande coisa, e fora tem a bendita taxa de serviço.... E fora q no site tava 49.90 e na hora de pagar 69.90, tem lugares q vale mais apena por esse valor....'),
-    SOC('','2026-08-17',null,'reclamacao','Rodízio — reposição','erichernandess_ — comentário no post do rodízio','Fui duas vezes achando que a primeira foi meio que azar sobre a experiência ruim, mas a segunda vez só confirmou a primeira... Demoram demais pra passar, te ignoram o tempo todo e as entradas são horríveis.'),
+    Object.assign(SOC('Pizzas e Massas','2026-08-17',null,'reclamacao','Retorno ao cliente (pós-venda)','Edmilson (@ebeckman...) — Instagram Direct','Sou Edmilson. Fiz uma reclamação no sábado em um pedido de pizza. Vocês me solicitaram para entrar em contato. [Print da resposta da loja, às 02:05, pedindo que ele procurasse o Instagram ou o telefone. O cliente veio pelo Instagram e o CX pediu o telefone de novo — o cliente já está no terceiro canal para a mesma reclamação. No print de 27/08 aparece a tela do app que ele usou para pedir: era Uber Eats, não iFood — o cabeçalho mostra “EDMILSON, adicione Uber One”.]'),{acao:'Cliente enviou telefone (91) 98485-4950 — encaminhar para tratativa e fechar o ciclo sem pedir novo canal. Verificar também por que a reclamação de um pedido do Uber Eats foi devolvida para o Instagram: se o canal Uber Eats não tem tratativa própria, todo caso dele cai como pós-venda perdido.',resp:'CX',status:'andamento'}),
+    Object.assign(SOC('Pizzas e Massas','2026-08-17',null,'reclamacao','Preço divergente / taxa de serviço','coaresmatatiane (Tatiane) — comentário no post do rodízio + direct','Nao gostei, pizza sao boas, mais infelizmente as entradas vc tem q solicitar, e ainda nao é la grande coisa, e fora tem a bendita taxa de serviço.... E fora q no site tava 49.90 e na hora de pagar 69.90, tem lugares q vale mais apena por esse valor.... [No direct, resumiu a causa:] então poblema foi a falta de comunicação e orientação.. pois no site 49.90 esta um preço e no final quando famos pagar a conta outro valor 69.90 e ainda tinha a taxa de serviço....mais faz parte do processo'),{acao:'Cliente enviou telefone 14997756495. O CX respondeu que “os nossos preços variam conforme os dias da semana” — a cliente não reclamou da variação, reclamou de não ter sido avisada: o site mostrava 49,90 e a conta veio 69,90. A correção é de comunicação de preço no site e na chegada, não de justificativa.',resp:'CX',status:'andamento'}),
+    Object.assign(SOC('Pizzas e Massas','2026-08-17',null,'reclamacao','Rodízio — reposição','erichernandess_ (Eric Hernandes) — comentário no post do rodízio + direct','Fui duas vezes achando que a primeira foi meio que azar sobre a experiência ruim, mas a segunda vez só confirmou a primeira... Demoram demais pra passar, te ignoram o tempo todo e as entradas são horríveis. [No direct, detalhou:] Nós gostamos muito do sabor da pizza de vocês, porém as duas vezes em que fomos para o rodízio, sentimos que demorou demais para passarem as pizzas, passam 1 e até 3 vezes, depois chega a demorar de 30 minutos+ pra passarem outra vez. E gostamos muito de rodízio onde é passado por diversas vezes, até ficarmos satisfeitos. E saímos das duas vezes em que fomos, muito insatisfeitos e entediados por esperar tanto.'),{acao:'Cliente respondeu ao direct e enviou telefone (43) 99181-5019 — encaminhar para tratativa. O relato dele quantifica a falha: 1 a 3 rodadas e depois mais de 30 minutos de intervalo.',resp:'CX',status:'andamento'}),
     SOC('','2026-08-18',null,'reclamacao','Preço divergente / taxa de serviço','andreraamos12 — resposta no post do rodízio','E eu que fui achando que era esse valor no final de semana, gastei mais de 200 reais, errei mas não erro mais, e tbm não volto mais.'),
-    SOC('','2026-08-17',null,'reclamacao','Rodízio — reposição','alex.personalt — comentário no post do rodízio','Só faltou dizer que demora muito pra passar as [comentário cortado no print — recuperar o texto completo no post]'),
+    Object.assign(SOC('Pizzas e Massas','2026-08-17',null,'reclamacao','Rodízio — reposição','alex.personalt — comentário no post do rodízio','Só faltou dizer que demora muito pra passar as pizzas. [Texto completo recuperado no print de 27/08 — na v29 estava cortado. O comentário tinha 2 curtidas.]'),{acao:'Respondido publicamente por @biggspizzas.massas: “Recado recebido. A espera entre uma pizza e outra incomoda mesmo e é ponto que precisa melhorar aqui.” Resposta pública feita; a causa (intervalo entre rodadas no rodízio) segue sem tratativa operacional.',resp:'CX',status:'andamento'}),
     SOC('','2026-08-17',null,'elogio','Sabor / padrão do produto','comentário no post do rodízio','De fato muito bom, gostoso, vários sabores, e massas boa tbm'),
+    /* ===== Instagram — prints enviados em 27/08 =====
+       A Amanda informou que as capturas são da semana 17 a 23/08. Os prints não trazem data absoluta
+       do contato, só marcadores relativos ("23 h", "3 d", "2 d", "SEX.", "ONTEM") e o relógio do
+       celular, que varia de 08:49 a 18:07 — sinal de que foram tiradas em dias diferentes.
+       Regra usada aqui: quando o print traz uma âncora de data absoluta (número e data do pedido),
+       essa âncora manda. Quando não traz, o registro entra na segunda-feira da semana (17/08) com o
+       dia marcado como NÃO CONFIRMADO no próprio relato — a semana está certa, o dia exato não.
+       FORA DESTE LOTE, esperando a loja que a Amanda vai informar: uDantt (pedido cancelado com o
+       entregador na rua ao lado), Ana Angélica Rodrigues / rodriguues.ana (comida gelada e dura,
+       demora de mais de 1 hora) e Bruna Fileto / brunafileto (veio sem a salada, comida sem tempero,
+       telefone 43 99946-0622, comentários públicos "Comida ruim, sem sabor sem sal, insonsa e cara"
+       e "Pedi, pedido veio errado"). */
+    IG27('','2026-08-17','reclamacao','Sabor / padrão do produto','Matheus (@nishi_mat) — Instagram Direct','Eu tinha feito um pedido via iFood de duas marmitas de frango com molho apimentado. Porém uma delas estava com o frango MAL FRITO. Ai eu tive que descartar boa parte do frango. A outra marmita estava correta. [Print do pedido: Dell Iris, pedido nº 1203 de 05/08/2026 às 11:32, concluído às 12:06 — Combo 2 refeições no precinho, Iscas de Frango Apimentado com Salada, R$ 51,82 + taxa de serviço R$ 1,04 = R$ 52,86, pago no crédito. Entrega em R. Prof. João Cândido, 1380 — Centro, apto 202.] [DIA DO CONTATO NÃO CONFIRMADO: o incidente é de 05/08 (semana 03 a 09/08), o direct é da semana 17 a 23/08 segundo a Amanda; registrado em 17/08 até ela confirmar o dia. Dell Iris: qual das 4 dark kitchens ainda não identificada — o endereço do print é o do cliente, não o da cozinha.]',
+      {acao:'PRIORIDADE DE SEGURANÇA ALIMENTAR: frango mal frito é risco microbiológico, não é desvio de sabor. Precisa de apuração na cozinha que produziu o pedido 1203, checagem do processo de fritura e ponto do frango, e retorno formal ao cliente.',status:'aberto'}),
+    IG27('','2026-08-17','reclamacao','Retorno ao cliente (pós-venda)','Victória (@vi.ruizz) — comentário + Instagram Direct','Comentário público: "Péssimo! Mil vezes pessimo. Quase fico sem comida". No direct: "Após a experiência horrível de ontem, me deram um cupom pra eu ter uma nova experiência. A experiência continua sendo péssima. Adivinhem? Pedido atrasado novamente." E depois: "Fiz um pedido era 11:30, precisei cancelar pq já tava dando hora de voltar do meu almoço e vim comer em outro lugar. Eles não atualizavam o status do pedido e o pessoal ainda mal respondia no chat." Também: "O PEDIDO ESTÁ ATRASADO NOVAMENTE. EU SÓ QUERO COMER KK. Qual o sentido de dar um cupom pra ter uma nova experiência e a experiência continuar sendo péssima. FAZ UMA HORA Q EU PEDI. UMA HORA. paguei 6,50 da entrega." No WhatsApp com a loja ela escreveu: "Só pra constatar q eu não sou idiota, ok? Eu vou até o procon e relatar". Quando o CX respondeu que havia verificado com o Luiz e que ele já estava em contato, ela respondeu "Mentira — ele me deu o cupom ontem, eu fui usar hoje". [Print do pedido: Dell Iris, pedido nº 4001, Marmita da sua escolha com salada + Coca 200ml, R$ 39,59, entrega na Rua Paranaguá, 1654; acompanhamento parado em "seu pedido está sendo preparado" das 11:29 às 11:39.] [DIA NÃO CONFIRMADO: registrado em 17/08, dentro da semana 17 a 23/08 informada pela Amanda. O atraso do dia anterior é do dia útil imediatamente anterior a este contato. Dell Iris: dark kitchen não identificada.]',
+      {acao:'Caso de recuperação falhada: o cupom de reparação gerou o mesmo problema no dia seguinte, e o cliente já falou em Procon. Precisa de contato de gestão (não do CX que já respondeu), reembolso da entrega de R$ 6,50 e do pedido, e apuração do porquê o status não era atualizado e o chat não respondia. Telefone (43) 98869-8720.',resp:'',status:'aberto'}),
+    IG27('Jamil Scaff','2026-08-18','reclamacao','Cobrança / pagamento','Lippe (@treinador.lippe) — Instagram Direct','Não, foi cancelado e não teve reembolso, deu o tempo de espera, mas o entregador não apareceu na academia. Porque sempre é deixado na recepção. Como sou Personal não fico com o celular, tive que refazer o pedido. Peço todos os dias com vocês. Nunca aconteceu isso antes. To sem o almoço. Faz uma hora que to esperando. Já fiz um novo pedido. Sou Personal aqui na Drako da Pioneiros, sempre é recebido na recepção. [Print do pedido: Biggs - Refeições - Zona Leste, pedido nº 4056 de 18/08/2026 às 11:59 — Pf Filé de frango grelhado com feijão e salada, R$ 22,43 + taxa de serviço R$ 0,99 = R$ 23,42, pago por carteira digital. Entrega em Drako Pioneiros, Av. Custódio Venâncio Ribeiro, 150 — Complexo Parque das Lagoas, academia. Motivo do cancelamento exibido pelo iFood: "Quem ia fazer a entrega não conseguiu encontrar você. Neste tipo de cancelamento, infelizmente, não há reembolso do pedido."] [Unidade atribuída pelo de-para: a loja virtual do iFood "Zona Leste" corresponde ao Biggs 07 · Jamil Scaff, vínculo que segue marcado a confirmar no painel. A data 18/08 vem do próprio pedido.]',
+      {acao:'Cliente diário, pagou e ficou sem almoço, e o cancelamento por "não encontrou o cliente" bloqueia o reembolso automático do iFood. Duas coisas: pedir o reembolso do pedido 4056 pelo painel do parceiro e cadastrar na rota que a entrega da Drako Pioneiros é entregue na recepção.',resp:'',status:'aberto'}),
     /* --- Higienópolis (semana anterior — única leitura disponível) --- */
-    G(HIG,'2026-08-03',2,'reclamacao','','isa morais','Avaliação de 2 estrelas sem comentário público (refeição no local, jantar, R$ 60–80).')
+    G(HIG,'2026-08-03',2,'reclamacao','','isa morais','Avaliação de 2 estrelas sem comentário público (refeição no local, jantar, R$ 60–80).'),
+    /* ===== Google — prints de 27/08/2026, tirados na parte da manhã =====
+       Lojas do lote: Isaías 01 · Maringá 1730, Isaías 02 · Alphaville e Rob's.
+       Datas convertidas a partir do "x dias atrás" contando para trás de 27/08:
+       3 dias = 24/08 · 4 dias = 23/08 · 5 dias = 22/08 · uma semana = 20/08 · 16 horas = 26/08.
+       Checagem de duplicata feita por cliente + loja contra os 115 registros Google da v29:
+       nenhum dos nomes deste lote já constava do painel.
+       PENDENTE: a avaliação de 2 estrelas da Isaías 02 · Alphaville (pizza de calabresa
+       entregue com borda de chocolate, Comida 5/5 · Serviço 1/5 · Ambiente 5/5, Local Guide
+       com 33 avaliações e 79 fotos) NÃO foi carregada porque o nome do cliente estava cortado
+       no print. Entra no próximo lote, com o nome. O snapshot da loja já está atualizado. */
+    /* --- semana 17 a 23/08 --- */
+    G27(ISM,'2026-08-20',1,'reclamacao','Atendimento da equipe','Natali Assis','Fui ao estabelecimento no sábado, dia 15/08, para comemorar o aniversário da minha irmã e fiquei extremamente decepcionada com a experiência. O ambiente estava totalmente despreparado para receber a quantidade de pessoas que havia no local em pleno final de semana. Estávamos em um grupo de aproximadamente 22 pessoas e, quando pedimos para colocar o bolo, a garçonete simplesmente nos informou que não havia pratos nem guardanapos disponíveis. Precisamos pegar os guardanapos daquele suporte que fica nas próprias mesas e, para piorar, o bolo não foi colocado na geladeira. Quando solicitamos pratos, fomos informados de que, caso quiséssemos, teríamos que aguardar até que os pratos fossem lavados. Onde já se viu um estabelecimento não ter pratos suficientes para atender os clientes em um sábado? Além disso, percebemos que outras mesas ao lado, que também estavam comemorando com bolo, tinham pratos disponíveis, o que tornou a situação ainda mais desagradável e constrangedora. O atendimento também deixou muito a desejar. A garçonete demonstrou pouca disposição em nos atender e não apresentou nenhuma solução adequada para a situação. Foi um verdadeiro absurdo e uma experiência muito frustrante, principalmente por se tratar de uma comemoração em família. Esperava, no mínimo, uma estrutura adequada e um atendimento mais atencioso. (Comida 2/5 · Serviço 1/5 · Ambiente 3/5 · jantar, R$ 80–100 · Local Guide, 17 avaliações · 1 foto · a VISITA foi em 15/08, semana 10 a 16/08; a AVALIAÇÃO é da semana 17 a 23/08 · falta de louça e guardanapo para grupo de 22 pessoas em sábado)'),
+    G27(ISM,'2026-08-22',5,'elogio','','Lucimara Nunes','Super recomendo [texto cortado no print — o Google exibia “…Mais”; recuperar o restante na ficha] (Local Guide, 29 avaliações · 10 fotos · categoria “Outro”, R$ 180–200)'),
+    G27(ROB,'2026-08-23',5,'avaliacao','','Fernanda Poli','Avaliação de 5 estrelas — o texto estava colapsado em “Mais” no print e não foi transcrito. (1 avaliação · 2 fotos)'),
+    /* --- semana 24 a 30/08 (em curso) --- */
+    G27(ISM,'2026-08-24',2,'reclamacao','Sabor / padrão do produto','Axel Ivale Menezes','Muito ruim. 1. Ambiente: Ficamos no lugar externo, poderia ter guarda-sol, pelo sereno. 2. Serviço: Atendentes perdidos, não sabem ponto de carne ou não anotaram. 3. Pedimos 1 batata de R$ 34,00; 1 contra-filé acebolado ao ponto R$ 74,00. Conclusão que o contra-filé estava passado e duro, cebola boa (tem tecnica pra fazer), batata boa sequinha (pelo menos a fritadeira é boa). O boi morreu em vão. Existem lugares semelhantes muito melhores. As 2 estrelas pela cebola e batata. A coca cola gelada. Não coloquei fotos pois não compensa o trabalho. Vim a convite com umas 20 pessoas, deveria ter ido na Boreluccio e voltado aqui pra cantar parabéns apenas. (Comida 2/5 · Serviço 2/5 · Ambiente 2/5 · nível moderado de barulho · jantar, R$ 40–60 · 4 avaliações · ATENÇÃO: a ficha do Google exibe 1 estrela nesta avaliação, mas o cliente escreveu “as 2 estrelas” e as notas parciais são 2/5 — registrado como 2 por decisão da Amanda em 27/08)'),
+    G27(ROB,'2026-08-26',2,'reclamacao','Sabor / padrão do produto',"jon'at'as Suzuki",'O purê fora do pão era bom cortar a salsicha fica mais fácil de comer purê de batata de vdd, mas nao tem leite nem manteiga, colocou muito pure, nao tem gosto de nada so de batata, da um trabalho cozinhar espremer a batata, poderia caprichar um pouco mais. Falta equilibrio no lanche, pra quem quer so encher a barriga esta bom. Não ao é um lanche prazeroso de se comer, nao é ruim, muito longe disso. A embalagem muito boa, vem na caixa no capricho, precisa melhorar no sabor, bem recheado mas não é muito saboroso. Esse custo da embalagem deveria gastar pra fazer um purê mais saboroso. O catupiry é verdadeiro catupiry parece que é! Mas muito corrido, escorrido. Gostei muito da embalagem, muito boa, gera uma ótima impressão, mas o lanche é normal. O molho tem um sabor amargo no final. (Comida 2/5 · Serviço 5/5 · 7 avaliações · 4 fotos · elogia embalagem e atendimento, reclama do padrão do purê e do molho)')
   ];
   /* ===== iFood — export oficial 10 a 16/08 · 2.482 avaliações =====
      Vínculo loja virtual → loja física feito pelo ID do Merchant, via de-para
@@ -936,8 +1144,8 @@ function seed(){
    {semana:'2026-08-10',canal:'ifood',loja:'Biggs - Japa & Poke - Zona Leste',cod:'Biggs 07',unidade:'Jamil Scaff',n:38,media:4.97,n5:37,n4:1,n3:0,n2:0,n1:0,n123:0,coment:0},
    {semana:'2026-08-10',canal:'ifood',loja:'Biggs - Pastel - Zona Leste',cod:'Biggs 07',unidade:'Jamil Scaff',n:27,media:4.93,n5:25,n4:2,n3:0,n2:0,n1:0,n123:0,coment:0},
    {semana:'2026-08-10',canal:'ifood',loja:'Biggs - Refeições - Zona Leste',cod:'Biggs 07',unidade:'Jamil Scaff',n:17,media:5.00,n5:17,n4:0,n3:0,n2:0,n1:0,n123:0,coment:1},
-   {semana:'2026-08-10',canal:'ifood',loja:'Biggs - Pizzas e Massas - Paranaguá',cod:'Biggs 08',unidade:'Pizzas e Massas / Pará',n:55,media:4.98,n5:54,n4:1,n3:0,n2:0,n1:0,n123:0,coment:1},
-   {semana:'2026-08-10',canal:'ifood',loja:'Biggs - Pastel - Centro',cod:'Biggs 09',unidade:'Street / Paranaguá',n:7,media:4.86,n5:6,n4:1,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-08-10',canal:'ifood',loja:'Biggs - Pizzas e Massas - Paranaguá',cod:'Biggs 08',unidade:'Pizzas e Massas',n:55,media:4.98,n5:54,n4:1,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-08-10',canal:'ifood',loja:'Biggs - Pastel - Centro',cod:'Biggs 09',unidade:'Street',n:7,media:4.86,n5:6,n4:1,n3:0,n2:0,n1:0,n123:0,coment:0},
    {semana:'2026-08-10',canal:'ifood',loja:'Lanches Biggs 88',cod:'Biggs 10',unidade:'Mercado 88',n:52,media:4.81,n5:46,n4:4,n3:1,n2:0,n1:1,n123:2,coment:4},
    {semana:'2026-08-10',canal:'ifood',loja:'Pizza Biggs 88',cod:'Biggs 10',unidade:'Mercado 88',n:45,media:4.89,n5:43,n4:1,n3:0,n2:0,n1:1,n123:1,coment:2},
    {semana:'2026-08-10',canal:'ifood',loja:'Marmitas Biggs 88',cod:'Biggs 10',unidade:'Mercado 88',n:20,media:5.00,n5:20,n4:0,n3:0,n2:0,n1:0,n123:0,coment:0},
@@ -1032,7 +1240,7 @@ function seed(){
    IF('2026-08-15','Jamil Scaff','Biggs - Refeições - Zona Leste','Biggs 07',5,'reclamacao','','Tudo de bom. Como sempre nunca decepciona'),
    IF('2026-08-15','Jamil Scaff','Biggs - Zona leste','Biggs 07',5,'elogio','','Eu adoro muito bom de mais'),
    IF('2026-08-16','Jamil Scaff','Açaí - Biggs - Zona Leste','Biggs 07',5,'elogio','Sabor / padrão do produto','Recomendo muito adorei'),
-   IF('2026-08-13','Pizzas e Massas / Pará','Biggs - Pizzas e Massas - Paranaguá','Biggs 08',5,'elogio','Preço x porção','A pizza estava uma delícia. O melhor custo benefício de Londrina!'),
+   IF('2026-08-13','Pizzas e Massas','Biggs - Pizzas e Massas - Paranaguá','Biggs 08',5,'elogio','Preço x porção','A pizza estava uma delícia. O melhor custo benefício de Londrina!'),
    IF('2026-08-10','Mercado 88','Pizza Biggs 88','Biggs 10',1,'reclamacao','Sabor / padrão do produto','veio queimada'),
    IF('2026-08-11','Mercado 88','Lanches Biggs 88','Biggs 10',5,'elogio','Atendimento da equipe','Lanche maravilhoso e ainda mandaram um recadinho💕 (vou pedir outro mais tarde rs'),
    IF('2026-08-11','Mercado 88','Lanches Biggs 88','Biggs 10',1,'reclamacao','Sabor / padrão do produto','Não entendi que pessoa quis fazer, não veio salada de tomate e sim cheia de alface, caindo do lanche hambúrguer seco, então imagine dificuldade para comer'),
@@ -1127,28 +1335,193 @@ function seed(){
    SC('elogio','Sabor / padrão do produto','foi muito boa, eu amei, vou voltar sempre'),
    SC('elogio','Sabor / padrão do produto','amei aqui, vou vir mais vezes e obrigado até a próxima')
   ];
+  /* ===== iFood — semana 17 a 23/08 (export de 24/08; avaliações até 22/08) ===== */
+  const AGG2=[
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Marmitas - Av. Maringá',cod:'Biggs 01',unidade:'Maringá / Aterro Igapó',n:61,media:4.93,n5:57,n4:4,n3:0,n2:0,n1:0,n123:0,coment:3},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Av. Maringá',cod:'Biggs 01',unidade:'Maringá / Aterro Igapó',n:37,media:4.95,n5:35,n4:2,n3:0,n2:0,n1:0,n123:0,coment:3},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Gleba Palhano',cod:'Biggs 01',unidade:'Maringá / Aterro Igapó',n:19,media:4.89,n5:17,n4:2,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Av. Santos Dumont',cod:'Biggs 02',unidade:'Aeroporto',n:62,media:4.89,n5:55,n4:7,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Centro',cod:'Biggs 03',unidade:'Centro',n:83,media:4.90,n5:78,n4:4,n3:0,n2:0,n1:1,n123:1,coment:4},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Zona Norte',cod:'Biggs 04',unidade:'Winston Churchill / Zona Norte',n:103,media:4.90,n5:96,n4:5,n3:1,n2:1,n1:0,n123:2,coment:4},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Pizzaria - Zona Norte',cod:'Biggs 04',unidade:'Winston Churchill / Zona Norte',n:96,media:4.95,n5:92,n4:3,n3:1,n2:0,n1:0,n123:1,coment:5},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Pastel - Zona Norte',cod:'Biggs 04',unidade:'Winston Churchill / Zona Norte',n:35,media:5.00,n5:35,n4:0,n3:0,n2:0,n1:0,n123:0,coment:3},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Marmitas - Zona Norte',cod:'Biggs 04',unidade:'Winston Churchill / Zona Norte',n:20,media:5.00,n5:20,n4:0,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Refeições - Zona Norte',cod:'Biggs 04',unidade:'Winston Churchill / Zona Norte',n:10,media:5.00,n5:10,n4:0,n3:0,n2:0,n1:0,n123:0,coment:2},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Zona Sul',cod:'Biggs 05',unidade:'Zona Sul / Igapó',n:95,media:4.95,n5:90,n4:5,n3:0,n2:0,n1:0,n123:0,coment:2},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Pizzaria - Zona Sul',cod:'Biggs 05',unidade:'Zona Sul / Igapó',n:67,media:4.96,n5:64,n4:3,n3:0,n2:0,n1:0,n123:0,coment:2},
+   {semana:'2026-08-17',canal:'ifood',loja:'China Biggs - Zona Sul',cod:'Biggs 05',unidade:'Zona Sul / Igapó',n:49,media:4.90,n5:44,n4:5,n3:0,n2:0,n1:0,n123:0,coment:2},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Pastel - Zona Sul',cod:'Biggs 05',unidade:'Zona Sul / Igapó',n:21,media:4.95,n5:20,n4:1,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Burger',cod:'Biggs 05',unidade:'Zona Sul / Igapó',n:19,media:5.00,n5:19,n4:0,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Japa Food - Zona Sul',cod:'Biggs 05',unidade:'Zona Sul / Igapó',n:17,media:4.94,n5:16,n4:1,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-08-17',canal:'ifood',loja:'China Biggs - Av. Higienópolis',cod:'Biggs 06',unidade:'Higienópolis',n:117,media:4.88,n5:105,n4:11,n3:0,n2:1,n1:0,n123:1,coment:9},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Japa Food - Higienópolis',cod:'Biggs 06',unidade:'Higienópolis',n:37,media:4.97,n5:36,n4:1,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Av. Higienópolis',cod:'Biggs 06',unidade:'Higienópolis',n:18,media:4.94,n5:17,n4:1,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Poke - Av. Higienópolis',cod:'Biggs 06',unidade:'Higienópolis',n:4,media:5.00,n5:4,n4:0,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Zona leste',cod:'Biggs 07',unidade:'Jamil Scaff',n:103,media:4.97,n5:100,n4:3,n3:0,n2:0,n1:0,n123:0,coment:2},
+   {semana:'2026-08-17',canal:'ifood',loja:'Açaí - Biggs - Zona Leste',cod:'Biggs 07',unidade:'Jamil Scaff',n:79,media:4.96,n5:76,n4:3,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Pizzaria - Zona Leste',cod:'Biggs 07',unidade:'Jamil Scaff',n:53,media:4.96,n5:51,n4:2,n3:0,n2:0,n1:0,n123:0,coment:2},
+   {semana:'2026-08-17',canal:'ifood',loja:'China Biggs - Zona Leste',cod:'Biggs 07',unidade:'Jamil Scaff',n:37,media:4.89,n5:35,n4:1,n3:0,n2:1,n1:0,n123:1,coment:1},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Japa & Poke - Zona Leste',cod:'Biggs 07',unidade:'Jamil Scaff',n:26,media:4.88,n5:24,n4:1,n3:1,n2:0,n1:0,n123:1,coment:3},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Pastel - Zona Leste',cod:'Biggs 07',unidade:'Jamil Scaff',n:20,media:4.95,n5:19,n4:1,n3:0,n2:0,n1:0,n123:0,coment:2},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Refeições - Zona Leste',cod:'Biggs 07',unidade:'Jamil Scaff',n:12,media:4.92,n5:11,n4:1,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Pizzas e Massas - Paranaguá',cod:'Biggs 08',unidade:'Pizzas e Massas',n:47,media:4.91,n5:45,n4:0,n3:2,n2:0,n1:0,n123:2,coment:4},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Pastel - Centro',cod:'Biggs 09',unidade:'Street',n:10,media:4.80,n5:8,n4:2,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-08-17',canal:'ifood',loja:'Lanches Biggs 88',cod:'Biggs 10',unidade:'Mercado 88',n:40,media:4.97,n5:39,n4:1,n3:0,n2:0,n1:0,n123:0,coment:3},
+   {semana:'2026-08-17',canal:'ifood',loja:'Pizza Biggs 88',cod:'Biggs 10',unidade:'Mercado 88',n:35,media:4.89,n5:34,n4:0,n3:0,n2:0,n1:1,n123:1,coment:2},
+   {semana:'2026-08-17',canal:'ifood',loja:'Marmitas Biggs 88',cod:'Biggs 10',unidade:'Mercado 88',n:12,media:4.50,n5:10,n4:0,n3:0,n2:2,n1:0,n123:2,coment:2},
+   {semana:'2026-08-17',canal:'ifood',loja:'Refeiçôes Biggs 88',cod:'Biggs 10',unidade:'Mercado 88',n:2,media:4.50,n5:1,n4:1,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Santo Amaro',cod:'Biggs 11',unidade:'Santo Amaro',n:67,media:4.97,n5:65,n4:2,n3:0,n2:0,n1:0,n123:0,coment:2},
+   {semana:'2026-08-17',canal:'ifood',loja:'Marmitas Biggs - Santo Amaro',cod:'Biggs 11',unidade:'Santo Amaro',n:11,media:5.00,n5:11,n4:0,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-08-17',canal:'ifood',loja:'Pizza Biggs - Santo Amaro',cod:'Biggs 11',unidade:'Santo Amaro',n:9,media:5.00,n5:9,n4:0,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Saul Elkind',cod:'Biggs 12',unidade:'Saul Elkind',n:111,media:4.93,n5:105,n4:5,n3:0,n2:1,n1:0,n123:1,coment:4},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Refeições - Saul Elkind',cod:'Biggs 12',unidade:'Saul Elkind',n:21,media:4.52,n5:17,n4:2,n3:0,n2:0,n1:2,n123:2,coment:2},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Marmitas - Saul Elkind',cod:'Biggs 12',unidade:'Saul Elkind',n:13,media:5.00,n5:13,n4:0,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Av. Arthur Thomas',cod:'Biggs 13',unidade:'Arthur Thomas',n:71,media:4.96,n5:68,n4:3,n3:0,n2:0,n1:0,n123:0,coment:4},
+   {semana:'2026-08-17',canal:'ifood',loja:'Dell Iris · Centro',cod:'Dell Iris',unidade:'Dell Iris · Centro',n:40,media:4.85,n5:37,n4:2,n3:0,n2:0,n1:1,n123:1,coment:6},
+   {semana:'2026-08-17',canal:'ifood',loja:'Dell Iris · Gleba Palhano',cod:'Dell Iris',unidade:'Dell Iris · Gleba Palhano',n:35,media:4.94,n5:33,n4:2,n3:0,n2:0,n1:0,n123:0,coment:7},
+   {semana:'2026-08-17',canal:'ifood',loja:'Dell Iris · Aeroporto',cod:'Dell Iris',unidade:'Dell Iris · Aeroporto',n:29,media:4.93,n5:27,n4:2,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-08-17',canal:'ifood',loja:'Dell Iris · Zona Norte',cod:'Dell Iris',unidade:'Dell Iris · Zona Norte',n:19,media:5.00,n5:19,n4:0,n3:0,n2:0,n1:0,n123:0,coment:2},
+   {semana:'2026-08-17',canal:'ifood',loja:'Isaias - Pizzas',cod:'Isaías 01',unidade:'Maringá 1730',n:76,media:4.91,n5:70,n4:5,n3:1,n2:0,n1:0,n123:1,coment:2},
+   {semana:'2026-08-17',canal:'ifood',loja:'Biggs - Pizzaria - Gleba Palhano',cod:'Isaías 01',unidade:'Maringá 1730',n:27,media:4.81,n5:24,n4:2,n3:0,n2:1,n1:0,n123:1,coment:3},
+   {semana:'2026-08-17',canal:'ifood',loja:'Isaias - Japan Food',cod:'Isaías 01',unidade:'Maringá 1730',n:25,media:4.96,n5:24,n4:1,n3:0,n2:0,n1:0,n123:0,coment:2},
+   {semana:'2026-08-17',canal:'ifood',loja:'Isaias - Burger',cod:'Isaías 01',unidade:'Maringá 1730',n:11,media:4.91,n5:10,n4:1,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-08-17',canal:'ifood',loja:'Isaias - Refeições',cod:'Isaías 01',unidade:'Maringá 1730',n:10,media:5.00,n5:10,n4:0,n3:0,n2:0,n1:0,n123:0,coment:2},
+   {semana:'2026-08-17',canal:'ifood',loja:'Isaias - Poke',cod:'Isaías 01',unidade:'Maringá 1730',n:9,media:5.00,n5:9,n4:0,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-08-17',canal:'ifood',loja:'Isaias Delivery - Alphaville',cod:'Isaías 02',unidade:'Alphaville',n:22,media:4.91,n5:20,n4:2,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-08-17',canal:'ifood',loja:'Refeições Isaias - Madre',cod:'Isaías 03',unidade:'Madre',n:19,media:4.95,n5:18,n4:1,n3:0,n2:0,n1:0,n123:0,coment:2},
+   {semana:'2026-08-17',canal:'ifood',loja:'Isaias Madre - Japan E Poke',cod:'Isaías 03',unidade:'Madre',n:11,media:5.00,n5:11,n4:0,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-08-17',canal:'ifood',loja:'Robs',cod:'Robs',unidade:'Rob\'s',n:99,media:4.96,n5:95,n4:4,n3:0,n2:0,n1:0,n123:0,coment:1},
+  ];
+  const regsIfood2=[
+   IF('2026-08-17','Maringá / Aterro Igapó','Biggs - Marmitas - Av. Maringá','Biggs 01',5,'elogio','Sabor / padrão do produto','Delicioso!! Frango grelhado muito bem temperado'),
+   IF('2026-08-18','Maringá / Aterro Igapó','Biggs - Av. Maringá','Biggs 01',5,'elogio','Atendimento da equipe','Atendimento nota 10 . 10 pela pontualidade e agilidade .'),
+   IF('2026-08-21','Maringá / Aterro Igapó','Biggs - Av. Maringá','Biggs 01',5,'elogio','','Barata não estava bem frita, não estava bem sequinha'),
+   IF('2026-08-21','Maringá / Aterro Igapó','Biggs - Marmitas - Av. Maringá','Biggs 01',5,'elogio','','Eu amo a comida da loja'),
+   IF('2026-08-21','Maringá / Aterro Igapó','Biggs - Marmitas - Av. Maringá','Biggs 01',5,'elogio','Sabor / padrão do produto','Muito boa, tenho comprado recorrentemente e é  um excelente custo / benefício.'),
+   IF('2026-08-22','Maringá / Aterro Igapó','Biggs - Av. Maringá','Biggs 01',5,'elogio','','Gente sou suspeita em falar meu lanche é só com eles desde o mais simples até o mais chique amoooooo muito'),
+   IF('2026-08-17','Centro','Biggs - Centro','Biggs 03',5,'elogio','Sabor / padrão do produto','Excelente, como sempre'),
+   IF('2026-08-21','Centro','Biggs - Centro','Biggs 03',1,'reclamacao','Sabor / padrão do produto','Pão estava seco e duro desta vez. Como se fosse velho'),
+   IF('2026-08-21','Centro','Biggs - Centro','Biggs 03',5,'elogio','Sabor / padrão do produto','Muito bom , superou as expectativas.'),
+   IF('2026-08-22','Centro','Biggs - Centro','Biggs 03',5,'elogio','','Precisa mais promoção'),
+   IF('2026-08-17','Winston Churchill / Zona Norte','Biggs - Zona Norte','Biggs 04',2,'reclamacao','','Fiquei indignada de não vir nem um tipo de molho, só oque foi comprado, todos restaurantes mandam molhos nas compras de lanches'),
+   IF('2026-08-17','Winston Churchill / Zona Norte','Biggs - Pastel - Zona Norte','Biggs 04',5,'elogio','Temperatura do produto','pastel grande e extremamente recheado, massa uma delicia, chegou quentinho, veio até um bilhete fofo "Quem planta fé colhe milagres", super bem embalado, simplesmente perfeito, ainda peguei na promoção e fizeram com maior capricho, experiência nota mil'),
+   IF('2026-08-17','Winston Churchill / Zona Norte','Biggs - Pizzaria - Zona Norte','Biggs 04',3,'reclamacao','','Nao gostei molho muito ruim'),
+   IF('2026-08-18','Winston Churchill / Zona Norte','Biggs - Refeições - Zona Norte','Biggs 04',5,'elogio','Sabor / padrão do produto','Sempre muito bom.'),
+   IF('2026-08-18','Winston Churchill / Zona Norte','Biggs - Pastel - Zona Norte','Biggs 04',5,'elogio','Atendimento da equipe','Os recadinhos fazem toda diferença 😍aquece o coração ❤️ ... Pastel delicioso e bem servido 😋🤌🏼'),
+   IF('2026-08-19','Winston Churchill / Zona Norte','Biggs - Zona Norte','Biggs 04',3,'reclamacao','','Linguiça de baixa qualidade...frango tostado e com muita gordura da chapa.'),
+   IF('2026-08-19','Winston Churchill / Zona Norte','Biggs - Refeições - Zona Norte','Biggs 04',5,'elogio','Sabor / padrão do produto','Foi a primeira vez que comprei muito bom'),
+   IF('2026-08-19','Winston Churchill / Zona Norte','Biggs - Zona Norte','Biggs 04',5,'elogio','','Só foi 5 estrela por causa do filósofo B. Winstom'),
+   IF('2026-08-20','Winston Churchill / Zona Norte','Biggs - Zona Norte','Biggs 04',5,'elogio','','Tava muito boa'),
+   IF('2026-08-21','Winston Churchill / Zona Norte','Biggs - Pizzaria - Zona Norte','Biggs 04',5,'elogio','Sabor / padrão do produto','Pizza Excelente!'),
+   IF('2026-08-21','Winston Churchill / Zona Norte','Biggs - Pizzaria - Zona Norte','Biggs 04',5,'elogio','Sabor / padrão do produto','Pizza perfeita, compro sempre!'),
+   IF('2026-08-21','Winston Churchill / Zona Norte','Biggs - Pizzaria - Zona Norte','Biggs 04',5,'elogio','Sabor / padrão do produto','Muito deliciosa essa pizza super recomendo'),
+   IF('2026-08-21','Winston Churchill / Zona Norte','Biggs - Pizzaria - Zona Norte','Biggs 04',5,'elogio','','Pizza frango com catupiry ótima como sempre.'),
+   IF('2026-08-22','Winston Churchill / Zona Norte','Biggs - Pastel - Zona Norte','Biggs 04',5,'elogio','Sabor / padrão do produto','Foi o pastel de queijo mais gostoso que já comi na vida inteira.'),
+   IF('2026-08-17','Zona Sul / Igapó','Biggs - Zona Sul','Biggs 05',5,'elogio','','Veio tudo certo, obrigada'),
+   IF('2026-08-18','Zona Sul / Igapó','Biggs - Japa Food - Zona Sul','Biggs 05',5,'elogio','Sabor / padrão do produto','Uma deliciaaa, crocante, saboroso. Do jeito que eu queria, matei oque estava me matando kkkk'),
+   IF('2026-08-20','Zona Sul / Igapó','Biggs - Pizzaria - Zona Sul','Biggs 05',5,'elogio','','Pizza muito gostosa!'),
+   IF('2026-08-21','Zona Sul / Igapó','China Biggs - Zona Sul','Biggs 05',5,'elogio','Sabor / padrão do produto','Muito bom, uma das melhores de Londrina'),
+   IF('2026-08-21','Zona Sul / Igapó','China Biggs - Zona Sul','Biggs 05',5,'elogio','Sabor / padrão do produto','Nossa que delícia!!! Amei 😍'),
+   IF('2026-08-22','Zona Sul / Igapó','Biggs - Pizzaria - Zona Sul','Biggs 05',5,'elogio','Sabor / padrão do produto','Pizza saborosíssima! Comprarei novamente, com certeza! A clareza e facilidade no cardápio ajudou muito na escolha dos sabores! Estão de parabéns!'),
+   IF('2026-08-22','Zona Sul / Igapó','Biggs - Zona Sul','Biggs 05',5,'elogio','Sabor / padrão do produto','Perfeito, lanche recheado'),
+   IF('2026-08-17','Higienópolis','China Biggs - Av. Higienópolis','Biggs 06',5,'elogio','Sabor / padrão do produto','Muitoooo bommm'),
+   IF('2026-08-17','Higienópolis','China Biggs - Av. Higienópolis','Biggs 06',4,'elogio','Sabor / padrão do produto','N sei se o yakimeshi é feito com arroz integral ou n mas tava mto durinho, fora isso restante estava bom'),
+   IF('2026-08-17','Higienópolis','China Biggs - Av. Higienópolis','Biggs 06',5,'elogio','Preço x porção','tava uma delíciaaaa! pedi a marmita trio… vem bastante comida e o preço é ótimo!'),
+   IF('2026-08-18','Higienópolis','China Biggs - Av. Higienópolis','Biggs 06',2,'reclamacao','','Infelizmente ruim e muito abaixo do esperado'),
+   IF('2026-08-18','Higienópolis','China Biggs - Av. Higienópolis','Biggs 06',5,'elogio','Sabor / padrão do produto','Muito boa. Gostei do saber muito bom'),
+   IF('2026-08-19','Higienópolis','China Biggs - Av. Higienópolis','Biggs 06',5,'elogio','Sabor / padrão do produto','Excelente! Nota 10! Deus abençoe 🙏'),
+   IF('2026-08-20','Higienópolis','China Biggs - Av. Higienópolis','Biggs 06',5,'elogio','','Olha parabéns agora recebi o capricho de sempre ! Vou até me retratar do comentário anterior, porque o capricho de vocês abençoa nossas refeiçõe. Obrigada'),
+   IF('2026-08-20','Higienópolis','China Biggs - Av. Higienópolis','Biggs 06',5,'elogio','Sabor / padrão do produto','MEU DEUS QUE COMIDA MARAVILHOSA, SEMPRE ME SURPREENDE. QUE TEMPERO…. PARABÉNS AO PESSOAL DA COZINHA. GENTE ME CONTRATEM COMO PROVADOR HAHAHAHA'),
+   IF('2026-08-21','Higienópolis','Biggs - Japa Food - Higienópolis','Biggs 06',5,'elogio','Atendimento da equipe','Muito atenciosos e chegou bem rápido'),
+   IF('2026-08-22','Higienópolis','China Biggs - Av. Higienópolis','Biggs 06',5,'elogio','Preço x porção','Maravilhosa,.muito boa mesmo, tempero, quantidade, capricho .tudo de bom essa marmita'),
+   IF('2026-08-17','Jamil Scaff','Biggs - Pastel - Zona Leste','Biggs 07',5,'elogio','Sabor / padrão do produto','Pastel saboroso, amei'),
+   IF('2026-08-17','Jamil Scaff','Biggs - Pizzaria - Zona Leste','Biggs 07',5,'elogio','','Amo muito a frango catupiry 💖'),
+   IF('2026-08-17','Jamil Scaff','China Biggs - Zona Leste','Biggs 07',2,'reclamacao','','Não estava agradável, legumes maus para cru que al dentro.'),
+   IF('2026-08-17','Jamil Scaff','Biggs - Zona leste','Biggs 07',5,'elogio','Sabor / padrão do produto','Perfeito esse lanche, o de frango deveria ser gostoso assim tbm 😍😍'),
+   IF('2026-08-17','Jamil Scaff','Biggs - Refeições - Zona Leste','Biggs 07',5,'elogio','Sabor / padrão do produto','Muito bom tempero'),
+   IF('2026-08-17','Jamil Scaff','Biggs - Japa & Poke - Zona Leste','Biggs 07',5,'elogio','Sabor / padrão do produto','Excelente, melhor temaki frito que já comi!'),
+   IF('2026-08-18','Jamil Scaff','Biggs - Japa & Poke - Zona Leste','Biggs 07',3,'reclamacao','Preço x porção','Nao combina manga com pepino. E sao muito pequenos'),
+   IF('2026-08-20','Jamil Scaff','Biggs - Pastel - Zona Leste','Biggs 07',5,'elogio','Sabor / padrão do produto','Estava perfeitooo, pedi um doce de chocolate casadinho, bem recheado do jeito q amo🫶'),
+   IF('2026-08-21','Jamil Scaff','Biggs - Zona leste','Biggs 07',5,'elogio','Entrega (marketplace)','Chegou em 15 minutos, muito rapido'),
+   IF('2026-08-21','Jamil Scaff','Biggs - Japa & Poke - Zona Leste','Biggs 07',5,'reclamacao','Preço x porção','Muitoo bom,apesar dos comentarios negativos,achei super bom,nn achei pequeno,veio regado,serve uma pessoa perfeitamente,um temaki maravilhoso,espero q na proxima venha shoio inves do tarê por que na minha opinião acho enjoativo,mais fora isso maravilhoso!!'),
+   IF('2026-08-21','Jamil Scaff','Biggs - Pizzaria - Zona Leste','Biggs 07',5,'elogio','','Pizza muito boa'),
+   IF('2026-08-17','Pizzas e Massas','Biggs - Pizzas e Massas - Paranaguá','Biggs 08',3,'reclamacao','Preço x porção','Pouco recheio ,'),
+   IF('2026-08-17','Pizzas e Massas','Biggs - Pizzas e Massas - Paranaguá','Biggs 08',5,'elogio','Entrega (marketplace)','Chegou rápido, muito boa'),
+   IF('2026-08-17','Pizzas e Massas','Biggs - Pizzas e Massas - Paranaguá','Biggs 08',3,'reclamacao','','A pizza veio com todos os lacres violados e em fita adesiva'),
+   IF('2026-08-18','Pizzas e Massas','Biggs - Pizzas e Massas - Paranaguá','Biggs 08',5,'elogio','Preço x porção','A borda de chocolate está diminuindo a quantidade de recheio.'),
+   IF('2026-08-17','Mercado 88','Pizza Biggs 88','Biggs 10',1,'reclamacao','','Bacon tudo branco sem'),
+   IF('2026-08-17','Mercado 88','Marmitas Biggs 88','Biggs 10',2,'reclamacao','','Esperava mais ...'),
+   IF('2026-08-17','Mercado 88','Marmitas Biggs 88','Biggs 10',2,'reclamacao','','HOJE estava a desejar, infelizmente.'),
+   IF('2026-08-20','Mercado 88','Pizza Biggs 88','Biggs 10',5,'elogio','Sabor / padrão do produto','Maravilhosooo como sempre🤌🏽👏🏻👏🏻🤭'),
+   IF('2026-08-20','Mercado 88','Lanches Biggs 88','Biggs 10',5,'elogio','Temperatura do produto','Pedido entregue no prazo e bem embalado. Sobre o lanche o mesmo chegou bem quentinho, molhadinho e saboroso.'),
+   IF('2026-08-20','Mercado 88','Lanches Biggs 88','Biggs 10',5,'reclamacao','Sabor / padrão do produto','Sempre estou pedindo mais dessa vez o hambúrguer veio cru e o pão não estava bom me decepcionei dessa vez'),
+   IF('2026-08-22','Mercado 88','Lanches Biggs 88','Biggs 10',5,'elogio','Atendimento da equipe','Os lanches são uma delícia e sempre chega no horário previsto. Veio até com uma mensagem motivacional e achei muito legal essa iniciativa ❤️ obrigada a toda equipe pelo ótimo atendimento! O entregador veio de bicicleta e foi super rápido, chegou até antes do prazo e o pedido estava impecável 👏'),
+   IF('2026-08-17','Santo Amaro','Biggs - Santo Amaro','Biggs 11',5,'elogio','','tinha que ser enviado mais guardanapos e reforça mais o embrulhado do lanche pq vaza tudo a hora que vai comer'),
+   IF('2026-08-20','Santo Amaro','Marmitas Biggs - Santo Amaro','Biggs 11',5,'elogio','Preço x porção','Muito boa pelo preço'),
+   IF('2026-08-22','Santo Amaro','Biggs - Santo Amaro','Biggs 11',5,'elogio','Sabor / padrão do produto','Apenas a batata não gostei mas o lanche delicioso'),
+   IF('2026-08-17','Saul Elkind','Biggs - Refeições - Saul Elkind','Biggs 12',1,'reclamacao','','Veio quase Cru o frango'),
+   IF('2026-08-17','Saul Elkind','Biggs - Saul Elkind','Biggs 12',4,'reclamacao','Sabor / padrão do produto','só achei q esse tava meio seco'),
+   IF('2026-08-17','Saul Elkind','Biggs - Saul Elkind','Biggs 12',2,'reclamacao','Sabor / padrão do produto','Lanche muito ruim, o hambúrguer tava duro passou do ponto'),
+   IF('2026-08-17','Saul Elkind','Biggs - Saul Elkind','Biggs 12',5,'reclamacao','Preço x porção','Eu só mudaria que a maionese fosse mais consistente, pq na hra de comer cão bastante por ser um pouco líquida. Mas só isso tbm'),
+   IF('2026-08-18','Saul Elkind','Biggs - Saul Elkind','Biggs 12',5,'elogio','Sabor / padrão do produto','Comida deliciosa bem saborosa'),
+   IF('2026-08-18','Saul Elkind','Biggs - Refeições - Saul Elkind','Biggs 12',1,'reclamacao','Sabor / padrão do produto','Na descrição consta que vem maionese e ketchup, o lanche agora é padrão seco esturricado, enganando cliente na descrição do produto, sendo que pedi maionese em observação e novamente veio seco, impossível de engolir sem beber um líquido  :/ ja foi melhor'),
+   IF('2026-08-17','Arthur Thomas','Biggs - Av. Arthur Thomas','Biggs 13',5,'elogio','','Vale muito estava ótimo o lanche valeu cada centavo'),
+   IF('2026-08-18','Arthur Thomas','Biggs - Av. Arthur Thomas','Biggs 13',4,'elogio','Entrega (marketplace)','Veio rápido. Bem embalado'),
+   IF('2026-08-20','Arthur Thomas','Biggs - Av. Arthur Thomas','Biggs 13',5,'elogio','','Uma delícia, pode pedir!'),
+   IF('2026-08-22','Arthur Thomas','Biggs - Av. Arthur Thomas','Biggs 13',5,'elogio','Sabor / padrão do produto','Amei vou pedir mais vezes 😍🥰'),
+   IF('2026-08-17','Dell Iris · Gleba Palhano','Dell Iris · Gleba Palhano','Dell Iris',5,'elogio','','Comida muito boa e muito bem apresentável, com certeza uma ótima opção para pedir no dia a dia'),
+   IF('2026-08-17','Dell Iris · Aeroporto','Dell Iris · Aeroporto','Dell Iris',5,'elogio','Sabor / padrão do produto','Comida excelente, parabéns!!'),
+   IF('2026-08-17','Dell Iris · Gleba Palhano','Dell Iris · Gleba Palhano','Dell Iris',5,'elogio','Temperatura do produto','muito boa! chegou rapidinho e bem quentinha a comida! parabéns pro pessoal que teve a ideia de trazer pra Londrina! que Deus abençoe vcs'),
+   IF('2026-08-17','Dell Iris · Zona Norte','Dell Iris · Zona Norte','Dell Iris',5,'elogio','Embalagem / transporte','Primeira vez que peço e amei muito, embalagem perfeita, entrega mega rápida, comida deliciosa e preço super justo, Deus abençoe vocês da equipe, parabéns pelo trabalho incrível!'),
+   IF('2026-08-18','Dell Iris · Gleba Palhano','Dell Iris · Gleba Palhano','Dell Iris',5,'elogio','','Comida muito boa'),
+   IF('2026-08-19','Dell Iris · Gleba Palhano','Dell Iris · Gleba Palhano','Dell Iris',5,'reclamacao','Sabor / padrão do produto','Acho que faltou um pouco de tempero no arroz e feijão'),
+   IF('2026-08-19','Dell Iris · Centro','Dell Iris · Centro','Dell Iris',5,'elogio','Embalagem / transporte','A comida é mto boa, mas acho q vcs poderiam rever a embalagem das comidas com mais molho, como o feijão, pois ele chegou vazando'),
+   IF('2026-08-19','Dell Iris · Centro','Dell Iris · Centro','Dell Iris',5,'elogio','Sabor / padrão do produto','Comida deliciosa ! Com sabor de comida de mae ! Pra quem pede marmita esse é o melhor sabor ! Continuem com esse capricho!'),
+   IF('2026-08-19','Dell Iris · Gleba Palhano','Dell Iris · Gleba Palhano','Dell Iris',5,'elogio','Embalagem / transporte','Comida muito saborosa e em ótima quantidade! A embalagem também me surpreendeu positivamente: bonita, muito bem organizada e lacrada, demonstrando todo o cuidado e capricho com o pedido. Adorei a experiência e recomendo!'),
+   IF('2026-08-19','Dell Iris · Gleba Palhano','Dell Iris · Gleba Palhano','Dell Iris',5,'reclamacao','Sabor / padrão do produto','A comida estava fria e o frango mesmo sendo Strogonoff tava um pouco seco. Fora isso estava bem bom, o tempero bem gostoso e o arroz soltinho'),
+   IF('2026-08-19','Dell Iris · Centro','Dell Iris · Centro','Dell Iris',5,'elogio','Embalagem / transporte','Marmita Top!!! Embalagem impecável e Sabor de outro mundo!! Diferente dos Iguais 🔥'),
+   IF('2026-08-20','Dell Iris · Centro','Dell Iris · Centro','Dell Iris',5,'elogio','Sabor / padrão do produto','Comida maravilhosa'),
+   IF('2026-08-20','Dell Iris · Zona Norte','Dell Iris · Zona Norte','Dell Iris',5,'elogio','Sabor / padrão do produto','Strogonoff muito gostoso!'),
+   IF('2026-08-20','Dell Iris · Centro','Dell Iris · Centro','Dell Iris',1,'reclamacao','Preço x porção','Muito saboroso, porém quantidade mínima. Muito pouco mesmo. Pra quem pede marmita media essa não serve'),
+   IF('2026-08-20','Dell Iris · Centro','Dell Iris · Centro','Dell Iris',5,'elogio','Sabor / padrão do produto','Comida maravilhosa! Primeira vez que peço e vou pedir mais'),
+   IF('2026-08-21','Dell Iris · Gleba Palhano','Dell Iris · Gleba Palhano','Dell Iris',5,'elogio','','A comida é uma delíciaaaaa, ganharam mto uma cliente! Mto bonitinha as caixinhas e elas vem super bem embaladas.'),
+   IF('2026-08-17','Maringá 1730','Biggs - Pizzaria - Gleba Palhano','Isaías 01',2,'reclamacao','','Esperava mais da pizza...'),
+   IF('2026-08-17','Maringá 1730','Isaias - Pizzas','Isaías 01',3,'reclamacao','','O bacon estava meio cru'),
+   IF('2026-08-17','Maringá 1730','Biggs - Pizzaria - Gleba Palhano','Isaías 01',5,'elogio','','A pizza doce mais gostosa que já comi em Londrina!'),
+   IF('2026-08-18','Maringá 1730','Isaias - Pizzas','Isaías 01',5,'reclamacao','Sabor / padrão do produto','Dessa vez veio meio queimado, mas não deixa de ser a melhor pizza do universo observável'),
+   IF('2026-08-18','Maringá 1730','Isaias - Poke','Isaías 01',5,'elogio','Sabor / padrão do produto','Maravilhoso, comeria em todas as refeições'),
+   IF('2026-08-19','Maringá 1730','Isaias - Refeições','Isaías 01',5,'elogio','','Primeiro pedido nesta loja e gostei muito.'),
+   IF('2026-08-20','Maringá 1730','Biggs - Pizzaria - Gleba Palhano','Isaías 01',4,'reclamacao','Preço x porção','Pouco recheio'),
+   IF('2026-08-20','Maringá 1730','Isaias - Japan Food','Isaías 01',5,'elogio','Sabor / padrão do produto','temaki hot perfeito'),
+   IF('2026-08-21','Maringá 1730','Isaias - Refeições','Isaías 01',5,'elogio','Sabor / padrão do produto','Amei demais a salada, parabéns'),
+   IF('2026-08-22','Maringá 1730','Isaias - Japan Food','Isaías 01',5,'elogio','Sabor / padrão do produto','Excelente, mas preferia quando mandavam o molho da salada em frasco separado.'),
+   IF('2026-08-18','Madre','Refeições Isaias - Madre','Isaías 03',5,'elogio','Sabor / padrão do produto','Comida Excelente!'),
+   IF('2026-08-18','Madre','Refeições Isaias - Madre','Isaías 03',5,'elogio','Sabor / padrão do produto','Comida saborosa'),
+   IF('2026-08-20','Rob\'s','Robs','Robs',5,'elogio','Sabor / padrão do produto','Recomendo de qualidade'),
+  ];
   const T=(t,n,neg)=>({t:t,n:n,neg:!!neg});
   return {
-    versao:'4.0', sessoes:1, meta:60, metaNota:4.8, modoNps:'todos', snapshotData:'2026-08-18',
+    versao:'4.3', sessoes:1, meta:60, metaNota:4.8, modoNps:'todos', snapshotData:'2026-08-27',
     unidades:UN_PADRAO.map(u=>Object.assign({},u)), temas:TEMAS_PADRAO.slice(),
-    cobertura:{sac:{ativo:false,obs:'Ativo apenas no Biggs 13 · leitura mensal, não semanal'},ifood:{ativo:true,obs:'export oficial da semana — 2.482 avaliações'},zap:{ativo:false,obs:'sem coleta nesta semana'},social:{ativo:true,obs:'Instagram — directs e comentários (prints de 18/08)'},card:{ativo:false,obs:'sem coleta nesta semana'},lider:{ativo:false,obs:'sem coleta nesta semana'},google:{ativo:true,obs:'16 de 18 unidades lidas (17 e 18/08) — faltam Rob\'s e Mapoli'},trip:{ativo:false,obs:'só 2 fichas com avaliação · 3 sem reivindicação · 13 unidades sem ficha'},'99':{ativo:false,obs:'sem coleta nesta semana'}},
+    cobertura:{sac:{ativo:false,obs:'Ativo apenas no Biggs 13 · leitura mensal, não semanal'},ifood:{ativo:true,obs:'export oficial por semana · inclui as dark kitchens Dell Iris'},zap:{ativo:false,obs:'sem coleta nesta semana'},social:{ativo:true,obs:'Instagram — directs e comentários · prints de 18/08 e de 27/08 (capturas da semana 17 a 23/08) · 3 casos esperando a loja: uDantt, Ana Angélica Rodrigues e Bruna Fileto'},card:{ativo:false,obs:'sem coleta nesta semana'},lider:{ativo:false,obs:'sem coleta nesta semana'},google:{ativo:true,obs:'17 unidades com snapshot · leituras entre 17/08 e 27/08 — Isaías 01, Isaías 02 e Rob\'s lidos em 27/08 · faltam Biggs 13 · Arthur Thomas e Isaías 03 · Madre (snapshot de 18/08) e Mapoli (sem ficha lida)'},trip:{ativo:false,obs:'só 2 fichas com avaliação · 3 sem reivindicação · 13 unidades sem ficha'},'99':{ativo:false,obs:'sem coleta nesta semana'}},
     google:{
       'Maringá / Aterro Igapó':{nota:4.4,aval:4374,dt:'2026-08-17',tags:[]},
-      'Aeroporto':{nota:4.5,aval:4247,dt:'2026-08-17',tags:[T('promoções',24),T('opções',18),T('ótimos lanches',16),T('frio',14,true)]},
-      'Centro':{nota:4.6,aval:3775,dt:'2026-08-17',tags:[T('ambiente agradável',43),T('hot dog',27),T('pratos prontos',13),T('combos',9)]},
-      'Winston Churchill / Zona Norte':{nota:4.4,aval:3507,dt:'2026-08-17',tags:[T('tempo de espera',28,true),T('pizza',29),T('hot dog',7),T('área espaçosa',5)]},
-      'Zona Sul / Igapó':{nota:4.5,aval:2146,dt:'2026-08-17',tags:[T('pizza',38),T('espaço kids',15),T('yakisoba',3),T('pratos prontos',6)]},
-      'Jamil Scaff':{nota:4.3,aval:761,dt:'2026-08-17',tags:[T('ambiente',21),T('mesas',20),T('pastéis',15),T('frio',15,true)]},
-      'Higienópolis':{nota:4.5,aval:683,dt:'2026-08-17',tags:[T('comida japonesa',28),T('ambiente agradável',26),T('poke',9),T('kung pao chicken',4)]},
-      'Pizzas e Massas / Pará':{nota:4.2,aval:552,dt:'2026-08-17',tags:[T('rodízio',105),T('doces',22),T('gerente',21),T('atendente',16)]},
-      'Santo Amaro':{nota:4.4,aval:153,dt:'2026-08-17',tags:[T('lanche',8),T('mesas',6),T('educação',5),T('atendente',4)]},
-      'Street / Paranaguá':{nota:3.7,aval:126,dt:'2026-08-17',tags:[T('pizza',20),T('lanche',17),T('rodízio',14),T('mesa',12)]},
-      'Mercado 88':{nota:3.7,aval:54,dt:'2026-08-17',tags:[T('atendentes prestativos',4),T('menu variado',3),T('venda casada',2,true),T('comida gostosa',2)]},
-      'Saul Elkind':{nota:4.0,aval:93,dt:'2026-08-18',tags:[]},
+      'Aeroporto':{nota:4.5,aval:4248,dt:'2026-08-25',tags:[T('promoções',24),T('opções',18),T('ótimos lanches',16),T('frio',14,true)]},
+      'Centro':{nota:4.6,aval:3832,dt:'2026-08-25',tags:[T('ambiente agradável',43),T('hot dog',27),T('pratos prontos',13),T('combos',9)]},
+      'Winston Churchill / Zona Norte':{nota:4.4,aval:3512,dt:'2026-08-26',tags:[T('tempo de espera',28,true),T('pizza',29),T('hot dog',7),T('área espaçosa',5)]},
+      'Zona Sul / Igapó':{nota:4.5,aval:2133,dt:'2026-08-26',tags:[T('pizza',38),T('espaço kids',15),T('yakisoba',3),T('pratos prontos',6)]},
+      'Jamil Scaff':{nota:4.3,aval:762,dt:'2026-08-26',tags:[T('ambiente',21),T('mesas',20),T('pastéis',15),T('frio',15,true)]},
+      'Higienópolis':{nota:4.5,aval:687,dt:'2026-08-26',tags:[T('comida japonesa',28),T('ambiente agradável',26),T('poke',9),T('kung pao chicken',4)]},
+      'Pizzas e Massas':{nota:4.2,aval:552,dt:'2026-08-17',tags:[T('rodízio',105),T('doces',22),T('gerente',21),T('atendente',16)]},
+      'Santo Amaro':{nota:4.4,aval:153,dt:'2026-08-26',tags:[T('lanche',8),T('mesas',6),T('educação',5),T('atendente',4)]},
+      'Street':{nota:3.7,aval:127,dt:'2026-08-26',tags:[T('pizza',20),T('lanche',17),T('rodízio',14),T('mesa',12)]},
+      'Mercado 88':{nota:3.7,aval:55,dt:'2026-08-26',tags:[T('refrigerante',4,true),T('cozinha',4),T('atendente',3),T('ambiente',3)]},
+      'Saul Elkind':{nota:4.0,aval:94,dt:'2026-08-26',tags:[T('gerente',8),T('mesa',5),T('batata',3),T('simpático',3)]},
       'Arthur Thomas':{nota:4.2,aval:59,dt:'2026-08-18',tags:[]},
-      'Maringá 1730':{nota:4.3,aval:1152,dt:'2026-08-18',tags:[]},
-      'Alphaville':{nota:4.6,aval:273,dt:'2026-08-18',tags:[T('pizza',15),T('espaço kids',7),T('poke',3),T('garçons atenciosos',2)]},
-      'Madre':{nota:4.3,aval:247,dt:'2026-08-18',tags:[]}
+      'Maringá 1730':{nota:4.3,aval:1153,dt:'2026-08-27',tags:[]},
+      'Alphaville':{nota:4.6,aval:274,dt:'2026-08-27',tags:[T('pizza',15),T('espaço kids',7),T('poke',3),T('garçons atenciosos',2)]},
+      'Madre':{nota:4.3,aval:247,dt:'2026-08-18',tags:[]},
+      "Rob's":{nota:4.4,aval:151,dt:'2026-08-27',tags:[T('batata',7),T('ambiente',6),T('mesa',6),T('bisnaga',5)]}
     },
     trip:{
       'Maringá / Aterro Igapó':{nota:4.2,aval:77,dt:'2026-08-18',dist:[36,31,4,2,4],sub:{Atendimento:4.4,Comida:4.5,Custo:4.5,Ambiente:3.8},status:'ativa'},
@@ -1157,8 +1530,8 @@ function seed(){
       'Maringá 1730':{nota:null,aval:0,dt:'2026-08-18',status:'ficha existe, 0 avaliações — não reivindicada'},
       'Alphaville':{nota:null,aval:0,dt:'2026-08-18',status:'ficha existe, 0 avaliações — sem gestão do anúncio'}
     },
-    agregados:AGG, sac:{unidade:'Arthur Thomas',periodo:'mês encerrado em 18/08/2026',matriz:SACM},
-    comentarios:{}, registros:regs.concat(regsIfood,regsSac)
+    agregados:AGG.concat(AGG2), sac:{unidade:'Arthur Thomas',periodo:'mês encerrado em 18/08/2026',matriz:SACM},
+    comentarios:{}, registros:regs.concat(regsIfood,regsIfood2,regsSac)
   };
 }
 
@@ -1263,6 +1636,8 @@ function render(){
   renderGoogle(regs);
   renderIfood(regs);
   renderTrip();
+  renderInsta();
+  renderGaleria();
   renderSac();
   renderEvidencias(regs);
   renderAcoes();
@@ -1644,8 +2019,10 @@ function renderLeitura(regs){
     if(semMapa.length)add('atencao',semMapa.length+' lojas virtuais do iFood ('+semMapa.reduce((s,a)=>s+a.n,0).toLocaleString('pt-BR')+' avaliações) ainda não estão ligadas a uma unidade física: '+semMapa.map(a=>a.loja).join(', ')+'. Enquanto isso, esse volume não aparece quando você filtra por unidade. O mapeamento é feito na aba iFood.','',[]);
     const aConf=DB.unidades.filter(u=>u.conf===0&&u.num);
     if(aConf.length)add('atencao',(aConf.length===1?'Um vínculo':aConf.length+' vínculos')+' entre a loja do iFood e a ficha do Google '+(aConf.length===1?'foi deduzido':'foram deduzidos')+', não '+(aConf.length===1?'confirmado':'confirmados')+': '+aConf.map(u=>u.marca+' '+u.num+' → '+u.ap).join(' · ')+'. O de-para dá o código da loja e a ficha do Google dá o nome; o cruzamento desses é hipótese, não dado. Confirme antes de levar número por unidade para reunião.','',[]);
-    const semCod=DB.unidades.filter(u=>u.conf===0&&!u.num);
-    if(semCod.length)add('alerta','Cliente citou uma loja que não existe no nosso cadastro: <b>'+semCod.map(u=>u.marca+' '+u.ap).join(', ')+'</b>. Não consta no de-para do iFood nem nas fichas do Google que levantamos. Ou é uma unidade fora do mapeamento, ou o cliente usou outro nome para uma loja existente — e nesse caso a reclamação está sem dono.','',[]);
+    const semCod=DB.unidades.filter(u=>u.conf===0&&!u.num&&!u.dark);
+    if(semCod.length)add('alerta','Cliente citou uma loja que não existe no nosso cadastro: <b>'+semCod.map(u=>nomeUn(u.ap)).join(', ')+'</b>. Não consta no de-para do iFood nem nas fichas do Google. Ou é uma unidade fora do mapeamento, ou o cliente usou outro nome para uma loja existente — e nesse caso a reclamação está sem dono.','',[]);
+    const darks=DB.unidades.filter(u=>u.dark&&regs.some(r=>r.unidade===u.ap));
+    if(darks.length)add('atencao',darks.length+' dark kitchen(s) do Dell Iris entraram no painel sem nome e sem loja anfitriã — o export do iFood não traz o nome da loja para essa conta. Enquanto isso, elas aparecem no ranking como se fossem unidades próprias: '+darks.map(u=>u.ap+' ('+u.end.split(' ·')[0]+')').join(' · ')+'.','',[]);
   }
   // 5c. TripAdvisor
   const T=DB.trip||{};
@@ -1731,6 +2108,7 @@ function evHtml(r){
    ((r.verbatim||'').trim()?'<div class="quote">'+esc(r.verbatim)+'</div>'
      :(canal(r.canal).esc==='star'&&notaTxt?'<div style="font-size:12.5px;color:var(--ink3)">Avaliação de '+notaTxt+' sem comentário — a nota é a evidência.</div>'
        :'<div class="noev">Registro sem relato do cliente — a evidência precisa ser anexada.</div>'))+
+   ((r.prints&&r.prints.length)?'<div class="prints">'+r.prints.map(p=>'<button class="pth" type="button" data-lb="'+p.id+'"><img src="'+p.src+'" alt="print anexado">'+(p.cap?'<span class="pcap">'+esc(p.cap)+'</span>':'')+'</button>').join('')+'</div>':'')+
    '<div class="evfoot">'+
      (r.link?'<span><span class="lb">origem</span>'+(/^https?:/.test(r.link)?'<a href="'+esc(r.link)+'" target="_blank" rel="noopener">abrir print</a>':esc(r.link))+'</span>':'<span style="color:var(--vermelho)"><span class="lb">origem</span>não informada</span>')+
      (r.cliente?'<span><span class="lb">cliente</span>'+esc(r.cliente)+'</span>':'')+
@@ -1745,10 +2123,13 @@ function renderEvidencias(regs){
    :'<div class="empty"><b>Nenhuma evidência nos filtros atuais</b>Ajuste os filtros ou registre a primeira manifestação da semana.</div>';
   ligarEdit('#listaEv');
 }
-function ligarEdit(sel){$$(sel+' [data-edit]').forEach(b=>b.onclick=e=>{e.stopPropagation();abrirModal(b.dataset.edit);});}
+function ligarEdit(sel){
+  $$(sel+' [data-edit]').forEach(b=>b.onclick=e=>{e.stopPropagation();abrirModal(b.dataset.edit);});
+  $$(sel+' [data-lb]').forEach(b=>b.onclick=e=>{e.stopPropagation();abrirLbox(b.dataset.lb);});
+}
 
 /* drawer */
-let drState={regs:[],f:'tudo',titulo:'',sub:''};
+let drState={regs:[],f:'tudo',tag:'',can:'',titulo:'',sub:''};
 const negativo=r=>r.tipo==='reclamacao'||(Number(r.nota)<=3&&r.nota!==null&&r.nota!==''&&canal(r.canal).esc==='star')||(canal(r.canal).esc==='nps'&&Number(r.nota)<7&&r.nota!==null&&r.nota!=='');
 const positivo=r=>r.tipo==='elogio'||(Number(r.nota)>=5&&canal(r.canal).esc==='star')||(canal(r.canal).esc==='nps'&&Number(r.nota)>=9);
 function prioridade(r){
@@ -1761,20 +2142,25 @@ function prioridade(r){
   return p;
 }
 function abrirEv(titulo,regs,sub){
-  drState={regs:regs||[],f:'tudo',tag:'',titulo:titulo,sub:sub||''};
+  drState={regs:regs||[],f:'tudo',tag:'',can:'',titulo:titulo,sub:sub||''};
   $('#drTitulo').textContent=titulo;
   pintarDrawer();
   $('#drawer').classList.add('on');$('#ov').classList.add('on');
   $('#drBody').scrollTop=0;
 }
 function pintarDrawer(){
-  const R=drState.regs;
+  /* TODOS = o recorte que abriu a gaveta. R = o mesmo recorte já filtrado por canal.
+     Tudo depois daqui (números, onde atacar, assuntos, grupos) usa R, então o filtro
+     de canal vale para a tela inteira, não só para a lista. */
+  const TODOS=drState.regs;
+  const R=drState.can?TODOS.filter(r=>r.canal===drState.can):TODOS.slice();
   const neg=R.filter(negativo), pos=R.filter(positivo);
   const comTexto=R.filter(r=>(r.verbatim||'').trim());
   const semAcao=R.filter(r=>r.tipo==='reclamacao'&&!(r.acao||'').trim());
   const notas=R.filter(r=>r.nota!==null&&r.nota!==''&&canal(r.canal).esc==='star').map(r=>Number(r.nota));
   const med=notas.length?(notas.reduce((a,b)=>a+b,0)/notas.length):null;
-  $('#drSub').textContent=(drState.sub?drState.sub+' · ':'')+R.length+' registro'+(R.length===1?'':'s');
+  $('#drSub').textContent=(drState.sub?drState.sub+' · ':'')+R.length+' registro'+(R.length===1?'':'s')+
+    (drState.can?' · só '+canal(drState.can).curto+' (de '+TODOS.length+')':'');
   // filtro
   const f=drState.f;
   let L=R.slice();
@@ -1838,6 +2224,17 @@ function pintarDrawer(){
       '<div class="grpB">'+g.rs.map(evHtml).join('')+'</div></div>';
   }).join(''):'<div class="empty"><b>Nada neste filtro</b>Troque o filtro acima.</div>');
   ligarEdit('#drBody');
+  /* chips de canal — contados sobre TODOS, para o chip não desaparecer depois de clicado */
+  const contCan={};
+  TODOS.forEach(r=>{(contCan[r.canal]=contCan[r.canal]||[]).push(r);});
+  const cansOrd=Object.entries(contCan).sort((a,b)=>b[1].length-a[1].length);
+  const umSo=cansOrd.length<2;
+  $('#drCanais').hidden=umSo;
+  $('#drCanais').innerHTML=umSo?'':'<span class="lb">canal</span>'+
+    '<button data-can=""'+(drState.can?'':' class="on"')+'>todos '+TODOS.length+'</button>'+
+    cansOrd.map(([id,rs])=>{const c=canal(id), on=drState.can===id;
+      return '<button data-can="'+id+'"'+(on?' class="on" style="background:'+c.cor+';border-color:'+c.cor+'"':'')+'>'+esc(c.curto||c.n)+' '+rs.length+'</button>';}).join('');
+  $$('#drCanais button').forEach(b=>b.onclick=()=>{drState.can=b.dataset.can||'';drState.tag='';pintarDrawer();$('#drBody').scrollTop=0;});
   $$('#drChips button').forEach(b=>b.onclick=()=>{drState.f=b.dataset.f;drState.tag='';pintarDrawer();$('#drBody').scrollTop=0;});
   $$('#drTags button').forEach(b=>b.onclick=()=>{drState.tag=b.dataset.tag||'';pintarDrawer();$('#drBody').scrollTop=0;});
   $$('#drBody .grpH').forEach(x=>x.onclick=()=>x.parentElement.classList.toggle('fechado'));
@@ -1931,6 +2328,17 @@ function faixa(n){
 function renderGoogle(regs){
   DB.google=DB.google||{};
   $('#gSnapData').value=DB.snapshotData||'2026-08-17';
+  /* resumo das datas de leitura — calculado do dado, para nunca ficar desatualizado */
+  (function(){
+    const el=$('#gLeituras'); if(!el)return;
+    const cont={};
+    Object.values(DB.google||{}).forEach(g=>{if(g&&g.dt)cont[g.dt]=(cont[g.dt]||0)+1;});
+    const ds=Object.keys(cont).sort();
+    if(!ds.length){el.textContent='';return;}
+    const p=n=>String(n).padStart(2,'0');
+    const fmt=iso=>{const d=new Date(iso+'T12:00:00');return p(d.getDate())+'/'+p(d.getMonth()+1);};
+    el.textContent='Leituras atuais: '+ds.map(d=>cont[d]+' ficha'+(cont[d]>1?'s':'')+' em '+fmt(d)).join(' · ')+'.';
+  })();
   const gRegs=regs.filter(r=>r.canal==='google');
   const linhas=DB.unidades.map(u=>{
     const g=DB.google[u.ap]||null;
@@ -1940,6 +2348,7 @@ function renderGoogle(regs){
     return {u,g,am,nps,baixas};
   });
   const comDado=linhas.filter(x=>x.g&&x.g.aval);
+  $('#tbGo').textContent=comDado.length;
   const somaAval=comDado.reduce((a,x)=>a+Number(x.g.aval),0);
   const pond=somaAval?comDado.reduce((a,x)=>a+Number(x.g.nota)*Number(x.g.aval),0)/somaAval:null;
   const abaixo=comDado.filter(x=>Number(x.g.nota)<4.0);
@@ -2025,8 +2434,43 @@ function renderSac(){
   compilar(regs,'#sacComp','#sacPessoas','#sacEstrat',S.periodo,iP,iA,N);
 }
 
+/* ---------- Instagram ---------- */
+function renderInsta(){
+  const regs=DB.registros.filter(r=>r.canal==='social');
+  $('#tbIg').textContent=regs.length;
+  const rec=regs.filter(r=>r.tipo==='reclamacao');
+  const eloN=regs.filter(r=>r.tipo==='elogio').length;
+  const semDono=rec.filter(r=>!(r.resp||'').trim()&&!(r.acao||'').trim());
+  const abertos=rec.filter(r=>(r.status||'aberto')==='aberto');
+  const reTel=/(\(\d{2}\)\s?)?\d{4,5}-\d{4}|\b\d{11}\b/;
+  const comTel=regs.filter(r=>reTel.test((r.verbatim||'')+' '+(r.acao||'')));
+  const semUn=regs.filter(r=>!(r.unidade||'').trim());
+  $('#igKpis').innerHTML=[
+    kpiHtml('📱 Manifestações no canal',regs.length,'directs e comentários registrados',regs.length,'ig_tot','var(--tinto)'),
+    kpiHtml('😠 Reclamações',rec.length,regs.length?Math.round(rec.length/regs.length*100)+'% do canal · '+eloN+' elogio'+(eloN===1?'':'s'):'—',rec.length,'ig_rec',rec.length?'var(--vermelho)':''),
+    kpiHtml('🔴 Sem ação nem responsável',semDono.length,semDono.length?'reclamações que ninguém assumiu':'todas com dono',semDono.length,'ig_sd',semDono.length?'var(--vermelho)':'var(--verde)'),
+    kpiHtml('⏳ Casos abertos',abertos.length,'reclamações ainda não resolvidas',abertos.length,'ig_ab',abertos.length?'var(--ambar)':'var(--verde)'),
+    kpiHtml('☎️ Telefone já coletado',comTel.length,'clientes que passaram contato — não pedir outro canal',comTel.length,'ig_tel','var(--azul)')
+  ].join('');
+  const alvos={ig_tot:regs,ig_rec:rec,ig_sd:semDono,ig_ab:abertos,ig_tel:comTel};
+  $$('#igKpis .kpi').forEach(b=>b.onclick=()=>abrirEv('Instagram — '+b.querySelector('.k').textContent,alvos[b.dataset.kpi]||regs,'canal Instagram · todos os períodos'));
+  $('#igAviso').innerHTML='<b>Como ler este canal.</b> '+regs.length+' manifestações registradas, '+rec.length+' delas reclamações. '+
+    (semUn.length?semUn.length+' registro'+(semUn.length===1?'':'s')+' sem loja identificada — o print não mostrava a unidade. ':'')+
+    (semDono.length?'<b>'+semDono.length+' reclamação'+(semDono.length===1?'':'ões')+' sem ação nem responsável.</b> ':'')+
+    'O Instagram não tem nota, então nada aqui entra na média da semana — o valor do canal é o caso a tratar e o telefone do cliente.';
+  const bar=(el,dados,cls)=>{
+    const mx=Math.max(1,...dados.map(d=>d[1].length));
+    $(el).innerHTML=dados.length?dados.map(([t,rs])=>'<button class="hb '+cls+'" data-t="'+esc(t)+'"><div><div class="hbl"><span>'+esc(t||'sem tema')+'</span></div><div class="hbt"><i style="width:'+(rs.length/mx*100)+'%"></i></div></div><div class="hbn">'+rs.length+'</div></button>').join(''):'<div class="empty" style="padding:18px">Nada aqui.</div>';
+    $$(el+' .hb').forEach(b=>b.onclick=()=>{const dd=dados.find(x=>x[0]===b.dataset.t);abrirEv(dd[0]||'sem tema',dd[1],'Instagram');});
+  };
+  bar('#igTemasNeg',contar(regs.filter(r=>r.tipo==='reclamacao'||r.tipo==='sugestao'),'tema'),'');
+  bar('#igTemasPos',contar(regs.filter(r=>r.tipo==='elogio'),'tema'),'good');
+  $('#igLista').innerHTML=regs.length?regs.slice().sort((a,b)=>b.data.localeCompare(a.data)).map(evHtml).join(''):'<div class="empty" style="padding:24px">Nenhum registro do Instagram.</div>';
+  ligarEdit('#igLista');
+}
+
 /* ---------- compilado estratégico ---------- */
-const NOMES=['Alessandra','João','Ana Júlia','Lucilene','Bruno','Carla'];
+const NOMES=['Alessandra','João','Ana Júlia','Lucilene','Fabrício','Jenilson','Valdinei'];
 const TEMA_TAG={'Atendimento da equipe':['atendimento'],'Temperatura do produto':['fria','fritura'],
  'Sabor / padrão do produto':['estragado','ponto','tempero','fritura'],'Estrutura / espaço kids':['kids'],
  'Preço x porção':['porcao','preco'],'Embalagem / transporte':['embalagem'],'Rodízio — reposição':['rodizio'],
@@ -2089,6 +2533,7 @@ function renderTrip(){
     return {u,t,npse};
   });
   const comNota=linhas.filter(x=>x.t&&x.t.aval>0);
+  $('#tbTr').textContent=comNota.length;
   const semAval=linhas.filter(x=>x.t&&!x.t.aval);
   const semFicha=linhas.filter(x=>!x.t);
   const totAval=comNota.reduce((s,x)=>s+x.t.aval,0);
@@ -2193,6 +2638,125 @@ function renderConfig(){
   $$('#tbCfgCanais [data-obs]').forEach(i=>i.onchange=()=>{DB.cobertura[i.dataset.obs]=DB.cobertura[i.dataset.obs]||{};DB.cobertura[i.dataset.obs].obs=i.value;salvar();render();});
 }
 
+/* ============================================================
+   PRINTS ANEXADOS
+   Guardados como data URL dentro do próprio DB, no localStorage.
+   Compressão forte por decisão da Amanda em 27/08: largura máxima 800px,
+   JPEG qualidade 0,62. Isso põe o print de celular em torno de 60 a 110 KB.
+   O teto do localStorage é de cerca de 5 MB; TETO_KB deixa margem para os
+   registros de texto crescerem. O anexo é BLOQUEADO antes de estourar —
+   se estourasse, o painel pararia de salvar tudo, inclusive o texto.
+   ATENÇÃO: as imagens vivem no navegador. Só o export do JSON as leva embora.
+   ============================================================ */
+const PRINT_MAXW=800, PRINT_Q=0.62, TETO_KB=4300, KB_MEDIO=90;
+function dbKb(){try{return Math.round(JSON.stringify(DB).length/1024);}catch(e){return 0;}}
+function livreKb(){return Math.max(0,TETO_KB-dbKb());}
+function cabemPrints(){return Math.floor(livreKb()/KB_MEDIO);}
+function totalPrints(){
+  let n=0;(DB.registros||[]).forEach(r=>n+=(r.prints||[]).length);
+  Object.values(DB.galeria||{}).forEach(a=>n+=a.length);return n;
+}
+function atualizarMedidor(){
+  const u=dbKb(), pc=Math.min(100,Math.round(u/TETO_KB*100));
+  const m=$('#galMed');
+  if(m){m.className='medidor'+(pc>85?' r':pc>65?' q':'');m.querySelector('i').style.width=Math.max(2,pc)+'%';}
+  const e=$('#galEsp');
+  if(e)e.textContent=u+' KB de '+TETO_KB+' KB · cabem ~'+cabemPrints()+' prints';
+  const h=$('#mPrintHelp');
+  if(h)h.textContent='reduzido para '+PRINT_MAXW+'px · '+livreKb()+' KB livres, cabem ~'+cabemPrints()+' prints';
+}
+function comprimirImagem(file){
+  return new Promise((res,rej)=>{
+    if(!/^image\//.test(file.type||'')){rej('“'+file.name+'” não é uma imagem.');return;}
+    const fr=new FileReader();
+    fr.onerror=()=>rej('Não consegui ler “'+file.name+'”.');
+    fr.onload=()=>{
+      const im=new Image();
+      im.onerror=()=>rej('Não consegui abrir “'+file.name+'” como imagem.');
+      im.onload=()=>{
+        const k=Math.min(1,PRINT_MAXW/(im.naturalWidth||PRINT_MAXW));
+        const w=Math.max(1,Math.round((im.naturalWidth||PRINT_MAXW)*k)), h=Math.max(1,Math.round((im.naturalHeight||PRINT_MAXW)*k));
+        const cv=document.createElement('canvas');cv.width=w;cv.height=h;
+        const cx=cv.getContext('2d');cx.fillStyle='#fff';cx.fillRect(0,0,w,h);cx.drawImage(im,0,0,w,h);
+        let src;
+        try{src=cv.toDataURL('image/jpeg',PRINT_Q);}catch(e){rej('O navegador barrou a conversão de “'+file.name+'”.');return;}
+        res({src:src,kb:Math.round(src.length/1024),w:w,h:h,orig:file.name});
+      };
+      im.src=fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
+}
+/* anexa a lista de arquivos no array destino; devolve o que entrou e o que não entrou */
+async function anexarPrints(files,destino){
+  const oks=[], erros=[];
+  for(const f of [...files]){
+    try{
+      const im=await comprimirImagem(f);
+      if(im.kb+40>livreKb()){
+        erros.push('“'+f.name+'” não entrou: só restam '+livreKb()+' KB e o print comprimido tem '+im.kb+' KB. Exporte o JSON e remova prints antigos.');
+        break;
+      }
+      destino.push({id:uid(),src:im.src,kb:im.kb,w:im.w,h:im.h,orig:im.orig,cap:'',em:new Date().toISOString().slice(0,10)});
+      oks.push(im);
+    }catch(e){erros.push(typeof e==='string'?e:('Falhou ao anexar “'+f.name+'”.'));}
+  }
+  return {oks:oks,erros:erros};
+}
+function acharPrint(pid){
+  for(const r of (DB.registros||[])) for(const p of (r.prints||[])) if(p.id===pid) return {p:p,r:r};
+  for(const [s,a] of Object.entries(DB.galeria||{})) for(const p of a) if(p.id===pid) return {p:p,sem:s};
+  for(const p of printsEdit) if(p.id===pid) return {p:p};
+  return null;
+}
+function abrirLbox(pid){
+  const f=acharPrint(pid); if(!f)return;
+  $('#lboxImg').src=f.p.src;
+  const partes=[];
+  if(f.p.cap)partes.push('<b>'+esc(f.p.cap)+'</b>');
+  if(f.r)partes.push(esc(nomeUn(f.r.unidade))+' · '+esc(canal(f.r.canal).n)+' · '+fmtData(f.r.data)+(f.r.cliente?' · '+esc(f.r.cliente):''));
+  if(f.sem)partes.push('galeria da semana '+fmtSemana(f.sem));
+  partes.push('<span style="color:#bbb">'+(f.p.orig?esc(f.p.orig)+' · ':'')+f.p.w+'×'+f.p.h+' px · '+f.p.kb+' KB · anexado em '+fmtData(f.p.em)+'</span>');
+  $('#lboxInfo').innerHTML=partes.join('<br>');
+  $('#lbox').classList.add('on');
+}
+function fecharLbox(){$('#lbox').classList.remove('on');$('#lboxImg').src='';}
+function chipPrint(p,attrCap,attrDel){
+  return '<div class="pchip"><img src="'+p.src+'" data-lb="'+p.id+'" alt="print anexado">'+
+    '<div><input '+attrCap+'="'+p.id+'" value="'+esc(p.cap||'')+'" placeholder="legenda do print">'+
+    '<div style="font-size:10.5px;color:var(--ink3);margin-top:3px">'+p.kb+' KB · '+p.w+'×'+p.h+'</div></div>'+
+    '<button class="px" type="button" '+attrDel+'="'+p.id+'" title="remover print">remover</button></div>';
+}
+function renderPrintsModal(){
+  const el=$('#mPrints'); if(!el)return;
+  el.innerHTML=printsEdit.length?printsEdit.map(p=>chipPrint(p,'data-cap','data-del')).join('')
+    :'<span style="font-size:12px;color:var(--ink3)">nenhum print anexado neste registro</span>';
+  $$('#mPrints [data-lb]').forEach(b=>b.onclick=e=>{e.stopPropagation();abrirLbox(b.dataset.lb);});
+  $$('#mPrints [data-cap]').forEach(i=>i.oninput=()=>{const p=printsEdit.find(x=>x.id===i.dataset.cap);if(p)p.cap=i.value;});
+  $$('#mPrints [data-del]').forEach(b=>b.onclick=()=>{printsEdit=printsEdit.filter(x=>x.id!==b.dataset.del);renderPrintsModal();});
+  atualizarMedidor();
+}
+function renderGaleria(){
+  DB.galeria=DB.galeria||{};
+  const s=filtros.semana||'';
+  if(!s){$('#galSem').textContent='selecione uma semana no filtro';$('#galLista').innerHTML='';atualizarMedidor();return;}
+  const arr=DB.galeria[s]=DB.galeria[s]||[];
+  $('#galSem').textContent='semana '+fmtSemana(s)+' · '+arr.length+' print'+(arr.length===1?'':'s')+' · '+totalPrints()+' no painel inteiro';
+  $('#galLista').innerHTML=arr.length?arr.map(p=>chipPrint(p,'data-gcap','data-gdel')).join('')
+    :'<span style="font-size:12px;color:var(--ink3)">Nenhum print geral nesta semana. O print de um cliente vai anexado no registro dele, em “editar”.</span>';
+  $$('#galLista [data-lb]').forEach(b=>b.onclick=e=>{e.stopPropagation();abrirLbox(b.dataset.lb);});
+  $$('#galLista [data-gcap]').forEach(i=>{
+    i.onchange=()=>{const p=arr.find(x=>x.id===i.dataset.gcap);if(p){p.cap=i.value;salvar();}};
+  });
+  $$('#galLista [data-gdel]').forEach(b=>b.onclick=()=>{
+    const p=arr.find(x=>x.id===b.dataset.gdel);
+    if(!confirm('Remover este print da galeria da semana? Não tem como desfazer.'))return;
+    DB.galeria[s]=arr.filter(x=>x.id!==b.dataset.gdel);
+    salvar();renderGaleria();toast('Print removido — '+(p?p.kb:0)+' KB liberados.');
+  });
+  atualizarMedidor();
+}
+
 /* ---------- modal ---------- */
 function abrirModal(id){
   editId=id||null;
@@ -2200,7 +2764,11 @@ function abrirModal(id){
   $('#mdTitulo').textContent=r?'Editar registro':'Novo registro';
   $('#mdExcluir').hidden=!r;
   $('#mCanal').innerHTML=CANAIS.map(c=>opt(c.id,c.n,r?r.canal:'sac')).join('');
-  $('#mUnidade').innerHTML=DB.unidades.map(u=>opt(u.ap,nomeUn(u.ap),r?r.unidade:DB.unidades[0].ap)).join('');
+  /* CORREÇÃO 27/08: antes, abrir um registro sem loja identificada e salvar jogava ele
+     para a primeira unidade da lista (Biggs 01) sem avisar. Agora existe a opção vazia,
+     e ela fica selecionada quando o registro não tem unidade. */
+  const unSel=r?(r.unidade||''):DB.unidades[0].ap;
+  $('#mUnidade').innerHTML=opt('','— unidade não identificada —',unSel)+DB.unidades.map(u=>opt(u.ap,nomeUn(u.ap),unSel)).join('');
   $('#mTipo').innerHTML=TIPOS.map(t=>opt(t.id,t.n,r?r.tipo:'reclamacao')).join('');
   const temas=[...new Set(DB.temas.concat(DB.registros.map(x=>x.tema).filter(Boolean)))].sort();
   $('#mTema').innerHTML=opt('','— sem tema —',r?r.tema:'')+temas.map(t=>opt(t,t,r?r.tema:'')).join('');
@@ -2214,6 +2782,8 @@ function abrirModal(id){
   $('#mResp').value=r?r.resp||'':'';
   $('#mPrazo').value=r?r.prazo||'':'';
   $('#mStatus').value=r?(r.status||'aberto'):'aberto';
+  printsEdit=(r&&Array.isArray(r.prints))?r.prints.map(p=>Object.assign({},p)):[];
+  renderPrintsModal();
   ajustarNota();
   $('#modal').classList.add('on');$('#ov').classList.add('on');
   setTimeout(()=>$('#mVerbatim').focus(),120);
@@ -2233,7 +2803,8 @@ function salvarRegistro(){
   const nota=$('#mNota').value===''?null:Number($('#mNota').value);
   const dados={data:$('#mData').value,canal:$('#mCanal').value,unidade:$('#mUnidade').value,tipo:$('#mTipo').value,
     tema:$('#mTema').value,nota:nota,verbatim:v,link:$('#mLink').value.trim(),cliente:$('#mCliente').value.trim(),
-    acao:$('#mAcao').value.trim(),resp:$('#mResp').value.trim(),prazo:$('#mPrazo').value,status:$('#mStatus').value};
+    acao:$('#mAcao').value.trim(),resp:$('#mResp').value.trim(),prazo:$('#mPrazo').value,status:$('#mStatus').value,
+    prints:printsEdit.map(p=>Object.assign({},p))};
   if(editId){Object.assign(DB.registros.find(r=>r.id===editId),dados);}
   else{DB.registros.push(Object.assign({id:uid()},dados));}
   salvar();fecharTudo();render();toast(editId?'Registro atualizado.':'Registro adicionado.');
@@ -2244,12 +2815,17 @@ function baixar(nome,conteudo,tipoMime){
   const b=new Blob([conteudo],{type:tipoMime});const u=URL.createObjectURL(b);
   const a=document.createElement('a');a.href=u;a.download=nome;a.click();setTimeout(()=>URL.revokeObjectURL(u),1500);
 }
-function exportarJson(){baixar('cx_sal_'+filtros.semana+'.json',JSON.stringify(DB,null,2),'application/json');toast('JSON exportado — guarde este arquivo.');}
+function exportarJson(){
+  baixar('cx_sal_'+filtros.semana+'.json',JSON.stringify(DB,null,2),'application/json');
+  const np=totalPrints();
+  toast(np?('JSON exportado com '+np+' print'+(np===1?'':'s')+' dentro ('+dbKb()+' KB) — este arquivo é a única cópia das imagens.')
+          :'JSON exportado — guarde este arquivo.');
+}
 function exportarCsv(){
   const regs=base();
-  const cab=['data','semana','canal','unidade','tipo','tema','nota','relato','origem','cliente','acao','responsavel','prazo','status'];
+  const cab=['data','semana','canal','unidade','tipo','tema','nota','relato','origem','cliente','acao','responsavel','prazo','status','prints_anexados'];
   const q=s=>'"'+String(s??'').replace(/"/g,'""')+'"';
-  const linhas=regs.map(r=>[r.data,fmtSemana(segunda(r.data)),canal(r.canal).n,nomeUn(r.unidade),tipo(r.tipo).n,r.tema,r.nota,r.verbatim,r.link,r.cliente,r.acao,r.resp,r.prazo,stat(r.status||'aberto').n].map(q).join(';'));
+  const linhas=regs.map(r=>[r.data,fmtSemana(segunda(r.data)),canal(r.canal).n,nomeUn(r.unidade),tipo(r.tipo).n,r.tema,r.nota,r.verbatim,r.link,r.cliente,r.acao,r.resp,r.prazo,stat(r.status||'aberto').n,(r.prints||[]).length].map(q).join(';'));
   baixar('cx_sal_'+filtros.semana+'.csv','\ufeff'+cab.join(';')+'\n'+linhas.join('\n'),'text/csv');
   toast('CSV exportado ('+regs.length+' registros).');
 }
@@ -2291,7 +2867,7 @@ function resumoZap(){
   const txt=L.join('\n');
   navigator.clipboard.writeText(txt).then(()=>toast('Resumo copiado — cole no WhatsApp.'),()=>{
     abrirEv('Resumo para WhatsApp',[],'copie o texto abaixo');
-    $('#drStats').innerHTML='';$('#drChips').innerHTML='';$('#drTags').innerHTML='';
+    $('#drStats').innerHTML='';$('#drChips').innerHTML='';$('#drTags').innerHTML='';$('#drCanais').innerHTML='';
     $('#drBody').innerHTML='<div style="padding:16px"><textarea style="width:100%;min-height:60vh;font-family:var(--mono);font-size:12.5px;border:1px solid var(--line);border-radius:8px;padding:12px">'+esc(txt)+'</textarea></div>';
   });
 }
@@ -2311,7 +2887,7 @@ async function salvarArquivo(){
 function trocarAba(t){
   aba=t;
   $$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
-  ['panorama','ifood','sac','evidencias','acoes','historico','config'].forEach(k=>$('#v-'+k).hidden=(k!==t));
+  ['panorama','ifood','google','insta','sac','trip','evidencias','acoes','historico','config'].forEach(k=>$('#v-'+k).hidden=(k!==t));
   $('#filtros').style.display=(t==='config')?'none':'';
 }
 
@@ -2321,6 +2897,7 @@ function init(){
   DB.sessoes=(DB.sessoes||0)+1;
   DB.comentarios=DB.comentarios||{};DB.cobertura=DB.cobertura||{};DB.meta=DB.meta??60;
   DB.google=DB.google||{};DB.metaNota=DB.metaNota||4.8;DB.modoNps=DB.modoNps||'todos';DB.snapshotData=DB.snapshotData||'2026-08-17';
+  DB.galeria=DB.galeria||{};
   if(DB.unidades.length&&typeof DB.unidades[0]==='string')DB.unidades=DB.unidades.map(s=>({ap:s,marca:'',num:'',end:''}));
   filtros.semana=semanasDisponiveis()[0]||segunda('2026-08-10');
   if(DB.registros.some(r=>segunda(r.data)==='2026-08-10'))filtros.semana='2026-08-10';
@@ -2338,7 +2915,7 @@ $('#btNovo').onclick=()=>abrirModal(null);
 $('#mCanal').onchange=ajustarNota;
 $('#mdSalvar').onclick=salvarRegistro;
 $('#mdCancelar').onclick=fecharTudo;$('#mdFechar').onclick=fecharTudo;$('#drFechar').onclick=fecharTudo;$('#ov').onclick=fecharTudo;
-document.addEventListener('keydown',e=>{if(e.key==='Escape')fecharTudo();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('#lbox').classList.contains('on')){fecharLbox();return;}fecharTudo();}});
 $('#mdExcluir').onclick=()=>{if(!confirm('Excluir este registro? A evidência será perdida.'))return;
   DB.registros=DB.registros.filter(r=>r.id!==editId);salvar();fecharTudo();render();toast('Registro excluído.');};
 $('#comentario').onchange=e=>{DB.comentarios[filtros.semana]=e.target.value;salvar();};
@@ -2362,6 +2939,36 @@ $('#cfgTemas').onchange=e=>{DB.temas=e.target.value.split('\n').map(s=>s.trim())
 $('#cfgMeta').onchange=e=>{DB.meta=Number(e.target.value);salvar();render();};
 $('#cfgMetaNota').onchange=e=>{DB.metaNota=Number(e.target.value)||4.8;salvar();render();};
 $('#btVincular').onclick=vincularArquivo;$('#btSalvarArq').onclick=salvarArquivo;
+
+/* prints anexados */
+$('#mPrintBt').onclick=()=>$('#mPrintIn').click();
+$('#mPrintIn').onchange=async e=>{
+  const fs=e.target.files; if(!fs||!fs.length)return;
+  $('#mPrintBt').disabled=true;$('#mPrintBt').textContent='comprimindo…';
+  const {oks,erros}=await anexarPrints(fs,printsEdit);
+  $('#mPrintBt').disabled=false;$('#mPrintBt').textContent='📎 anexar print';
+  renderPrintsModal();e.target.value='';
+  if(oks.length)toast(oks.length+' print'+(oks.length===1?'':'s')+' anexado'+(oks.length===1?'':'s')+' ('+oks.reduce((a,x)=>a+x.kb,0)+' KB) — salve o registro para gravar.');
+  if(erros.length)alert(erros.join('\n\n'));
+};
+$('#galBt').onclick=()=>{
+  if(!filtros.semana){toast('Escolha uma semana no filtro antes de anexar.');return;}
+  $('#galIn').click();
+};
+$('#galIn').onchange=async e=>{
+  const fs=e.target.files; if(!fs||!fs.length)return;
+  const s=filtros.semana; DB.galeria=DB.galeria||{}; DB.galeria[s]=DB.galeria[s]||[];
+  $('#galBt').disabled=true;$('#galBt').textContent='comprimindo…';
+  const {oks,erros}=await anexarPrints(fs,DB.galeria[s]);
+  $('#galBt').disabled=false;$('#galBt').textContent='📎 anexar print na semana';
+  e.target.value='';
+  if(oks.length){salvar();}
+  renderGaleria();
+  if(oks.length)toast(oks.length+' print'+(oks.length===1?'':'s')+' na galeria de '+fmtSemana(s)+' ('+oks.reduce((a,x)=>a+x.kb,0)+' KB). Exporte o JSON para não perder.');
+  if(erros.length)alert(erros.join('\n\n'));
+};
+$('#lboxX').onclick=fecharLbox;
+$('#lbox').onclick=e=>{if(e.target.id==='lbox')fecharLbox();};
 
 init();
 </script>
