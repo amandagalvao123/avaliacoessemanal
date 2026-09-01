@@ -773,6 +773,14 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
       </div>
     </div>
     <div class="sec">
+      <h2>🔄 Dados do arquivo</h2>
+      <p class="sub">O painel guarda o banco no seu navegador para não perder o que você edita à mão. Quando chega um arquivo novo, ele acrescenta sozinho as avaliações, os agregados do iFood e as fichas do Google que só existem no arquivo. Se por algum motivo alguma aba abrir zerada, aperte aqui: o painel refaz essa comparação e acrescenta o que faltar. <b>Nada é apagado.</b></p>
+      <div class="card"><div class="cb" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn pri" type="button" id="btRecarregar">🔄 conferir e carregar dados do arquivo</button>
+        <span style="font-size:12px;color:var(--ink2)" id="cfgSeed"></span>
+      </div></div>
+    </div>
+    <div class="sec">
       <h2>📡 Cobertura dos canais</h2>
       <p class="sub">Marque onde o canal já está ativo. O painel usa isso para diferenciar “sem reclamação” de “sem coleta”.</p>
       <div class="card"><div class="tblwrap" style="max-height:none"><table id="tbCfgCanais"></table></div></div>
@@ -891,9 +899,9 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
    CX | SAL Restaurantes — biblioteca Ragga
    Arquivo único. Sem framework, sem servidor.
    ============================================================ */
-const KEY='cxSal_v41';
+const KEY='cxSal_v42';
 /* chaves anteriores, da mais nova para a mais antiga: a v34 aproveita o que já estava salvo */
-const KEYS_ANT=['cxSal_v40','cxSal_v39','cxSal_v38','cxSal_v37','cxSal_v36','cxSal_v35','cxSal_v34','cxSal_v32','cxSal_v31'];
+const KEYS_ANT=['cxSal_v41','cxSal_v40','cxSal_v39','cxSal_v38','cxSal_v37','cxSal_v36','cxSal_v35','cxSal_v34','cxSal_v32','cxSal_v31'];
 
 const CANAIS=[
  {id:'sac',   cor:'#E96821', n:'📋 SAC / QR Code das lojas', curto:'📋 SAC / QR',    esc:'nps',  desc:'Avaliações, reclamações, elogios e sugestões.'},
@@ -1014,6 +1022,56 @@ function carregar(){
   }catch(e){podeSalvar=false;}
   return false;
 }
+
+/* ============================================================
+   COMPLEMENTO DE DADOS — corrige o problema de 01/09.
+   O painel guarda o banco no navegador e, quando chega uma versão nova,
+   ele migra o banco antigo para não perder o que a Amanda editou à mão.
+   Só que assim os dados NOVOS do arquivo (avaliações, agregados do iFood,
+   snapshots do Google) não entravam: o navegador continuava com a foto antiga.
+   Foi o que aconteceu — a aba do iFood abriu zerada porque os agregados da
+   semana 24 a 30/08 estavam só no arquivo, não no banco salvo.
+
+   Agora, a cada lote de dados novo o SEED_V sobe. Se o banco salvo for de um
+   SEED_V menor, o painel compara com os dados do arquivo e acrescenta só o que
+   falta, sem tocar no que já existe e sem apagar edição nenhuma.
+   ============================================================ */
+const SEED_V=7;
+function assinaturaReg(r){
+  return [r.canal||'', r.data||'', r.unidade||'', r.loja||'',
+    String(r.cliente||'').trim().toLowerCase(),
+    (r.nota===''||r.nota===null||r.nota===undefined)?'':String(r.nota),
+    String(r.verbatim||'').replace(/\s+/g,' ').trim().slice(0,70).toLowerCase()].join('|');
+}
+function chaveAgg(a){return [a.semana||'',a.canal||'',a.loja||'',a.cod||'',a.unidade||''].join('|');}
+function completarComSeed(){
+  if((DB.seedV||0)>=SEED_V) return null;
+  let S; try{S=seed();}catch(e){return null;}
+  DB.registros=DB.registros||[]; DB.agregados=DB.agregados||[]; DB.google=DB.google||{};
+  const tem=new Set(DB.registros.map(assinaturaReg));
+  let reg=0;
+  (S.registros||[]).forEach(r=>{const a=assinaturaReg(r); if(!tem.has(a)){DB.registros.push(r);tem.add(a);reg++;}});
+  const temA=new Set(DB.agregados.map(chaveAgg));
+  let agg=0;
+  (S.agregados||[]).forEach(a=>{const k=chaveAgg(a); if(!temA.has(k)){DB.agregados.push(a);temA.add(k);agg++;}});
+  /* snapshot do Google: fica sempre a leitura mais recente */
+  let snap=0;
+  for(const k in (S.google||{})){
+    const novo=S.google[k], atual=DB.google[k];
+    if(!atual || String(novo.dt||'')>String(atual.dt||'')){DB.google[k]=novo;snap++;}
+  }
+  const aps=new Set((DB.unidades||[]).map(u=>u&&u.ap));
+  (S.unidades||[]).forEach(u=>{if(!aps.has(u.ap)){DB.unidades.push(u);aps.add(u.ap);}});
+  DB.temas=[...new Set((DB.temas||[]).concat(S.temas||[]))];
+  DB.trip=DB.trip&&Object.keys(DB.trip).length?DB.trip:S.trip;
+  DB.sac=DB.sac&&Object.keys(DB.sac).length?DB.sac:S.sac;
+  DB.cobertura=S.cobertura||DB.cobertura;
+  DB.metaNota=DB.metaNota||S.metaNota;
+  DB.versao=S.versao; DB.seedV=SEED_V;
+  salvar();
+  return {reg,agg,snap};
+}
+
 function chipSessao(){
   const c=$('#chipSessao');
   if(!podeSalvar){c.className='chip warn';c.textContent='sem gravação — exporte o JSON';return;}
@@ -2158,7 +2216,7 @@ function seed(){
   ];
 
   return {
-    versao:'6.5', sessoes:1, meta:60, metaNota:4.8, modoNps:'todos', snapshotData:'2026-08-27',
+    versao:'6.6', sessoes:1, meta:60, metaNota:4.8, modoNps:'todos', snapshotData:'2026-08-27',
     unidades:UN_PADRAO.map(u=>Object.assign({},u)), temas:TEMAS_PADRAO.slice(),
     cobertura:{sac:{ativo:false,obs:'Ativo apenas no Biggs 13 · leitura mensal, não semanal'},ifood:{ativo:true,obs:'export oficial por semana · inclui as dark kitchens Dell Iris'},zap:{ativo:false,obs:'sem coleta nesta semana'},social:{ativo:true,obs:'Instagram — directs e comentários · prints de 18/08 e de 27/08 (capturas da semana 17 a 23/08) · 3 casos esperando a loja: uDantt, Ana Angélica Rodrigues e Bruna Fileto'},card:{ativo:false,obs:'sem coleta nesta semana'},lider:{ativo:false,obs:'sem coleta nesta semana'},google:{ativo:true,obs:'17 fichas com leitura de 01/09 — as 17 unidades com ficha mapeada · Biggs 09 Street e Isaías 02 Alphaville conferidos em 01/09 sem avaliação nova; Biggs 06 Higienópolis e Rob\'s com ficha parada, sem avaliação nova · Mapoli segue sem ficha lida e as 4 Dell Iris são dark kitchens sem ficha · PENDENTE: 1 avaliação do Biggs 05 sem nome no print, 6 registros sem print anexado e 2 clientes que aparecem em duas lojas no mesmo dia'},trip:{ativo:false,obs:'só 2 fichas com avaliação · 3 sem reivindicação · 13 unidades sem ficha'},'99':{ativo:false,obs:'sem coleta nesta semana'}},
     google:{
@@ -3448,6 +3506,8 @@ function renderIfood(regs){
 
 /* config */
 function renderConfig(){
+  const _s=$('#cfgSeed');
+  if(_s)_s.textContent='banco no navegador: '+(DB.registros||[]).length+' avaliações · '+(DB.agregados||[]).length+' linhas de export · '+Object.keys(DB.google||{}).length+' fichas do Google · versão dos dados '+(DB.seedV||0)+' de '+SEED_V;
   $('#tbCfgUn').innerHTML='<thead><tr><th>Nº</th><th>Marca</th><th>Apelido</th><th>Endereço</th><th></th></tr></thead><tbody>'+
    DB.unidades.map((u,i)=>{
      const st='border:1px solid var(--line);border-radius:5px;padding:4px 6px;font-size:12.5px;width:100%';
@@ -3852,8 +3912,11 @@ function trocarAba(t){
 
 /* ---------- boot ---------- */
 function init(){
-  if(!carregar()){DB=seed();salvar();}
+  const novo=!carregar();
+  if(novo){DB=seed();DB.seedV=SEED_V;salvar();}
   DB.sessoes=(DB.sessoes||0)+1;
+  /* acrescenta ao banco salvo o que só existe no arquivo desta versão */
+  const cs=novo?null:completarComSeed();
   DB.comentarios=DB.comentarios||{};DB.cobertura=DB.cobertura||{};DB.meta=DB.meta??60;
   DB.google=DB.google||{};DB.metaNota=DB.metaNota||4.8;DB.modoNps=DB.modoNps||'todos';DB.snapshotData=DB.snapshotData||'2026-08-17';
   DB.galeria=DB.galeria||{};DB.prints=DB.prints||{};
@@ -3863,6 +3926,13 @@ function init(){
   const avisos=[];
   if(mg.movidas||mg.reaproveitadas)avisos.push('prints reorganizados no depósito único');
   if(pb.novos)avisos.push(pb.novos+' prints originais carregados e ligados a '+pb.ligados+' registros');
+  if(cs&&(cs.reg||cs.agg||cs.snap)){
+    const partes=[];
+    if(cs.reg)partes.push(cs.reg+' avaliações');
+    if(cs.agg)partes.push(cs.agg+' linhas do export do iFood');
+    if(cs.snap)partes.push(cs.snap+' fichas do Google');
+    avisos.unshift('dados novos do arquivo carregados: '+partes.join(', '));
+  }
   if(avisos.length)setTimeout(()=>toast(avisos.join(' · ')+'.'),700);
   if(DB.unidades.length&&typeof DB.unidades[0]==='string')DB.unidades=DB.unidades.map(s=>({ap:s,marca:'',num:'',end:''}));
   filtros.semana=semanasDisponiveis()[0]||segunda('2026-08-10');
@@ -3881,6 +3951,13 @@ let bqT;$('#bqTexto').oninput=e=>{clearTimeout(bqT);const v=e.target.value;bqT=s
 ['bqSem','bqUn','bqCan','bqTipo'].forEach(id=>$('#'+id).onchange=e=>{
   busca[{bqSem:'sem',bqUn:'un',bqCan:'can',bqTipo:'tipo'}[id]]=e.target.value;renderBuscar();});
 $('#bqLimpar').onclick=()=>{busca={q:'',sem:'',un:'',can:'',tipo:''};$('#bqTexto').value='';renderBuscar();};
+$('#btRecarregar').onclick=()=>{
+  const antes=(DB.seedV||0); DB.seedV=0;
+  const r=completarComSeed()||{reg:0,agg:0,snap:0};
+  if(!r.reg&&!r.agg&&!r.snap){DB.seedV=Math.max(antes,SEED_V);salvar();toast('Nada faltando — o painel já está com todos os dados deste arquivo.');}
+  else toast('Carregados: '+r.reg+' avaliações, '+r.agg+' linhas do iFood e '+r.snap+' fichas do Google.');
+  filtros.semana=semanasDisponiveis()[0]||filtros.semana; render();
+};
 $('#btNovo').onclick=()=>abrirModal(null);
 $('#mCanal').onchange=ajustarNota;
 $('#mdSalvar').onclick=salvarRegistro;
