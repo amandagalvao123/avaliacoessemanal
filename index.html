@@ -524,6 +524,7 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
             <div class="npsBig" id="heroVal">—</div>
             <div class="npsScale"><span id="heroBase">—</span> <span id="heroDelta"></span></div>
             <div style="font-size:12px;color:var(--ink2);margin-top:8px" id="heroLeitura"></div>
+            <button class="btn gh" id="btComoNota" style="margin-top:9px;font-size:12px">🧮 como esta nota é feita?</button>
           </div>
           <div class="npsR">
             <div class="semaforo" id="heroSem"></div>
@@ -987,9 +988,9 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
    CX | SAL Restaurantes — biblioteca Ragga
    Arquivo único. Sem framework, sem servidor.
    ============================================================ */
-const KEY='cxSal_v49';
+const KEY='cxSal_v52';
 /* chaves anteriores, da mais nova para a mais antiga: a v34 aproveita o que já estava salvo */
-const KEYS_ANT=['cxSal_v48','cxSal_v47','cxSal_v46','cxSal_v45','cxSal_v44','cxSal_v43','cxSal_v42','cxSal_v41','cxSal_v40','cxSal_v39','cxSal_v38','cxSal_v37','cxSal_v36','cxSal_v35','cxSal_v34','cxSal_v32','cxSal_v31'];
+const KEYS_ANT=['cxSal_v51','cxSal_v50','cxSal_v49','cxSal_v48','cxSal_v47','cxSal_v46','cxSal_v45','cxSal_v44','cxSal_v43','cxSal_v42','cxSal_v41','cxSal_v40','cxSal_v39','cxSal_v38','cxSal_v37','cxSal_v36','cxSal_v35','cxSal_v34','cxSal_v32','cxSal_v31'];
 
 const CANAIS=[
  {id:'sac',   cor:'#E96821', n:'📋 SAC / QR Code das lojas', curto:'📋 SAC / QR',    esc:'nps',  desc:'Avaliações, reclamações, elogios e sugestões.'},
@@ -2762,7 +2763,7 @@ function seed(){
   ];
 
   return {
-    versao:'7.3', sessoes:1, meta:60, metaNota:4.8, modoNps:'todos', snapshotData:'2026-08-27',
+    versao:'7.6', sessoes:1, meta:60, metaNota:4.8, modoNps:'todos', snapshotData:'2026-08-27',
     unidades:UN_PADRAO.map(u=>Object.assign({},u)), temas:TEMAS_PADRAO.slice(),
     cobertura:{sac:{ativo:false,obs:'Ativo apenas no Biggs 13 · leitura mensal, não semanal'},ifood:{ativo:true,obs:'export oficial por semana · semana 31/08 a 06/09 com 2.765 avaliações em 54 lojas virtuais · inclui as 4 dark kitchens Dell Iris · o merchant e255c2c8 (44 avaliações nesta semana) segue sem nome e sem loja física identificada'},zap:{ativo:false,obs:'sem coleta nesta semana'},social:{ativo:true,obs:'Instagram — directs e comentários · prints de 18/08, 27/08 e 10/09 · semana 31/08 a 06/09 com 5 conversas, 4 delas da Dell Iris sem identificar qual das 4 cozinhas · seguem sem loja: uDantt, Ana Angélica Rodrigues e Bruna Fileto'},card:{ativo:false,obs:'sem coleta nesta semana'},lider:{ativo:false,obs:'sem coleta nesta semana'},google:{ativo:true,obs:'Leitura de 10/09 em 14 fichas · Biggs 07 Jamil Scaff tem avaliação nova mas a FICHA não foi capturada, então o volume dele segue com a leitura de 01/09 · Biggs 04 Winston Churchill e Biggs 05 Zona Sul sem releitura em 10/09 · Mapoli sem ficha e as 4 Dell Iris são dark kitchens sem ficha · PENDENTE: 3 avaliações com texto colapsado em Mais (Sthefan Piccinini, Thiago Henrique Romagnoli e Rian Charles Santos), 1 avaliação do Biggs 05 sem nome, 4 registros do Arthur Thomas e 1 do Saul Elkind sem print, e 5 fichas com avaliação saindo do ar'},trip:{ativo:false,obs:'só 2 fichas com avaliação · 3 sem reivindicação · 13 unidades sem ficha'},'99':{ativo:false,obs:'sem coleta nesta semana'}},
     google:{
@@ -2929,8 +2930,10 @@ function renderFiltros(){
   const semReg=CANAIS.filter(c=>!daSemana(filtros.semana).some(r=>r.canal===c.id));
   const chip=$('#chipCobertura');
   chip.className='chip '+(semReg.length?'warn':'ok');
-  chip.textContent=semReg.length? semReg.length+' canal(is) sem dado na semana' : '9 canais com dado';
-  chip.title=semReg.map(c=>c.n).join(', ');
+  chip.textContent=semReg.length? semReg.length+' canal(is) sem dado neste recorte' : '9 canais com dado';
+  chip.title=semReg.length?('clique para ver quais: '+semReg.map(c=>c.n).join(', ')):'os 9 canais trouxeram dado neste recorte';
+  chip.style.cursor=semReg.length?'pointer':'default';
+  chip.onclick=semReg.length?(()=>abrirCobertura(semReg.map(c=>c.id))):null;
 }
 
 /* termômetro */
@@ -3139,6 +3142,85 @@ function renderAcumulado(){
     document.querySelector('#v-panorama .sec:nth-of-type(2)').scrollIntoView({behavior:'smooth',block:'start'});});
 }
 
+/* ================= COMO A NOTA É FEITA =================
+   Explicação para a Amanda conseguir defender o número em reunião.
+   Tudo calculado AO VIVO com o filtro aberto — nada escrito à mão. */
+function explicarNota(){
+  const S=filtros.semana, un=filtros.unidade||'';
+  const nomeFiltro=un?(nomeUn(un)||'sem loja'):'toda a rede';
+  const regs=daSemana(S);
+  const C=contar5(regs,null,S);
+  const linhas=CANAIS.filter(c=>c.esc==='star').map(c=>{
+    const k=contar5(regs,a=>a.canal===c.id,S);
+    return {c:c, n:k.nEst, m:k.media, estrelas:k.media===null?0:Math.round(k.media*k.nEst)};
+  }).filter(x=>x.n>0).sort((a,b)=>b.n-a.n);
+  const somaEst=linhas.reduce((a,x)=>a+x.estrelas,0);
+  const somaN=linhas.reduce((a,x)=>a+x.n,0);
+  const nf2=v=>v===null?'—':v.toFixed(2).replace('.',',');
+  /* contraprova: a média das médias, que é o erro comum */
+  const mediaDasMedias=linhas.length>1?linhas.reduce((a,x)=>a+x.m,0)/linhas.length:null;
+  /* canais que NÃO entram na nota */
+  const foraNota=CANAIS.filter(c=>c.esc!=='star').map(c=>{
+    const rs=regs.filter(r=>r.canal===c.id); return {c:c,n:rs.length};}).filter(x=>x.n>0);
+  /* ficha do Google guardada no painel */
+  let ficha=null;
+  const G=DB.google||{};
+  if(un && G[un]) ficha={nota:G[un].nota,aval:G[un].aval,dt:G[un].dt};
+  const gSem=contar5(regs,a=>a.canal==='google'&&(!un||a.unidade===un),S);
+
+  const tab='<table style="width:100%;border-collapse:collapse;font-size:13px;margin:6px 0 2px">'+
+    '<tr style="color:var(--ink3);font-size:11.5px;letter-spacing:.03em"><th style="text-align:left;padding:4px 0">CANAL</th>'+
+    '<th style="text-align:right">AVALIAÇÕES</th><th style="text-align:right">MÉDIA</th><th style="text-align:right">ESTRELAS</th></tr>'+
+    linhas.map(x=>'<tr style="border-top:1px solid var(--linha)"><td style="padding:5px 0">'+esc(x.c.curto)+'</td>'+
+      '<td style="text-align:right">'+fmtN(x.n)+'</td><td style="text-align:right">'+nf2(x.m)+'</td>'+
+      '<td style="text-align:right"><b>'+fmtN(x.estrelas)+'</b></td></tr>').join('')+
+    '<tr style="border-top:2px solid var(--ink)"><td style="padding:6px 0"><b>Total</b></td>'+
+    '<td style="text-align:right"><b>'+fmtN(somaN)+'</b></td><td style="text-align:right">—</td>'+
+    '<td style="text-align:right"><b>'+fmtN(somaEst)+'</b></td></tr></table>';
+
+  const contaFinal='<div style="font-size:15px;margin:8px 0 2px"><b>'+fmtN(somaEst)+'</b> estrelas ÷ <b>'+
+    fmtN(somaN)+'</b> avaliações = <b style="font-size:18px">'+nf2(C.media)+'</b></div>';
+
+  const porQue=linhas.length>1?
+    '<div class="card" style="padding:11px 13px;margin:10px 0;background:var(--bg2)">'+
+    '<b>Por que não é a média das médias.</b> Somar '+linhas.map(x=>nf2(x.m)).join(' + ')+' e dividir por '+linhas.length+
+    ' daria <b>'+nf2(mediaDasMedias)+'</b> — e daria a '+esc(linhas[linhas.length-1].c.curto)+', com '+fmtN(linhas[linhas.length-1].n)+
+    (linhas[linhas.length-1].n===1?' avaliação':' avaliações')+', o mesmo peso do '+esc(linhas[0].c.curto)+', com '+fmtN(linhas[0].n)+'. '+
+    'Cada avaliação vale uma, venha de onde vier: por isso a conta é estrela somada, não média de média.</div>':'';
+
+  const pesos='<div style="font-size:12.5px;color:var(--ink2);margin:8px 0">'+
+    linhas.map(x=>'<b>'+esc(x.c.curto)+'</b> = '+(somaN?(100*x.n/somaN).toFixed(1).replace('.',','):'0')+'% do volume').join(' · ')+
+    (linhas.length>1?'. Quem tem mais volume escreve o resultado.':'')+'</div>';
+
+  const fora=foraNota.length?'<div class="card" style="padding:11px 13px;margin:10px 0">'+
+    '<b>O que NÃO entra nesta nota.</b><br>'+
+    foraNota.map(x=>esc(x.c.n)+' — '+x.n+' registro'+(x.n===1?'':'s')+
+      (x.c.esc==='nps'?' <i>(escala 0 a 10, entra só no NPS-e)</i>':' <i>(canal sem nota, entra só como relato)</i>')).join('<br>')+
+    '</div>':'';
+
+  const google='<div class="card" style="padding:11px 13px;margin:10px 0;border-left:3px solid #4285F4">'+
+    '<b>Por que não bate com a nota que aparece no Google.</b><br>'+
+    'A nota da ficha do Google é o <b>acumulado de todas as avaliações desde que a loja abriu</b>. A daqui é <b>só o que entrou nesta semana</b>. '+
+    'Uma avaliação nova quase não mexe num acumulado de milhares.'+
+    (ficha?'<br><br>Ficha desta loja, capturada em '+fmtData(ficha.dt)+': <b>'+String(ficha.nota).replace('.',',')+'</b> em <b>'+fmtN(ficha.aval)+'</b> avaliações.'+
+      (gSem.nEst?'<br>Google <b>nesta semana</b>, nesta loja: <b>'+nf2(gSem.media)+'</b> em '+gSem.nEst+(gSem.nEst===1?' avaliação.':' avaliações.'):'<br>Google nesta semana, nesta loja: nenhuma avaliação.'):
+      '<br><br><i>Filtre uma loja para ver a ficha dela ao lado da nota da semana.</i>')+
+    '</div>';
+
+  drState={regs:[],f:'tudo',tag:'',can:'',un:'',titulo:'',sub:''};
+  $('#drTitulo').textContent='🧮 Como a nota '+nf2(C.media)+' é feita';
+  $('#drSub').textContent=fmtSemana(S)+' · '+nomeFiltro;
+  ['#drStats','#drChips','#drCanais','#drLojas','#drTags'].forEach(k=>{const e=$(k);if(e){e.innerHTML='';e.hidden=false;}});
+  $('#drBody').innerHTML=
+    '<div class="card" style="padding:12px 13px">'+
+      '<b>A regra, em uma linha:</b> soma todas as estrelas que entraram no período e divide pelo número de avaliações com estrela.'+
+      tab+contaFinal+pesos+
+    '</div>'+porQue+fora+google+
+    '<div class="card" style="padding:11px 13px;margin-top:10px;background:var(--bg2);font-size:12.5px">'+
+      'Esta conta muda com o filtro. Trocando a semana ou a loja lá em cima, a tabela acima se refaz — é sempre o cálculo do que está na tela.</div>';
+  $('#drawer').classList.add('on');$('#ov').classList.add('on');$('#drBody').scrollTop=0;
+}
+
 function renderHero(regs){
   const C=contar5(regs), ant=contar5(daSemana(semanaAnterior(filtros.semana)),null,semanaAnterior(filtros.semana));
   const el=$('#heroVal');
@@ -3156,6 +3238,7 @@ function renderHero(regs){
   const sf=(cls,em,lb,v,id)=>'<button class="sf '+cls+'" data-sf="'+id+'"><span class="lb">'+em+' '+lb+'</span>'+
     '<span class="vl">'+fmtN(v)+'</span><span class="pc">'+(v/T*100).toFixed(1)+'% do total</span></button>';
   $('#heroSem').innerHTML=sf('v','🟢','Positivos',C.pro,'pro')+sf('a','🟡','Neutros',C.neu,'neu')+sf('r','🔴','Negativos',C.det,'det');
+  { const bc=$('#btComoNota'); if(bc) bc.onclick=explicarNota; }
   $('#heroSemBar').innerHTML=[['var(--verde)',C.pro],['var(--ambar)',C.neu],['var(--vermelho)',C.det]]
     .map(x=>x[1]?'<i style="width:'+(x[1]/T*100)+'%;background:'+x[0]+'"></i>':'').join('');
   const mapaSf={pro:['🟢 Positivos',regs.filter(r=>classeNota(r)==='pro'),C.pro],
@@ -3206,6 +3289,107 @@ function renderBigNumbersOld(regs){
   $$('#bnGeral .kpi').forEach(b=>b.onclick=()=>{const m=mapa[b.dataset.kpi];if(m)abrirEv(m[0],m[1],fmtSemana(filtros.semana));});
 }
 
+/* ================= COBERTURA DOS CANAIS =================
+   Responde a pergunta "de onde eu nunca mandei evidência?".
+   Um canal pode estar sem dado por dois motivos MUITO diferentes:
+   (a) nunca recebeu nada, em nenhuma semana e em nenhuma loja — é canal não lido;
+   (b) já recebeu, mas não neste recorte de semana/loja.
+   A tela separa os dois e mostra, quando houver, quando foi e em qual loja. */
+function coberturaCanal(id){
+  const rs=(DB.registros||[]).filter(r=>r.canal===id);
+  const ag=(DB.agregados||[]).filter(a=>a.canal===id);
+  const dts=rs.map(r=>r.data).filter(Boolean).sort();
+  const un=filtros.unidade||'';
+  const daUn=un?rs.filter(r=>(r.unidade||'')===un):rs;
+  const dtsUn=daUn.map(r=>r.data).filter(Boolean).sort();
+  const mensais=rs.filter(r=>r.mensal).length;
+  return {id:id, n:rs.length, agg:ag.length, mensais:mensais, soMensal:rs.length>0&&mensais===rs.length,
+    primeiro:dts[0]||null, ultimo:dts[dts.length-1]||null,
+    lojas:[...new Set(rs.map(r=>nomeUn(r.unidade)||'sem loja'))],
+    semanas:[...new Set(rs.map(r=>segunda(r.data)).filter(Boolean))].sort(),
+    nUn:daUn.length, ultimoUn:dtsUn[dtsUn.length-1]||null, regs:rs};
+}
+function abrirCobertura(ids){
+  const un=filtros.unidade||'', nomeFiltro=un?(nomeUn(un)||'sem loja'):'toda a rede';
+  drState={regs:[],f:'tudo',tag:'',can:'',un:'',titulo:'Canais sem dado',sub:''};
+  $('#drTitulo').textContent='🕳️ Canais sem dado — de onde não veio nada';
+  $('#drSub').textContent=fmtSemana(filtros.semana)+' · '+nomeFiltro+' · estes '+ids.length+' canais trouxeram 0 registro neste recorte';
+  ['#drStats','#drChips','#drCanais','#drLojas','#drTags'].forEach(k=>{const e=$(k); if(e){e.innerHTML='';e.hidden=false;}});
+  const dados=ids.map(id=>({c:canal(id),k:coberturaCanal(id)}));
+  const nunca=dados.filter(x=>!x.k.n), jaTeve=dados.filter(x=>x.k.n);
+  const cartao=(x,tipo)=>{
+    const k=x.k, c=x.c;
+    let corpo;
+    if(tipo==='nunca'){
+      corpo='<div style="color:var(--vermelho);font-weight:700;font-size:12px;letter-spacing:.02em">NUNCA RECEBEU NADA</div>'+
+        '<div style="color:var(--ink2);font-size:13px;margin-top:4px">Nenhuma evidência deste canal foi carregada no painel — em nenhuma semana e em nenhuma loja. '+
+        'Não é falha de carga desta semana: é canal que a rede ainda não lê.</div>';
+    }else{
+      const q=k.n+' registro'+(k.n===1?'':'s');
+      const ondeQ=k.lojas.length===1?('1 loja: <b>'+esc(k.lojas[0])+'</b>'):(k.lojas.length+' lojas');
+      const quando=k.primeiro===k.ultimo?('em <b>'+fmtData(k.ultimo)+'</b>'):('de <b>'+fmtData(k.primeiro)+'</b> a <b>'+fmtData(k.ultimo)+'</b>');
+      if(k.soMensal){
+        /* canal de apuração mensal: nunca entra numa leitura de semana, por definição.
+           Não é lacuna de carga — é a natureza do canal. */
+        corpo='<div style="color:var(--ink2);font-weight:700;font-size:12px;letter-spacing:.02em">APURAÇÃO MENSAL — NÃO ENTRA EM LEITURA SEMANAL</div>'+
+          '<div style="color:var(--ink2);font-size:13px;margin-top:4px">Os '+k.n+' registros deste canal estão marcados como <b>mensais</b> no painel '+
+          '(acumulado do mês lançado numa data só, em '+fmtData(k.ultimo)+', '+(k.lojas.length===1?'em <b>'+esc(k.lojas[0])+'</b>':k.lojas.length+' lojas')+'). '+
+          'Por isso ele aparece sem dado em <b>todas</b> as semanas — inclusive na semana da própria data. Está certo assim: não é print faltando.</div>'+
+          '<div style="margin-top:7px"><button class="btn gh" data-vercob="'+c.id+'" data-escopo="tudo">ver os '+k.n+' registros mensais</button></div>';
+        return '<div class="card" style="padding:12px 13px;margin:0 0 9px">'+
+          '<div style="font-weight:800;font-size:14.5px">'+esc(c.n)+'</div>'+
+          '<div style="color:var(--ink3);font-size:12.5px;margin:2px 0 6px">'+esc(c.desc||'')+'</div>'+corpo+'</div>';
+      }
+      corpo='<div style="color:var(--ambar-esc,#8a6b12);font-weight:700;font-size:12px;letter-spacing:.02em">0 NESTE RECORTE — O QUE EXISTE ESTÁ FORA DELE</div>'+
+        '<div style="color:var(--ink2);font-size:13px;margin-top:4px"><b>Fora deste recorte:</b> '+q+' no painel, '+quando+' · '+ondeQ+
+        ' · '+k.semanas.length+' semana'+(k.semanas.length===1?'':'s')+'.</div>'+
+        (un&&!k.nUn?'<div style="color:var(--ink3);font-size:12.5px;margin-top:3px">Nesta loja ('+esc(nomeFiltro)+') este canal <b>nunca trouxe nada</b>.</div>':'')+
+        (un&&k.nUn?'<div style="color:var(--ink3);font-size:12.5px;margin-top:3px">Nesta loja: '+k.nUn+' registro'+(k.nUn===1?'':'s')+', último em '+fmtData(k.ultimoUn)+'.</div>':'')+
+        /* O botão precisa dizer de QUAL loja são os registros antes de abrir.
+           Com filtro de loja ligado, abrir o canal inteiro faz aparecer caso de outra
+           unidade e a leitura vira erro. */
+        '<div style="margin-top:7px;display:flex;gap:6px;flex-wrap:wrap">'+
+        (un&&k.nUn?'<button class="btn gh" data-vercob="'+c.id+'" data-escopo="loja">'+
+          (k.nUn===1?'ver o 1 registro desta loja':'ver os '+k.nUn+' registros desta loja')+'</button>':'')+
+        '<button class="btn gh" data-vercob="'+c.id+'" data-escopo="tudo">'+
+          (un?(k.n===1?'ver o 1 registro ⚠️ de outra loja':'ver os '+k.n+' de todas as lojas ⚠️ fora do filtro')
+             :(k.n===1?'ver o 1 registro deste canal':'ver os '+k.n+' registros deste canal'))+'</button>'+
+        '</div>';
+    }
+    return '<div class="card" style="padding:12px 13px;margin:0 0 9px">'+
+      '<div style="font-weight:800;font-size:14.5px">'+esc(c.n)+'</div>'+
+      '<div style="color:var(--ink3);font-size:12.5px;margin:2px 0 6px">'+esc(c.desc||'')+'</div>'+corpo+'</div>';
+  };
+  let html='';
+  if(nunca.length){
+    html+='<h4 style="margin:2px 0 8px;font-size:13px;letter-spacing:.04em;color:var(--ink3)">NUNCA RECEBERAM NENHUMA EVIDÊNCIA — '+nunca.length+'</h4>'+
+      nunca.map(x=>cartao(x,'nunca')).join('');
+  }
+  if(jaTeve.length){
+    html+='<h4 style="margin:14px 0 8px;font-size:13px;letter-spacing:.04em;color:var(--ink3)">ZERO NESTE RECORTE — JÁ RECEBERAM EM OUTRA SEMANA OU OUTRA LOJA — '+jaTeve.length+'</h4>'+
+      '<div style="color:var(--ink3);font-size:12.5px;margin:-4px 0 8px">Tudo o que aparece abaixo é <b>fora do filtro que você está vendo</b>. Está aqui só para você conferir se a evidência que lembra de ter mandado entrou em algum lugar.</div>'+
+      jaTeve.map(x=>cartao(x,'teve')).join('');
+  }
+  html+='<div class="card" style="padding:11px 13px;margin-top:12px;background:var(--bg2)">'+
+    '<b>Como ler.</b> Neste recorte ('+fmtSemana(filtros.semana)+' · '+esc(nomeFiltro)+') estes canais trouxeram <b>zero registro</b> — é por isso que o número do cartão é 0. '+
+    'Canal que nunca recebeu nada não é nota baixa nem problema da loja: é cobertura que falta. '+
+    'As datas e lojas citadas acima são sempre <b>de fora deste recorte</b>, e cada uma vem com o aviso.</div>';
+  $('#drBody').innerHTML=html;
+  $$('#drBody [data-vercob]').forEach(b=>b.onclick=()=>{
+    const id=b.dataset.vercob, c=canal(id), esc0=b.dataset.escopo;
+    const todos=(DB.registros||[]).filter(r=>r.canal===id);
+    if(esc0==='loja'){
+      abrirEv(c.n+' — '+nomeFiltro, todos.filter(r=>(r.unidade||'')===un),
+        'registros deste canal nesta loja, em todas as semanas');
+    }else{
+      const lj=[...new Set(todos.map(r=>nomeUn(r.unidade)||'sem loja'))];
+      abrirEv(c.n+(un?' — TODAS as lojas':''), todos,
+        (un?'⚠️ fora do filtro de loja (você está em '+nomeFiltro+') · '+lj.join(' · '):'')||
+        'todos os registros já carregados deste canal');
+    }});
+  $('#drawer').classList.add('on');$('#ov').classList.add('on');$('#drBody').scrollTop=0;
+}
+
 function renderPorCanal(regs){
   const cards=CANAIS.map(c=>{
     const C=contar5(regs,a=>a.canal===c.id);
@@ -3225,7 +3409,11 @@ function renderPorCanal(regs){
     /* último argumento true: cartão neutro. A cor fica só no número da nota. */
     return kpiHtml(x.c.n,val,sub,x.rs.length,'c_'+x.c.id,t,true);
   }).join('')+
-   (sem.length?'<div class="kpi" style="border-style:dashed"><span class="k">🕳️ canais sem dado</span><span class="v" style="color:var(--ink3)">'+sem.length+'</span><span class="d">'+sem.map(c=>esc(c.n)).join(' · ')+'</span></div>':'');
+   /* O número grande do card mede o RECORTE: nestes canais entraram ZERO registros.
+      Antes ele mostrava a quantidade de canais (7), que lida na mesma posição das
+      notas dos outros cartões dava a impressão de volume de dado onde não há nenhum. */
+   (sem.length?'<button class="kpi" id="kpiSemDado" style="border-style:dashed;cursor:pointer;text-align:left"><span class="k">🕳️ '+sem.length+' canais sem dado neste recorte</span><span class="v" style="color:var(--ink3)">0</span><span class="d">nenhum registro de: '+sem.map(c=>esc(c.curto)).join(' · ')+' <u>— ver cobertura</u></span></button>':'');
+  const bSem=$('#kpiSemDado'); if(bSem) bSem.onclick=()=>abrirCobertura(sem.map(c=>c.id));
   $$('#bnCanal .kpi[data-kpi]').forEach(b=>b.onclick=()=>{
     const id=b.dataset.kpi.slice(2), c=canal(id);
     abrirEv(c.n,regs.filter(r=>r.canal===id),fmtSemana(filtros.semana)+' · relatos com texto deste canal');});
