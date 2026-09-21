@@ -479,6 +479,7 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
       <button data-t="sac">📋 SAC salão <b id="tbSac">0</b></button>
       <button data-t="trip">🦉 TripAdvisor <b id="tbTr">0</b></button>
       <button data-t="evidencias">🧾 Evidências <b id="tbEv">0</b></button>
+      <button data-t="pdca">🎯 PDCA da semana</button>
       <button data-t="acoes">✅ Plano de ação <b id="tbAc">0</b></button>
       <button data-t="historico">📈 Histórico</button>
       <button data-t="config">⚙️ Configurar</button>
@@ -517,6 +518,7 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
     <div class="sec">
       <h2>⭐ Nota média da semana</h2>
       <p class="sub">O número principal da rede. Ponderado por todas as avaliações com nota que entraram no período.</p>
+      <div id="obsSemana"></div>
       <div class="card">
         <div class="nps">
           <div class="npsL">
@@ -559,9 +561,9 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
         </div>
         <div class="cb">
           <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:11px">
-            <span class="eyebrow">NPS</span>
-            <span class="mono" style="font-family:var(--disp);font-size:26px;font-weight:700" id="npsVal">—</span>
-            <span class="npsScale"><span id="npsBase"></span> <span id="npsDelta"></span></span>
+            <span class="eyebrow">Distribuição das notas</span>
+            <span class="mono" style="font-family:var(--disp);font-size:26px;font-weight:700;display:none" id="npsVal">—</span>
+            <span class="npsScale"><span id="npsBase"></span> <span id="npsDelta" style="display:none"></span></span>
           </div>
           <div class="bar" id="npsBar"></div>
           <div class="legend">
@@ -743,7 +745,7 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
   <div id="v-trip" hidden>
     <div class="sec">
       <h2>🦉 TripAdvisor — presença e reputação</h2>
-      <p class="sub">Snapshot de 18/08. Nenhum comentário novo no período, então este canal não gera evidência nesta semana — só posição. O TripAdvisor usa escala Excelente a Horrível, e como a distribuição é pública dá para converter em NPS-e sem estimativa.</p>
+      <p class="sub">Snapshot de 18/08. Nenhum comentário novo no período, então este canal não gera evidência nesta semana — só posição. O TripAdvisor usa escala Excelente a Horrível, e a distribuição é pública na ficha.</p>
       <div class="card" style="margin-bottom:14px"><div class="cb" id="tripResumo"></div></div>
       <div class="card"><div class="tblwrap" style="max-height:none"><table id="tbTrip"></table></div></div>
     </div>
@@ -753,7 +755,7 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
   <div id="v-ifood" hidden>
     <div class="sec">
       <h2>🛵 iFood — semana fechada</h2>
-      <p class="sub">Export oficial do iFood, avaliação por avaliação, agregado por loja virtual. Diferente do Google, aqui o volume é completo: dá para calcular o NPS-e da semana sem estimativa.</p>
+      <p class="sub">Export oficial do iFood, avaliação por avaliação, agregado por loja virtual. Diferente do Google, aqui o volume é completo: a nota da semana é o número real, não uma amostra.</p>
       <div class="grid kpis" id="ifKpis" style="margin-bottom:14px"></div>
       <div class="banner info" id="ifAviso"></div>
       <div class="card"><div class="tblwrap" style="max-height:none"><table id="tbIfood"></table></div></div>
@@ -830,6 +832,48 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
     </div>
   </div>
 
+  <!-- ============ PDCA ============ -->
+  <div id="v-pdca" hidden>
+    <div class="sec">
+      <h2>🎯 PDCA da semana</h2>
+      <p class="sub">A pauta da reunião com os gerentes, de cima para baixo: como foi a semana, quem está fora da meta, o que a gente combinou da última vez e o que vamos combinar agora.</p>
+      <div id="pdcaCab"></div>
+    </div>
+
+    <div class="sec">
+      <h2>1️⃣ PLAN — o placar da semana</h2>
+      <p class="sub">Cada loja com a nota da semana, o movimento contra a semana anterior e as reclamações que entraram. Ordenado do pior para o melhor: a reunião começa pelo topo. <b>Clique em qualquer loja para abrir o que o cliente escreveu</b> — reclamações, sugestões e elogios, um do lado do outro.</p>
+      <div class="card"><div class="tblwrap" style="max-height:none"><table id="tbPdcaLojas"></table></div></div>
+      <div id="pdcaLegenda" style="font-size:12px;color:var(--ink2);margin-top:8px"></div>
+    </div>
+
+    <div class="sec">
+      <h2>🔎 A reputação pública no Google</h2>
+      <p class="sub">Duas réguas diferentes, de propósito. A <b>ficha</b> é a nota que o cliente vê no Google: são milhares de avaliações acumuladas e ela quase não se move em uma semana — é meta de ano. As <b>avaliações novas</b> são as que entraram nesta semana: é o que o gerente consegue mudar em 7 dias, e é aí que a meta de 4,80 morde.</p>
+      <div class="card"><div class="tblwrap" style="max-height:none"><table id="tbPdcaGoogle"></table></div></div>
+      <div id="pdcaGoogleNota" style="font-size:12px;color:var(--ink2);margin-top:8px"></div>
+    </div>
+
+    <div class="sec">
+      <h2>2️⃣ DO / CHECK — o que a gente combinou antes</h2>
+      <p class="sub">Toda ação aberta das semanas anteriores. Vencida em vermelho. Esta é a primeira coisa a passar na reunião: sem conferir o que foi combinado, o PDCA vira lista de desejos.</p>
+      <div class="grid kpis" id="pdcaKpisCheck" style="margin-bottom:12px"></div>
+      <div class="card"><div class="tblwrap" style="max-height:none"><table id="tbPdcaCheck"></table></div></div>
+    </div>
+
+    <div class="sec">
+      <h2>3️⃣ ACT — o plano desta semana</h2>
+      <p class="sub">Escreva aqui durante a reunião. Cada linha é um compromisso de uma loja com um responsável e uma data. Tudo é salvo no seu navegador na hora em que você digita.</p>
+      <div class="card"><div class="cb" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <select id="pdcaNovaLoja" style="border:1px solid var(--line);border-radius:7px;padding:7px 9px;font-size:13px;min-width:200px"></select>
+        <button class="btn pri" id="btPdcaAdd">+ nova ação</button>
+        <span style="flex:1"></span>
+        <button class="btn gh" id="btPdcaCopiar">📋 copiar a ata da reunião</button>
+      </div></div>
+      <div class="card" style="margin-top:12px"><div class="tblwrap" style="max-height:none"><table id="tbPdcaPlano"></table></div></div>
+    </div>
+  </div>
+
   <!-- ============ HISTÓRICO ============ -->
   <div id="v-historico" hidden>
     <div class="sec">
@@ -837,7 +881,7 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
       <p class="sub">Comparação semana a semana. Respeita os filtros de unidade, canal e tema — mas ignora o filtro de semana.</p>
       <div class="card"><div class="tblwrap" style="max-height:none"><table id="tbHist"></table></div></div>
     </div>
-    <div class="sec">
+    <div class="sec" hidden>
       <h2>📉 Evolução do NPS</h2>
       <div class="card"><div class="cb"><div id="sparkNps"></div></div></div>
     </div>
@@ -905,11 +949,11 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
   </div>
 
   <div class="foot">
-    <b>Como o NPS é calculado aqui.</b> Promotores menos detratores, dividido pelo total de avaliações com nota. Nos canais 0–10 (SAC/QR, WhatsApp, card físico) vale o corte clássico: 9–10 promotor, 7–8 neutro, 0–6 detrator. Nos canais de estrelas (Google, iFood, TripAdvisor, 99Food) usamos a conversão de mercado: 5★ promotor, 4★ neutro, 1–3★ detrator — o chamado NPS-e. O seletor no termômetro permite ver cada escala separada, porque somar as duas é uma escolha, não uma verdade.<br>
-    <b>Nota acumulada x NPS da semana.</b> A nota do Google (4,4 · 4.374 avaliações) é a média de todo o histórico da loja e quase não se move em uma semana — serve para comparar unidades entre si. O NPS-e da semana lê só o que entrou de novo e é volátil — serve para detectar o que mudou. São duas perguntas diferentes; o painel não mistura as duas.<br>
-    <b>Base amostral.</b> Abaixo de 30 avaliações na semana, o NPS oscila muito com pouca gente; abaixo de 5, o painel se recusa a comparar com a semana anterior. Isso está sinalizado na leitura em vez de escondido.<br>
+    <b>Por que não tem NPS aqui.</b> O painel mede <b>nota média</b>, <b>volume</b> e <b>avaliações negativas</b> — que é a linguagem da operação. O NPS foi retirado a pedido da operação: ele comprime a nota num índice de −100 a +100 que não diz ao gerente o que fazer na segunda-feira. Quem precisar do número pode calcular da distribuição de estrelas, que continua aberta em toda tabela.<br>
+    <b>Nota acumulada x nota da semana.</b> A nota da ficha do Google é a média de todo o histórico da loja e quase não se move em uma semana — serve para comparar unidades entre si e como meta de longo prazo. A nota das avaliações que entraram <b>nesta</b> semana é volátil e serve para detectar o que mudou, e é ela que o gerente consegue mexer em 7 dias. São duas perguntas diferentes; o painel não mistura as duas.
+    <b>Base amostral.</b> Abaixo de 30 avaliações na semana, a nota oscila muito com pouca gente; abaixo de 5, o painel se recusa a comparar com a semana anterior. Isso está sinalizado na leitura em vez de escondido.<br>
     <b>iFood x loja física.</b> O vínculo usa o ID do Merchant do export contra o de-para “VISUAL IFOOD ATUALIZADO 06-26”: os 50 merchants casaram, então nenhuma avaliação ficou órfã. Uma loja física tem várias lojas virtuais (lanches, pizzaria, marmitas, pastel, china, poke), e o painel soma todas na unidade.<br>
-    <b>TripAdvisor.</b> Escala Excelente a Horrível convertida em NPS-e da mesma forma que as estrelas: Excelente promotor, Bom neutro, Médio/Ruim/Horrível detrator. A distribuição é pública na ficha, então esse número é cálculo, não estimativa. Sem comentário novo no período, o canal entra só como posição.<br>
+    <b>TripAdvisor.</b> A distribuição de Excelente a Horrível é pública na ficha, então o número vem do dado e não de estimativa. Sem comentário novo no período, o canal entra só como posição.<br>
     <b>Cobertura.</b> O SAC/QR Code está ativo hoje só no Biggs 13. Google só tem leitura em 11 das 18 unidades cadastradas. Enquanto isso, nenhum indicador aqui representa a rede inteira — representa quem foi ouvido.<br>
     <span style="opacity:.8">CX | SAL Restaurantes · Grupo Ragga · arquivo único, roda offline · dados no seu navegador</span>
   </div>
@@ -988,9 +1032,9 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
    CX | SAL Restaurantes — biblioteca Ragga
    Arquivo único. Sem framework, sem servidor.
    ============================================================ */
-const KEY='cxSal_v57';
+const KEY='cxSal_v63';
 /* chaves anteriores, da mais nova para a mais antiga: a v34 aproveita o que já estava salvo */
-const KEYS_ANT=['cxSal_v56','cxSal_v55','cxSal_v54','cxSal_v53','cxSal_v52','cxSal_v51','cxSal_v50','cxSal_v49','cxSal_v48','cxSal_v47','cxSal_v46','cxSal_v45','cxSal_v44','cxSal_v43','cxSal_v42','cxSal_v41','cxSal_v40','cxSal_v39','cxSal_v38','cxSal_v37','cxSal_v36','cxSal_v35','cxSal_v34','cxSal_v32','cxSal_v31'];
+const KEYS_ANT=['cxSal_v62','cxSal_v61','cxSal_v60','cxSal_v59','cxSal_v58','cxSal_v57','cxSal_v56','cxSal_v55','cxSal_v54','cxSal_v53','cxSal_v52','cxSal_v51','cxSal_v50','cxSal_v49','cxSal_v48','cxSal_v47','cxSal_v46','cxSal_v45','cxSal_v44','cxSal_v43','cxSal_v42','cxSal_v41','cxSal_v40','cxSal_v39','cxSal_v38','cxSal_v37','cxSal_v36','cxSal_v35','cxSal_v34','cxSal_v32','cxSal_v31'];
 
 const CANAIS=[
  {id:'sac',   cor:'#E96821', n:'📋 SAC / QR Code das lojas', curto:'📋 SAC / QR',    esc:'nps',  desc:'Avaliações, reclamações, elogios e sugestões.'},
@@ -1092,14 +1136,39 @@ function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clea
 
 /* ---------- persistência ---------- */
 let podeSalvar=true;
+/* ------------------------------------------------------------------
+   POR QUE O SALVAR NÃO GRAVA AS IMAGENS ORIGINAIS
+   Os prints que vieram nos lotes (PRINTS_BASE1..8) já estão dentro deste
+   arquivo HTML. Gravar de novo a mesma imagem em base64 no navegador fazia
+   o banco passar de 5,9 MB e o navegador recusava a gravação inteira — ou
+   seja, nada do que a Amanda editava era salvo, em silêncio.
+   Agora o salvar grava tudo MENOS essas imagens, e no boot elas voltam do
+   próprio arquivo (reidratarPrintsBase). Prints que a Amanda subiu à mão
+   NÃO estão no arquivo, então continuam sendo gravados normalmente.
+   ------------------------------------------------------------------ */
+function paraGravar(){
+  const copia={};
+  for(const k in DB){ if(k!=='prints') copia[k]=DB[k]; }
+  const pr={};
+  for(const id in (DB.prints||{})){ if(!IDS_PRINT_BASE.has(id)) pr[id]=DB.prints[id]; }
+  copia.prints=pr;
+  return copia;
+}
 function salvar(){
-  try{localStorage.setItem(KEY,JSON.stringify(DB));podeSalvar=true;}
+  try{
+    const txt=JSON.stringify(paraGravar());
+    localStorage.setItem(KEY,txt);
+    podeSalvar=true;
+    ultimoTam=txt.length;
+    if(txt.length>4000000) toast('O banco salvo está em '+(txt.length/1048576).toFixed(1)+' MB. O limite do navegador é cerca de 5 MB — exporte o JSON e apague prints que não usa mais.');
+  }
   catch(e){
     podeSalvar=false;
     toast('O navegador recusou a gravação — provavelmente falta espaço. Exporte o JSON AGORA e remova prints antigos.');
   }
   chipSessao();
 }
+var ultimoTam=0;
 function carregar(){
   try{
     const raw=localStorage.getItem(KEY);
@@ -1125,7 +1194,7 @@ function carregar(){
    SEED_V menor, o painel compara com os dados do arquivo e acrescenta só o que
    falta, sem tocar no que já existe e sem apagar edição nenhuma.
    ============================================================ */
-const SEED_V=15;
+const SEED_V=21;
 function assinaturaReg(r){
   return [r.canal||'', r.data||'', r.unidade||'', r.loja||'',
     String(r.cliente||'').trim().toLowerCase(),
@@ -1500,7 +1569,16 @@ const VINCULOS_BASE8=[
  {canal:'google',cliente:"Mayara Broggio",un:"Rob\'s",prints:["349d0f7f"]},
  {canal:'google',cliente:"Elson Gomes",un:"Rob\'s",prints:["349d0f7f"]},
 ];
+const PRINTS_BASE_TODOS=[PRINTS_BASE,PRINTS_BASE2,PRINTS_BASE3,PRINTS_BASE4,PRINTS_BASE5,PRINTS_BASE6,PRINTS_BASE7,PRINTS_BASE8];
+const IDS_PRINT_BASE=new Set();PRINTS_BASE_TODOS.forEach(o=>{for(const k in o)IDS_PRINT_BASE.add(k);});
+/* devolve ao banco, a cada boot, as imagens que não são gravadas no navegador */
+function reidratarPrintsBase(){
+  DB.prints=DB.prints||{};let n=0;
+  PRINTS_BASE_TODOS.forEach(o=>{for(const k in o){if(!DB.prints[k]){DB.prints[k]=Object.assign({},o[k]);n++;}}});
+  return n;
+}
 function aplicarPrintsBase(){
+  reidratarPrintsBase();
   if((DB.printsBaseV||0)>=8)return {novos:0,ligados:0};
   DB.prints=DB.prints||{}; DB.galeria=DB.galeria||{};
   let novos=0,ligados=0;
@@ -1531,7 +1609,7 @@ function seed(){
     verbatim:v||'',link:'Google — ficha da unidade (print 17/08)',cliente:cl||'',acao:'',resp:'',prazo:'',status:'aberto'});
   /* mesma coisa que G, mas registra a data do print no campo de origem */
   const GP=pr=>(ap,d,nt,tp,tm,cl,v)=>Object.assign(G(ap,d,nt,tp,tm,cl,v),{link:'Google — ficha da unidade (print '+pr+')'});
-  const G18=GP('18/08'), G25=GP('25/08'), G26=GP('26/08'), G27=GP('27/08'), G0109=GP('01/09'), G1009=GP('10/09'), G1509=GP('15/09');
+  const G2109=GP('21/09'); const G18=GP('18/08'), G25=GP('25/08'), G26=GP('26/08'), G27=GP('27/08'), G0109=GP('01/09'), G1009=GP('10/09'), G1509=GP('15/09');
   const SOC=(ap,d,nt,tp,tm,cl,v)=>({id:uid(),data:d,canal:'social',unidade:ap,tipo:tp,tema:tm||'',nota:null,
     verbatim:v||'',link:'Instagram — direct/comentário (print 18/08)',cliente:cl||'',acao:'',resp:'',prazo:'',status:'aberto'});
   /* mesma coisa que SOC, com a origem do print própria */
@@ -1545,11 +1623,145 @@ function seed(){
         SEK='Saul Elkind', ATH='Arthur Thomas', ISM='Maringá 1730', ISA='Alphaville', ISD='Madre',
         ROB="Rob's", MAP='Mapoli';
   const regs=[
+    /* ============================================================
+       GOOGLE — 3º E ÚLTIMO LOTE DE PRINTS DE 21/09/2026.
+       CONFERÊNCIA DE FICHA:
+         Maringá 1730 1.157 -> 1.159 = +2 · Deivid Souza (20/09) e Victor Turrisi
+           (16/09). As outras 3 do print já estavam no painel. FECHA EXATO.
+         Madre 248 -> 248 = 0 · a única do print (Marcos Dionisio) já estava
+           carregada em 11/09. FECHA.
+         Arthur Thomas 66 (10/09) -> 68 = +2, MAS agora são 3 avaliações novas
+           (Adriano Gaspar 18/09, Fábio Chagas 17/09 e REGINALDO SOARES 16/09).
+           SOBRA 1 — corrige a leitura anterior, que dizia faltar print: o print
+           chegou e o problema virou o contrário. PENDÊNCIA.
+         Alphaville e Rob\'s: os prints trazem só a lista de avaliações, sem a
+           ficha. SEM RECONCILIAÇÃO POSSÍVEL nestas duas — a última leitura de
+           ficha delas continua sendo a de 15/09.
+       ============================================================ */
+    /* --- Biggs 13 · Arthur Thomas --- ficha 4,1 · 68 --- */
+    G2109('Arthur Thomas','2026-09-17',1,'reclamacao','Atendimento da equipe','Fábio Chagas','Péssimo atendimento dos funcionários, você fica esperando o pedido que não chega e nenhum funcionário se coloca a disposição para verificar a situação do cliente. Garçons mal educados que desrespeitam o cliente querendo bater de frente. Pedi o contato do gerente da unidade e a funcionária do caixa não informou. (Comida 3/5 · SERVIÇO 1/5 · AMBIENTE 1/5 · 4 avaliações) [GRAVE: o cliente pediu o contato do gerente e a loja NEGOU a informação. Isso fecha a porta do pós-venda — não é só atendimento ruim, é o cliente sendo impedido de reclamar com quem decide.] [É o segundo caso da semana em que a saída do problema passava pelo caixa: aqui o caixa negou o contato do gerente, na Pizzas e Massas (Yasmin Pinotti, 16/09) foi o caixa que tentou salvar o caso com trufas de cortesia.]'),
+    G2109('Arthur Thomas','2026-09-16',5,'avaliacao','','REGINALDO SOARES','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] (Local Guide, 71 avaliações · 5 fotos)'),
+    /* --- Isaías 01 · Maringá 1730 --- ficha 4,3 · 1.159 --- */
+    G2109('Maringá 1730','2026-09-20',5,'avaliacao','','Deivid Souza','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] (jantar, R$ 40–60 · 4 avaliações) [MESMO CLIENTE avaliou o Rob\\\'s no mesmo dia 20/09 com 5 estrelas, e o Biggs 02 · Aeroporto em 17/09, também com 5. São 3 das 4 avaliações do perfil dele, todas em lojas do grupo.]'),
+    G2109('Maringá 1730','2026-09-16',1,'reclamacao','','Victor Turrisi','[avaliação de 1 estrela sem texto no print] (Local Guide, 8 avaliações · 3 fotos) [PENDÊNCIA: é a única nota 1 do Maringá 1730 na semana e não há texto nenhum — nem no print, nem colapsado. Sem saber o motivo, não dá para encaminhar para nenhuma área.]'),
+    /* --- Isaías 02 · Alphaville --- sem leitura de ficha neste lote --- */
+    G2109('Alphaville','2026-09-21',2,'reclamacao','Pedido errado / item faltando','Gabriel Campinha','O ambiente é acolhedor assim como todos os mesmos da franquia, porém minha avaliação baixa é por conta de uma situação muito triste... Sempre frequentei o local, a comida é saborosa, o poke tropical é um dos meus pratos favoritos, todavia, o dia que pedi os pratos "brasileiros", deixaram muito a desejar, a primeira vez pedi com filé mignon, batata, arroz e feijão, e a proteína veio do tamanho de um limão pequeno, já quando pedi contra filé, eles mandaram alcatra, eu não reclamei pois, a diferença de valor era de 1 real, porém quando peço contra filé, não quero comer alcatra, e quando questionei o trabalhador, ele disse; "dependendo do corte, o contra filé parece alcatra", o que realmente me fez ficar indignado, por querer fazer os clientes de trouxa, ou pensar que não sei a diferença entre contra filé e alcatra. (refeição no local, R$ 60–80 · COMIDA 1/5 · Serviço 3/5 · Ambiente 5/5 · Local Guide, 2 avaliações · 2 fotos) [FORA DA SEMANA 14 a 20/09: o Google marcava "2 horas atrás" na captura da manhã de 21/09. Entra na próxima leitura.] [O cliente relata DUAS ocorrências, não uma: proteína do tamanho de um limão numa vez, e troca de corte noutra. E o que ele chama de "situação muito triste" não é a carne — é a resposta do funcionário. Ele é cliente antigo e elogia o poke.]'),
+    G2109('Alphaville','2026-09-20',5,'avaliacao','','Robson Borsato','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] (Local Guide, 165 avaliações · 1.881 fotos)'),
+    /* --- Rob\'s --- sem leitura de ficha neste lote --- */
+    G2109('Rob\'s','2026-09-20',5,'avaliacao','','Deivid Souza','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] (4 avaliações) [MESMO CLIENTE avaliou o Isaías 01 · Maringá 1730 no mesmo dia 20/09 e o Biggs 02 · Aeroporto em 17/09.]'),
+    G2109('Rob\'s','2026-09-20',5,'avaliacao','','Vanessa Sabec','[avaliação de 5 estrelas sem texto no print] (5 avaliações · 13 fotos)'),
+    G2109('Rob\'s','2026-09-19',4,'elogio','','Roberta Montagnini','Eu pedi um lanche X-Tudo e 3 bombons de maracuja pra entregar. A entrega foi super rápida em Cambé. Pedi porque moro fora do Brasil, e o Rob\\\'s fazia parte da minha adolescência e queria relembrar o gostinho. Não é igual ao que eu me lembrava e por isso achei meio fraco. Mesmo assim vou dar 4 estrelas por que o lanche vem super bem embalado, a apresentação é ótima e estava gostoso. / O lanche estava bom, comi tudinho a pesar de nao estar fresquinho como se tivesse pedido pra comer no restaurante. / Achei que faltou um pouco mais de impacto no sabor, não sei se era falta de sal, ou outro tempero. Mas tava um pouco sem graça. Mas matei minha vontade. Acho o Arnaldo\\\'s mais temperadinho e prefiro o molho de pimenta do Arnaldo\\\'s também. / Minha recomendação caso o lanche incluir batata palha ponha ela a parte num saquinho. O gostoso é comer a batata palha crocante e não murcha, perde até a graça. O hamburger estava rosa e pra mim poderia esta bem mais passado. E ovo estava com a gema melequenta o que eu geralmente não curto. / Na descrição do que vem junto ao lanche no website vcs deveriam atualizar e dizer se inclui ao menos 1 molho e o tamanho do molho etc. Parece que vieram 5 molhos sendo que comprei só 4. Talvez o extra era incluso. / Achei caro 1 lanche X-Tudo com 4 molhos custar quase R$ 46 reais. E se eu quisesse adicionar uma maionese verde ou outro molho o preço era mais R$3+ então nao adicionei. Mas é quase desnecessário já que o lanche é bem molhadinho. / O total do lanche e dos bombons pra entregar ficou em R$69 reais incluindo R$10 da entrega que foi um preço justo. / Super recomendo pra quem quer matar a vontade do passado, mas acho o Arnaldo\\\'s mais saboroso. (entrega, R$ 60–80 · Comida 4/5 · Serviço 5/5 · Local Guide, 43 avaliações · 44 fotos · 3 fotos na avaliação) [4 estrelas e recomenda, mas é o relato mais detalhado da semana e traz 5 pontos concretos: 1) falta de sal ou tempero — "um pouco sem graça"; 2) batata palha murcha, pede para embalar à parte; 3) hambúrguer rosa, gostaria mais passado, e gema melequenta; 4) o site não diz quantos molhos vêm inclusos; 5) acha caro R$ 46 no X-Tudo com 4 molhos. Ela cita o concorrente Arnaldo\\\'s DUAS vezes como mais saboroso e mais temperado.] [A falta de sal aqui é a outra ponta do problema da semana: no iFood foram 6 relatos de comida SALGADA DEMAIS. Não é o mesmo defeito, é falta de padrão de tempero.]'),
+    /* ============================================================
+       GOOGLE — 2º LOTE DE PRINTS DE 21/09/2026 (mesma captura da manhã).
+       CONFERÊNCIA DE FICHA (leitura anterior -> 21/09):
+         Jamil Scaff 768 -> 771 = +3 · 3 avaliações novas. FECHA EXATO.
+           (as 4 de "uma semana atrás" já estavam no painel: Gabriel Roque 12/09,
+            Marcos Dionisio 11/09, Keith Moura Ribas 10/09 e Ozeas Xavier 08/09.)
+         Street 128 -> 129 = +1 · 1 avaliação nova. FECHA.
+         Pizzas e Massas 562 -> 564 = +2 · Yasmin Pinotti (16/09) e Alessandra Nuki.
+           A Alessandra está como "uma semana atrás", o que daria até 14/09 — antes
+           da leitura da ficha de 15/09. Mesma coisa que aconteceu com a Isabela gnann
+           em 10/09: a avaliação entra na ficha depois da captura do dia. FECHA.
+         Mercado 88 57 -> 57 = 0 · as 2 do print já estavam no painel. FECHA.
+         Santo Amaro 154 (10/09) -> 170 = +16 · 16 avaliações novas. FECHA EXATO.
+           Confere também na nota: 154 x 4,4 = 677,6 mais as 16 novas (14 de cinco,
+           1 de dois e 1 de uma estrela = 73) dá 750,6 / 170 = 4,41. A ficha marca 4,4.
+         Saul Elkind 104 -> 104 = 0 · o print traz só a ficha, sem avaliação.
+         Arthur Thomas 66 (10/09) -> 68 = +2 · o print mostra só a primeira.
+           Falta 1 print. PENDÊNCIA.
+       ============================================================ */
+    /* --- Biggs 07 · Jamil Scaff --- ficha 4,3 · 771 --- */
+    G2109('Jamil Scaff','2026-09-20',5,'avaliacao','','Mariane Assalin Izidoro','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] (refeição no local, almoço, R$ 40–60 · Local Guide, 9 avaliações · 33 fotos) [MESMA CLIENTE aparece no Aterro Igapó em 20/09, mas lá a avaliação está marcada "Editado" e aqui está marcada "Novo" — são duas avaliações diferentes, uma em cada loja, no mesmo dia.]'),
+    G2109('Jamil Scaff','2026-09-17',1,'reclamacao','','Reduz Consultoria Empresarial','[avaliação de 1 estrela — o texto estava colapsado em "Mais" no print] (Local Guide, 5 avaliações · 12 fotos) [PENDÊNCIA: é a nota mais baixa da semana no Jamil Scaff e o texto não abriu. Precisa de print da avaliação inteira.] [O perfil é de uma empresa, não de pessoa física.]'),
+    G2109('Jamil Scaff','2026-09-16',5,'avaliacao','','Nicole Alves','[avaliação de 5 estrelas sem texto no print] (2 avaliações)'),
+    /* --- Biggs 09 · Street --- ficha 3,7 · 129 --- */
+    G2109('Street','2026-09-17',5,'avaliacao','','Paranagua Biggs','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] [ATENÇÃO: o perfil que assina a avaliação se chama "Paranagua Biggs" — é o nome da própria loja. Avaliação 5 estrelas feita por um perfil com o nome do estabelecimento, na unidade de pior nota do Google da rede (3,7). NÃO tratar como voz de cliente até a loja explicar de quem é esse perfil.]'),
+    /* --- Biggs 08 · Pizzas e Massas --- ficha 4,2 · 564 --- */
+    G2109('Pizzas e Massas','2026-09-16',1,'reclamacao','Rodízio — reposição','Yasmin Pinotti','Foi a pior experiência em rodízio que eu já tive na minha vida! Hoje é uma terça, entre uma pizza e outra demorava uns 10/15 minutos, saia pizza da cozinha, mas quase não chegava na nossa mesa e se chegava era 1 fatia ou 2, ESTAVAMOS EM 3! / Minha menina é autista e tem seletividade alimentar, opto por ir em rodízio justamente pra ela ter liberdade de escolher, e quero esclarecer que ela já e pagante. Hoje ela quis 1 salgada e começou a pedir a doce, pedimos pra 2 garçons diferentes, pra um deles expliquei que ela só queria a doce se era possivel por favor trazer, o primeiro disse que eu tinha que esperar, esperamos e ao chamar o segundo ele disse que era mais uns 10/15 minutos pra sair as doces. Lá ficamos nos esperando e nada. Decidimos ir embora e sem sequer nenhum de nós por 1 pizza doce na boca ou poder escolher 1 sabor de pizza. Ao finalizar o pagamento falei pro meu esposo "vamos comprar um chocolate pra ela pra ver se então ela come" aí a moça super querida do caixa me perguntou o ocorrido. Expliquei que pedimos 2x aguardamos, mas nada ela educadamente nos ofertou umas trufas de cortesia e quando estávamos na porta passou a doce. Ela até sugeriu por uma fatia em um guardanapo pra minha filha ir comendo, mas nessa altura, já estávamos até SAINDO. (jantar, R$ 120–140 · Comida 1/5 · Serviço 1/5 · Ambiente 1/5 · 7 avaliações · 4 fotos) [A cliente diz "hoje é uma terça" e a avaliação é de 16/09, que foi uma quarta — ela pode ter escrito no dia seguinte à visita, ou seja, a visita foi na TERÇA 15/09.] [O único acerto do caso veio do CAIXA, não do salão: foi a atendente do caixa que perguntou o que houve, ofereceu trufas de cortesia e tentou resolver quando a família já estava saindo.]'),
+    G2109('Pizzas e Massas','2026-09-14',5,'avaliacao','','Alessandra Nuki Cavalcante','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] (Local Guide, 50 avaliações) [DATA APROXIMADA: "uma semana atrás" na captura de 21/09 cobre de 7 a 13 dias, ou seja, entre 08 e 14/09. Lançada em 14/09, o último dia possível.]'),
+    /* --- Biggs 11 · Santo Amaro --- ficha 4,4 · 170 · 15 avaliações em 20/09 --- */
+    G2109('Santo Amaro','2026-09-20',5,'avaliacao','','Evelyn Silva','[avaliação de 5 estrelas sem texto no print] [O Google marcava "15 horas atrás" na captura da manhã de 21/09, o que cai na noite de domingo 20/09.] [Faz parte do bloco de 15 avaliações 5 estrelas que entraram no Santo Amaro em 20/09 — a loja tinha 154 avaliações no total em 10/09.]'),
+    G2109('Santo Amaro','2026-09-20',5,'avaliacao','','Analice Alves','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] [O Google marcava "15 horas atrás" na captura da manhã de 21/09, o que cai na noite de domingo 20/09.] [Faz parte do bloco de 15 avaliações 5 estrelas que entraram no Santo Amaro em 20/09 — a loja tinha 154 avaliações no total em 10/09.]'),
+    G2109('Santo Amaro','2026-09-20',5,'avaliacao','','Gabriella Gaby','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] (1 avaliação) [O Google marcava "15 horas atrás" na captura da manhã de 21/09, o que cai na noite de domingo 20/09.] [Faz parte do bloco de 15 avaliações 5 estrelas que entraram no Santo Amaro em 20/09 — a loja tinha 154 avaliações no total em 10/09.]'),
+    G2109('Santo Amaro','2026-09-20',2,'reclamacao','Atendimento da equipe','Lucas Serafim','[avaliação de 2 estrelas — o texto estava colapsado em "Mais" no print] (refeição no local, almoço, R$ 40–60 · Comida 4/5 · SERVIÇO 1/5 · Ambiente 4/5) [A nota por item é o que este caso tem de mais claro: a comida foi bem avaliada e o SERVIÇO levou 1 de 5. É a segunda avaliação da semana no Santo Amaro que separa comida boa de atendimento ruim — a outra é a da ariani Martin, de 16/09.] [PENDÊNCIA: o texto não abriu no print.]'),
+    G2109('Santo Amaro','2026-09-20',5,'avaliacao','','Carlos Eduardo','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] (1 avaliação) [Faz parte do bloco de 15 avaliações 5 estrelas que entraram no Santo Amaro em 20/09 — a loja tinha 154 avaliações no total em 10/09.]'),
+    G2109('Santo Amaro','2026-09-20',5,'avaliacao','','Silvana Bárbara','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] (3 avaliações) [Faz parte do bloco de 15 avaliações 5 estrelas que entraram no Santo Amaro em 20/09 — a loja tinha 154 avaliações no total em 10/09.]'),
+    G2109('Santo Amaro','2026-09-20',5,'avaliacao','','Adilson jader Alves da Silva','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] (7 avaliações) [Faz parte do bloco de 15 avaliações 5 estrelas que entraram no Santo Amaro em 20/09 — a loja tinha 154 avaliações no total em 10/09.]'),
+    G2109('Santo Amaro','2026-09-20',5,'avaliacao','','juliana valentim','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] [Faz parte do bloco de 15 avaliações 5 estrelas que entraram no Santo Amaro em 20/09 — a loja tinha 154 avaliações no total em 10/09.]'),
+    G2109('Santo Amaro','2026-09-20',5,'avaliacao','','Sheila Costa','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] (1 avaliação) [Faz parte do bloco de 15 avaliações 5 estrelas que entraram no Santo Amaro em 20/09 — a loja tinha 154 avaliações no total em 10/09.]'),
+    G2109('Santo Amaro','2026-09-20',5,'avaliacao','','Renata Carneiro De Lima Souza','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] [Faz parte do bloco de 15 avaliações 5 estrelas que entraram no Santo Amaro em 20/09 — a loja tinha 154 avaliações no total em 10/09.]'),
+    G2109('Santo Amaro','2026-09-20',5,'avaliacao','','mariana alici','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] [Faz parte do bloco de 15 avaliações 5 estrelas que entraram no Santo Amaro em 20/09 — a loja tinha 154 avaliações no total em 10/09.]'),
+    G2109('Santo Amaro','2026-09-20',5,'avaliacao','','Silveira Express','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] [Faz parte do bloco de 15 avaliações 5 estrelas que entraram no Santo Amaro em 20/09 — a loja tinha 154 avaliações no total em 10/09.]'),
+    G2109('Santo Amaro','2026-09-20',5,'avaliacao','','Rosinei Nei','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] [Faz parte do bloco de 15 avaliações 5 estrelas que entraram no Santo Amaro em 20/09 — a loja tinha 154 avaliações no total em 10/09.]'),
+    G2109('Santo Amaro','2026-09-20',5,'avaliacao','','Giovanna Nicole','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] [Faz parte do bloco de 15 avaliações 5 estrelas que entraram no Santo Amaro em 20/09 — a loja tinha 154 avaliações no total em 10/09.]'),
+    G2109('Santo Amaro','2026-09-20',5,'elogio','','LINCON SHIMONISHI','Top ... [o resto do texto estava colapsado em "Mais" no print. O Google oferecia "Mostrar tradução (português)", ou seja, a avaliação foi escrita em outro idioma.] (entrega, jantar, R$ 40–60 · Local Guide, 17 avaliações) [Faz parte do bloco de 15 avaliações 5 estrelas que entraram no Santo Amaro em 20/09 — a loja tinha 154 avaliações no total em 10/09.]'),
+    G2109('Santo Amaro','2026-09-16',1,'reclamacao','Atendimento da equipe','ariani Martin','O atendimento é terrível, normalmente, chegamos, sentamos e não vem ninguém atender. Quando vem, demoram, temos que ficar sinalizando para alguém atender. (Comida 5/5 · SERVIÇO 1/5 · Ambiente 5/5 · 6 avaliações) [A cliente diz "normalmente" — não é um dia ruim, é o padrão que ela descreve. E dá 5 de 5 para comida e ambiente: o problema está isolado no salão.]'),
+    /* --- Biggs 13 · Arthur Thomas --- ficha 4,1 · 68 --- */
+    G2109('Arthur Thomas','2026-09-18',1,'reclamacao','Sabor / padrão do produto','Adriano Gaspar','Comprei pastel de carne e queijo e sinceramente o pior que já comi na minha vida, massa pesada, pura gordura carne sem sabor decepção total sem contar o valor absurdo, nunca mais (Comida 1/5 · Serviço 5/5 · Ambiente 5/5 · 5 avaliações) [Mesmo padrão dos outros dois casos da semana: o cliente separa o produto do atendimento — comida 1 de 5, serviço e ambiente 5 de 5.]'),
+    /* ============================================================
+       GOOGLE — LOTE DE PRINTS DE 21/09/2026 (segunda), capturado de manhã.
+       As datas saem do rótulo relativo do Google CONTADO A PARTIR DE 21/09:
+       "uma hora" = 21/09 · "16 horas" = tarde/noite de 20/09 (captura de manhã)
+       "um dia" = 20/09 · "3 dias" = 18/09 · "4 dias" = 17/09 · "5 dias" = 16/09
+       "6 dias" = 15/09 · "uma semana" = intervalo de 08 a 14/09 (7 a 13 dias).
+       CONFERÊNCIA DE FICHA (leitura anterior -> leitura de 21/09):
+         Aeroporto 4.254 -> 4.257 = +3 · e entraram 3 avaliações novas. FECHA.
+         Centro 3.902 -> 3.923 = +21 · e entraram 21 novas + 1 editada
+           (editada não soma na ficha). FECHA EXATO.
+         Aterro 4.395 -> 4.396 = +1 · mas entraram 2 novas (17/09 e 18/09) e 1
+           editada. SOBRA 1 SEM EXPLICAÇÃO — provável avaliação removida. PENDÊNCIA.
+         Winston Churchill 3.515 -> 3.517 = +2 desde 01/09 · o print mostra só a
+           primeira da lista. A segunda está abaixo do corte. PENDÊNCIA de print.
+         Zona Sul 2.132 -> 2.132 = ZERO · mas o Ronaldo está marcado "Novo".
+           Ou saiu uma avaliação junto, ou a ficha não atualizou. PENDÊNCIA.
+       ============================================================ */
+    /* --- Biggs 01 · Aterro Igapó --- ficha 4,4 · 4.396 --- */
+    G2109('Maringá / Aterro Igapó','2026-09-20',5,'avaliacao','','Mariane Assalin Izidoro','[avaliação de 5 estrelas EDITADA — o texto estava colapsado em "Mais" no print] (refeição no local, R$ 40–60 · Local Guide, 9 avaliações · 33 fotos) [EDITADA: o Google mostra "Editado um dia atrás". A avaliação é anterior e por isso NÃO soma na contagem da ficha.]'),
+    G2109('Maringá / Aterro Igapó','2026-09-18',4,'avaliacao','','Ana Beatriz','[avaliação de 4 estrelas sem texto no print] (3 avaliações) [MESMA CLIENTE avaliou o Aeroporto e o Centro NO MESMO DIA 18/09, nos dois com 5 estrelas. Aqui deu 4 — é a única nota abaixo de 5 de todo o lote do Google desta semana.]'),
+    G2109('Maringá / Aterro Igapó','2026-09-17',5,'elogio','','Alessandro Machado','Ótimo... [o resto do texto estava colapsado em "Mais" no print] (Local Guide, 56 avaliações · 72 fotos)'),
+    /* --- Biggs 02 · Aeroporto --- ficha 4,5 · 4.257 --- */
+    G2109('Aeroporto','2026-09-21',5,'avaliacao','','flavio santos','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] (Local Guide, 7 avaliações) [FORA DA SEMANA 14 a 20/09: o Google marcava "uma hora atrás" na captura de 21/09. Entra na próxima leitura, não nesta.]'),
+    G2109('Aeroporto','2026-09-18',5,'avaliacao','','Ana Beatriz','[avaliação de 5 estrelas sem texto no print] (3 avaliações) [MESMA CLIENTE avaliou o Aterro Igapó e o Centro no mesmo dia 18/09.]'),
+    G2109('Aeroporto','2026-09-17',5,'elogio','','Deivid Souza','Muito bom . ... [o resto do texto estava colapsado em "Mais" no print] (refeição no local, jantar, R$ 1–20 · 4 avaliações)'),
+    /* --- Biggs 03 · Centro --- ficha 4,6 · 3.923 · 21 avaliações novas em 6 dias --- */
+    G2109('Centro','2026-09-20',5,'avaliacao','','Suely Rosa Francisquini de Mello','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] (3 avaliações) [O Google marcava "16 horas atrás" na captura da manhã de 21/09, o que cai na tarde ou noite de domingo 20/09 — último dia da semana.]'),
+    G2109('Centro','2026-09-20',5,'elogio','','Marcos José Ferreira','Gostei demais de tudo! ... [o resto do texto estava colapsado em "Mais" no print] (refeição no local, jantar, R$ 40–60 · 3 avaliações)'),
+    G2109('Centro','2026-09-20',5,'elogio','Atendimento da equipe','Telma Martins','Fui muito bem atendida pelo colaborador Fabrício. ... [o resto do texto estava colapsado em "Mais" no print] (3 avaliações) [CITA O FABRÍCIO NOMINALMENTE]'),
+    G2109('Centro','2026-09-20',5,'elogio','Atendimento da equipe','Esther Campos','Serviço Fabrício nota 10 ... [o resto do texto estava colapsado em "Mais" no print] (refeição no local, outro · 10 avaliações) [CITA O FABRÍCIO NOMINALMENTE]'),
+    G2109('Centro','2026-09-20',5,'elogio','Atendimento da equipe','isaac Fernandes','Uma experiência agradável, um local agradável com um bom atendimento. ... [o resto do texto estava colapsado em "Mais" no print]'),
+    G2109('Centro','2026-09-20',5,'elogio','Atendimento da equipe','Lucas Felipe','Atendente atencioso da dicas boas , e o ambiente é top e atendimento é diferenciado Fabrício ... [o resto do texto estava colapsado em "Mais" no print] [CITA O FABRÍCIO NOMINALMENTE]'),
+    G2109('Centro','2026-09-18',5,'avaliacao','','Ana Beatriz','[avaliação de 5 estrelas sem texto no print] (3 avaliações) [MESMA CLIENTE avaliou o Aterro Igapó e o Aeroporto no mesmo dia 18/09.]'),
+    G2109('Centro','2026-09-17',5,'elogio','Limpeza e ambiente','Andy Silva','Comida boa loja limpa ambiente agradável ... [o resto do texto estava colapsado em "Mais" no print] (5 avaliações)'),
+    G2109('Centro','2026-09-17',5,'elogio','Atendimento da equipe','Salvador','comida boa e bom atendimento garçons e pelo gerente Gabriel ... [o resto do texto estava colapsado em "Mais" no print] (1 avaliação) [CITA O GERENTE GABRIEL NOMINALMENTE — é o único do lote que cita outra pessoa que não o Fabrício.]'),
+    G2109('Centro','2026-09-16',5,'avaliacao','','André Ferreira','[avaliação de 5 estrelas sem texto no print] (Local Guide, 2 avaliações)'),
+    G2109('Centro','2026-09-16',5,'elogio','Atendimento da equipe','pHS','Comida boa, saborosa e de qualidade. / Atendimento excelente e cordial do Sr. Fabrício! / Recomendo. ... [o resto do texto estava colapsado em "Mais" no print] (refeição no local, jantar, R$ 20–40 · 1 avaliação) [CITA O FABRÍCIO NOMINALMENTE]'),
+    G2109('Centro','2026-09-16',5,'elogio','Atendimento da equipe','Gab','Te amo Fabricio ... [o resto do texto estava colapsado em "Mais" no print] (refeição no local, jantar, R$ 20–40 · 1 avaliação) [CITA O FABRÍCIO NOMINALMENTE] [ATENÇÃO: já existe "Gab" no painel com avaliações no Centro (30/08), Jamil Scaff (12/09), Saul Elkind (27/08 e 06/09) e Pizzas e Massas (28/08). Neste print o perfil aparece com "1 avaliação", o que não bate com um perfil de 5 avaliações — CONFERIR se é a mesma pessoa ou outro perfil com o mesmo nome.]'),
+    G2109('Centro','2026-09-16',5,'elogio','','Carlos Silveira','Muito bom ... [o resto do texto estava colapsado em "Mais" no print] (1 avaliação) [EDITADA: o Google mostra "Editado 5 dias atrás" — por isso NÃO soma na contagem da ficha, e é ela que faz a conta fechar em +21.]'),
+    G2109('Centro','2026-09-16',5,'avaliacao','','Giovani Sambati','[avaliação de 5 estrelas sem texto no print]'),
+    G2109('Centro','2026-09-16',5,'avaliacao','','Fernando Assega','[avaliação de 5 estrelas — o texto estava colapsado em "Mais" no print] (Local Guide, 8 avaliações · 9 fotos)'),
+    G2109('Centro','2026-09-16',5,'elogio','Atendimento da equipe','Vitor Hugo Furman','Excelente atendimento do fabricio! (2 avaliações) [CITA O FABRÍCIO NOMINALMENTE]'),
+    G2109('Centro','2026-09-16',5,'elogio','Atendimento da equipe','Miguel Hagemeyer','Excelente atendimento do Fabrício ... [o resto do texto estava colapsado em "Mais" no print] (1 avaliação) [CITA O FABRÍCIO NOMINALMENTE]'),
+    G2109('Centro','2026-09-16',5,'elogio','Atendimento da equipe','Luan Lopes','Cliente desde o ensino médio, qualidade excepcional ,recepção do Fabrício nota 10! ... [o resto do texto estava colapsado em "Mais" no print] (1 avaliação) [CITA O FABRÍCIO NOMINALMENTE]'),
+    G2109('Centro','2026-09-16',5,'elogio','Atendimento da equipe','Jack Azevedo','O Biggs tem o melhor cachorro quente de Londrina. Extremamente saboroso! E o atendimento então... O Fabrício foi super simpático e gentil! ... [o resto do texto estava colapsado em "Mais" no print] (refeição no local, outro, R$ 20–40 · 6 avaliações · 7 fotos) [CITA O FABRÍCIO NOMINALMENTE]'),
+    G2109('Centro','2026-09-16',5,'elogio','Atendimento da equipe','Ricardo Souza','eu amo biggs, biggs e a minha vida. / valeu meu irmão fabrício pelo ótimo atendimento. tmj. ... [o resto do texto estava colapsado em "Mais" no print] (3 avaliações) [CITA O FABRÍCIO NOMINALMENTE]'),
+    G2109('Centro','2026-09-16',5,'elogio','Atendimento da equipe','Bruno Silva','Experiência ótima. Fui bem atendido pelo Fabrício. (3 avaliações) [CITA O FABRÍCIO NOMINALMENTE]'),
+    G2109('Centro','2026-09-16',5,'elogio','Atendimento da equipe','Breno Morais','Fabricio nos atendeu com muita atencao ... [o resto do texto estava colapsado em "Mais" no print] (5 avaliações) [CITA O FABRÍCIO NOMINALMENTE]'),
+    /* --- Biggs 04 · Winston Churchill / Zona Norte --- ficha 4,4 · 3.517 --- */
+    G2109('Winston Churchill / Zona Norte','2026-09-20',5,'avaliacao','','Alex Fernandes','[avaliação de 5 estrelas sem texto no print] (5 avaliações) [A ficha subiu 2 desde 01/09 e o print mostra só esta. A outra está abaixo do corte do print.]'),
+    /* --- Biggs 05 · Zona Sul / Igapó --- ficha 4,5 · 2.132 (não subiu) --- */
+    G2109('Zona Sul / Igapó','2026-09-14',5,'elogio','','Jean Rafael Tardem Delefrati','Melhor lanche artesanal do Brasil. (Local Guide, 55 avaliações · 2.387 fotos · 1 reação de coração) [EDITADA: o Google mostra "Editado uma semana atrás" — não soma na contagem da ficha.] [DATA APROXIMADA: o Google mostrava "uma semana atrás" na captura de 21/09, rótulo que cobre de 7 a 13 dias — ou seja, a data real está entre 08 e 14/09. Lançada em 14/09, o último dia possível, a pedido da Amanda. PODE PERTENCER À SEMANA ANTERIOR.]'),
+    G2109('Zona Sul / Igapó','2026-09-14',5,'elogio','','RONALDO WANDRÉ ALMEIDA','Lanche muito saboroso e o pessoal atencioso. ... [o resto do texto estava colapsado em "Mais" no print] (refeição no local, R$ 20–40 · Local Guide, 15 avaliações)[ESTÁ MARCADA "Novo", então deveria ter somado 1 na ficha — mas a ficha da Zona Sul continua em 2.132, igual à leitura de 01/09. PENDÊNCIA.] [DATA APROXIMADA: o Google mostrava "uma semana atrás" na captura de 21/09, rótulo que cobre de 7 a 13 dias — ou seja, a data real está entre 08 e 14/09. Lançada em 14/09, o último dia possível, a pedido da Amanda. PODE PERTENCER À SEMANA ANTERIOR.]'),
+    /* ======== INSTAGRAM — PRINT DE 19/09/2026 (sexta) ========
+       Conversa das 15:50 de 19/09. A cliente abriu com "Boa noite", então a primeira
+       mensagem dela é da noite anterior e o CX só respondeu na tarde do dia 19. */
+    Object.assign(SOC('Winston Churchill / Zona Norte','2026-09-19',null,'reclamacao','Sabor / padrão do produto','Dani / Daniela (43998661008) — Instagram Direct',
+      'Vocês que pediram pra entrar em contato comigo à respeito do pedido que fiz no ifood / \'Olha nao posso nem chamar aquilo de pizza, tivemos que jogar fora pq não tinha condições de comer. Sempre comemos lanche nunca tive problemas mais a pizza.\' [A cliente mandou print da PRÓPRIA avaliação do iFood, 1 estrela, com a resposta da loja. Confirmado pela Amanda: é a avaliação de 16/09 do BIGGS - PIZZARIA - ZONA NORTE, \'A pizza de mussarela é horrível. Nadando no molho de tomate, mal tinha mussarela.\'] [NÃO CONTA COMO NEGATIVA NOVA DA SEMANA: essa nota já está dentro do agregado do iFood. O que o Instagram acrescenta é o desfecho — a pizza foi para o lixo — e o telefone.] [A própria cliente separa as duas operações da mesma loja: o lanche ela sempre pediu sem problema, o defeito é na pizza. O dado bate: nesta semana o BIGGS - ZONA NORTE (lanches) fechou 93 avaliações e 4,95, sem nenhuma negativa, e a PIZZARIA - ZONA NORTE fechou 34 avaliações e 4,82 com essa única 1 estrela — na semana anterior a pizzaria estava em 4,95 sem negativa.] [O CX pediu o telefone e a cliente passou 43 99866 1008. Sem retorno registrado até agora.]'),
+      {link:'Instagram — direct (print de 19/09) · desdobramento da avaliação iFood de 16/09'}),
     /* ======== INSTAGRAM — PRINTS DE 14/09/2026 ========
        A cliente escreveu "fiz um pedido domingo" e o print é de 14/09 (segunda),
        então o pedido é de DOMINGO 13/09 — último dia da semana 07 a 13/09. */
     Object.assign(SOC('Dell Iris · Aeroporto','2026-09-13',null,'reclamacao','Preço x porção','Dayane (43998709819) — Instagram Direct',
-      'Eu fiz um pedido domingo e fiquei decepcionada porque não entregou o que ofereceu, veio um pouco só de estrogonofe / Contei umas quatro colheres de estrogonofe / Arroz veio normal / Como eu moro perto do aeroporto achei que seria uma boa opção começar a pedir o jantar aí com vcs / Mas pelo que percebi pelo menos no dia, fica inviável / Mas agradeço [O CX abriu a conversa: "Vimos o seu comentário e gostaríamos de entender melhor sua experiência com a marca". O rodapé do direct identifica a marca como Dell Íris.] [ATRIBUÍDA POR INFERÊNCIA à cozinha do Aeroporto porque a cliente diz que mora perto do aeroporto — CONFERIR no pedido do iFood qual das 4 cozinhas Dell Iris produziu.] [PENDÊNCIA: o comentário original que o CX viu não foi localizado no export do iFood da semana.]'),
+      'Eu fiz um pedido domingo e fiquei decepcionada porque não entregou o que ofereceu, veio um pouco só de estrogonofe / Contei umas quatro colheres de estrogonofe / Arroz veio normal / Como eu moro perto do aeroporto achei que seria uma boa opção começar a pedir o jantar aí com vcs / Mas pelo que percebi pelo menos no dia, fica inviável / Mas agradeço [O CX abriu a conversa: "Vimos o seu comentário e gostaríamos de entender melhor sua experiência com a marca". O rodapé do direct identifica a marca como Dell Íris.] [ATRIBUÍDA POR INFERÊNCIA à cozinha do Aeroporto porque a cliente diz que mora perto do aeroporto — CONFERIR no pedido do iFood qual das 4 cozinhas Dell Iris produziu.] [PENDÊNCIA: o comentário original que o CX viu não foi localizado no export do iFood da semana.] [DESFECHO — prints de 21/09: o CX pediu telefone, a cliente passou 43 99870 98 19 e escreveu \'Somente por watts\'. O CX respondeu \'O nosso time comercial entrará em contato dentro de 15 dias\'. PRAZO PROMETIDO AO CLIENTE: 15 dias a partir de 14/09, ou seja, até 29/09. NÃO É CASO NOVO — é a mesma conversa de 13/09 já carregada, agora com o desfecho.]'),
       {link:'Instagram — direct (print de 14/09, pedido de domingo 13/09)'}),
     /* ======== GOOGLE — 3º LOTE DE PRINTS DE 15/09/2026 · fichas Isaías ========
        O resto deste lote (Pizzas e Massas, Mercado 88, Saul Elkind, Arthur Thomas)
@@ -2416,6 +2628,149 @@ function seed(){
    IF5('2026-09-11','Maringá 1730','ISAIAS - BURGER','Isaías 01','Isaías','Burger',5,'elogio','','Sempre excelente (tags do iFood: Comida saborosa, Bem temperada, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo)'),
    IF5('2026-09-07','Mercado 88','REFEICOES BIGGS 88','Biggs 10','Biggs','Marmita e refeição',1,'reclamacao','Sabor / padrão do produto','Panqueca sem tempero e fri!')
   ];
+
+  const AGG6=[
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - SANTO AMARO',cod:'Biggs 11',unidade:'Santo Amaro',grupo:'Biggs',categoria:'Lanches',merch:'4c0c421d',n:106,media:4.97,n5:103,n4:3,n3:0,n2:0,n1:0,n123:0,coment:3},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - ZONA NORTE',cod:'Biggs 04',unidade:'Winston Churchill / Zona Norte',grupo:'Biggs',categoria:'Lanches',merch:'524c1b6e',n:93,media:4.95,n5:88,n4:5,n3:0,n2:0,n1:0,n123:0,coment:2},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - CENTRO',cod:'Biggs 03',unidade:'Centro',grupo:'Biggs',categoria:'Lanches',merch:'5bd54d81',n:89,media:4.94,n5:84,n4:5,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'CHINA BIGGS - AV HIGIENOPOLIS',cod:'Biggs 06',unidade:'Higienópolis',grupo:'Biggs',categoria:'Comida chinesa',merch:'e8837fb8',n:85,media:4.88,n5:75,n4:10,n3:0,n2:0,n1:0,n123:0,coment:5},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - SAUL ELKIND',cod:'Biggs 12',unidade:'Saul Elkind',grupo:'Biggs',categoria:'Lanches',merch:'9eb6a20c',n:83,media:4.96,n5:80,n4:3,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - ZONA LESTE',cod:'Biggs 07',unidade:'Jamil Scaff',grupo:'Biggs',categoria:'Lanches',merch:'d814cc99',n:78,media:4.92,n5:72,n4:6,n3:0,n2:0,n1:0,n123:0,coment:2},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - ZONA SUL',cod:'Biggs 05',unidade:'Zona Sul / Igapó',grupo:'Biggs',categoria:'Lanches',merch:'bcf8f55c',n:71,media:4.97,n5:69,n4:2,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'ROBS',cod:'Robs',unidade:'Rob\'s',grupo:'Rob\'s',categoria:'Lanches',merch:'56843371',n:65,media:4.92,n5:62,n4:2,n3:0,n2:1,n1:0,n123:1,coment:8},
+   {semana:'2026-09-14',canal:'ifood',loja:'merchant 665daa81',cod:'Dell Iris',unidade:'Dell Iris · Gleba Palhano',grupo:'Dell Iris',categoria:'Marmita e refeição',merch:'665daa81',n:62,media:4.84,n5:55,n4:6,n3:0,n2:0,n1:1,n123:1,coment:7},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - AV SANTOS DUMONT',cod:'Biggs 02',unidade:'Aeroporto',grupo:'Biggs',categoria:'Lanches',merch:'f1e7bc12',n:61,media:4.98,n5:60,n4:1,n3:0,n2:0,n1:0,n123:0,coment:2},
+   {semana:'2026-09-14',canal:'ifood',loja:'merchant e255c2c8',cod:'a identificar',unidade:'',grupo:'Biggs',categoria:'Lanches',merch:'e255c2c8',n:58,media:4.91,n5:54,n4:3,n3:1,n2:0,n1:0,n123:1,coment:5},
+   {semana:'2026-09-14',canal:'ifood',loja:'merchant faaba7c0',cod:'Dell Iris',unidade:'Dell Iris · Centro',grupo:'Dell Iris',categoria:'Marmita e refeição',merch:'faaba7c0',n:56,media:4.88,n5:52,n4:1,n3:3,n2:0,n1:0,n123:3,coment:8},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - MARMITAS - AV MARINGA',cod:'Biggs 01',unidade:'Maringá / Aterro Igapó',grupo:'Biggs',categoria:'Marmita e refeição',merch:'629392cf',n:55,media:4.89,n5:52,n4:2,n3:0,n2:0,n1:1,n123:1,coment:4},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - GLEBA PALHANO',cod:'Biggs 01',unidade:'Maringá / Aterro Igapó',grupo:'Biggs',categoria:'Lanches',merch:'51ed2580',n:51,media:4.90,n5:46,n4:5,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'ISAIAS - PIZZAS',cod:'Isaías 01',unidade:'Maringá 1730',grupo:'Isaías',categoria:'Pizza',merch:'4b722b0e',n:49,media:5.00,n5:49,n4:0,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'CHINA BIGGS - ZONA SUL',cod:'Biggs 05',unidade:'Zona Sul / Igapó',grupo:'Biggs',categoria:'Comida chinesa',merch:'7c668e87',n:45,media:4.98,n5:44,n4:1,n3:0,n2:0,n1:0,n123:0,coment:4},
+   {semana:'2026-09-14',canal:'ifood',loja:'CHINA BIGGS - ZONA LESTE',cod:'Biggs 07',unidade:'Jamil Scaff',grupo:'Biggs',categoria:'Comida chinesa',merch:'4edad2d0',n:42,media:4.88,n5:40,n4:1,n3:0,n2:0,n1:1,n123:1,coment:2},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - ACAI',cod:'Biggs 07',unidade:'Jamil Scaff',grupo:'Biggs',categoria:'Açaí',merch:'d168ca7a',n:40,media:4.92,n5:37,n4:3,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - AV MARINGA',cod:'Biggs 01',unidade:'Maringá / Aterro Igapó',grupo:'Biggs',categoria:'Lanches',merch:'6042e59b',n:40,media:4.95,n5:38,n4:2,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - PASTEL - ZONA NORTE',cod:'Biggs 04',unidade:'Winston Churchill / Zona Norte',grupo:'Biggs',categoria:'Pastel',merch:'7605fbf6',n:39,media:4.97,n5:38,n4:1,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'LANCHES BIGGS 88',cod:'Biggs 10',unidade:'Mercado 88',grupo:'Biggs',categoria:'Lanches',merch:'2b80dc5c',n:37,media:4.97,n5:36,n4:1,n3:0,n2:0,n1:0,n123:0,coment:2},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - PASTEL - ZONA LESTE',cod:'Biggs 07',unidade:'Jamil Scaff',grupo:'Biggs',categoria:'Pastel',merch:'60e23206',n:36,media:4.97,n5:35,n4:1,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - PIZZARIA - ZONA LESTE',cod:'Biggs 07',unidade:'Jamil Scaff',grupo:'Biggs',categoria:'Pizza',merch:'30746279',n:34,media:4.79,n5:30,n4:3,n3:0,n2:0,n1:1,n123:1,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - PIZZARIA - ZONA NORTE',cod:'Biggs 04',unidade:'Winston Churchill / Zona Norte',grupo:'Biggs',categoria:'Pizza',merch:'b31feaf1',n:34,media:4.82,n5:31,n4:2,n3:0,n2:0,n1:1,n123:1,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - JAPA FOOD - ZONA LESTE',cod:'Biggs 07',unidade:'Jamil Scaff',grupo:'Biggs',categoria:'Japonesa e poke',merch:'341c65c4',n:34,media:4.91,n5:31,n4:3,n3:0,n2:0,n1:0,n123:0,coment:3},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - PIZZARIA - ZONA SUL',cod:'Biggs 05',unidade:'Zona Sul / Igapó',grupo:'Biggs',categoria:'Pizza',merch:'ba3e8a59',n:33,media:4.94,n5:31,n4:2,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - REFEICOES - SAUL ELKIND',cod:'Biggs 12',unidade:'Saul Elkind',grupo:'Biggs',categoria:'Marmita e refeição',merch:'ca941556',n:32,media:4.97,n5:31,n4:1,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - PASTEL - ZONA SUL',cod:'Biggs 05',unidade:'Zona Sul / Igapó',grupo:'Biggs',categoria:'Pastel',merch:'3f9eaf10',n:31,media:4.94,n5:29,n4:2,n3:0,n2:0,n1:0,n123:0,coment:2},
+   {semana:'2026-09-14',canal:'ifood',loja:'PIZZA BIGGS - SANTO AMARO',cod:'Biggs 11',unidade:'Santo Amaro',grupo:'Biggs',categoria:'Pizza',merch:'9c419eff',n:27,media:5.00,n5:27,n4:0,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'merchant 20480e5b',cod:'Dell Iris',unidade:'Dell Iris · Aeroporto',grupo:'Dell Iris',categoria:'Marmita e refeição',merch:'20480e5b',n:25,media:4.96,n5:24,n4:1,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - JAPA FOOD - AV HIGIENOPOLIS',cod:'Biggs 06',unidade:'Higienópolis',grupo:'Biggs',categoria:'Japonesa e poke',merch:'d20631ce',n:24,media:4.83,n5:21,n4:2,n3:1,n2:0,n1:0,n123:1,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'ISAIAS PIZZAS - ALPHAVILLE',cod:'Isaías 02',unidade:'Alphaville',grupo:'Isaías',categoria:'Pizza',merch:'2a5b9bd1',n:22,media:5.00,n5:22,n4:0,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-09-14',canal:'ifood',loja:'MARMITAS BIGGS - SANTO AMARO',cod:'Biggs 11',unidade:'Santo Amaro',grupo:'Biggs',categoria:'Marmita e refeição',merch:'9af10acc',n:19,media:4.95,n5:18,n4:1,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - JAPA FOOD - ZONA SUL',cod:'Biggs 05',unidade:'Zona Sul / Igapó',grupo:'Biggs',categoria:'Japonesa e poke',merch:'76776918',n:17,media:4.94,n5:16,n4:1,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'PIZZA BIGGS 88',cod:'Biggs 10',unidade:'Mercado 88',grupo:'Biggs',categoria:'Pizza',merch:'d9be8f17',n:17,media:5.00,n5:17,n4:0,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'merchant 62a7d9c7',cod:'Dell Iris',unidade:'Dell Iris · Zona Norte',grupo:'Dell Iris',categoria:'Marmita e refeição',merch:'62a7d9c7',n:17,media:4.94,n5:16,n4:1,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - PIZZAS E MASSAS - PARANAGUA',cod:'Biggs 08',unidade:'Pizzas e Massas',grupo:'Biggs',categoria:'Pizza',merch:'fa3b4172',n:16,media:4.81,n5:13,n4:3,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - PASTEL - CENTRO',cod:'Biggs 09',unidade:'Street',grupo:'Biggs',categoria:'Pastel',merch:'3fed275f',n:14,media:4.79,n5:13,n4:0,n3:0,n2:1,n1:0,n123:1,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - REFEICOES - ZONA LESTE',cod:'Biggs 07',unidade:'Jamil Scaff',grupo:'Biggs',categoria:'Marmita e refeição',merch:'cbc464e9',n:12,media:4.92,n5:11,n4:1,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - POKE - AV HIGIENOPOLIS',cod:'Biggs 06',unidade:'Higienópolis',grupo:'Biggs',categoria:'Japonesa e poke',merch:'8a6a1f5c',n:12,media:4.92,n5:11,n4:1,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - REFEICOES - ZONA NORTE',cod:'Biggs 04',unidade:'Winston Churchill / Zona Norte',grupo:'Biggs',categoria:'Marmita e refeição',merch:'ab91c5da',n:10,media:5.00,n5:10,n4:0,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-09-14',canal:'ifood',loja:'ISAIAS - JAPAN FOOD',cod:'Isaías 01',unidade:'Maringá 1730',grupo:'Isaías',categoria:'Japonesa e poke',merch:'b1cec734',n:10,media:5.00,n5:10,n4:0,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - AV HIGIENOPOLIS',cod:'Biggs 06',unidade:'Higienópolis',grupo:'Biggs',categoria:'Lanches',merch:'38d45154',n:8,media:5.00,n5:8,n4:0,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - MARMITAS - ZONA NORTE',cod:'Biggs 04',unidade:'Winston Churchill / Zona Norte',grupo:'Biggs',categoria:'Marmita e refeição',merch:'3f8805f2',n:8,media:5.00,n5:8,n4:0,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - PIZZARIA - GLEBA PALHANO',cod:'Isaías 01',unidade:'Maringá 1730',grupo:'Biggs',categoria:'Pizza',merch:'fac06e5f',n:7,media:5.00,n5:7,n4:0,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - MARMITAS - SAUL ELKIND',cod:'Biggs 12',unidade:'Saul Elkind',grupo:'Biggs',categoria:'Marmita e refeição',merch:'de6cc312',n:7,media:4.71,n5:5,n4:2,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'ISAIAS - BURGER',cod:'Isaías 01',unidade:'Maringá 1730',grupo:'Isaías',categoria:'Burger',merch:'77925ad1',n:6,media:5.00,n5:6,n4:0,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'REFEICOES ISAIAS - MADRE',cod:'Isaías 03',unidade:'Madre',grupo:'Isaías',categoria:'Marmita e refeição',merch:'08b6c57f',n:6,media:5.00,n5:6,n4:0,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-09-14',canal:'ifood',loja:'ISAIAS - REFEICOES',cod:'Isaías 01',unidade:'Maringá 1730',grupo:'Isaías',categoria:'Marmita e refeição',merch:'cd1938a6',n:4,media:5.00,n5:4,n4:0,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'ISAIAS MADRE - JAPAN E POKE',cod:'Isaías 03',unidade:'Madre',grupo:'Isaías',categoria:'Japonesa e poke',merch:'d02b5530',n:4,media:4.75,n5:3,n4:1,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - BURGER',cod:'Biggs 05',unidade:'Zona Sul / Igapó',grupo:'Biggs',categoria:'Burger',merch:'d7a2d9de',n:4,media:4.75,n5:3,n4:1,n3:0,n2:0,n1:0,n123:0,coment:1},
+   {semana:'2026-09-14',canal:'ifood',loja:'ISAIAS - POKE',cod:'Isaías 01',unidade:'Maringá 1730',grupo:'Isaías',categoria:'Japonesa e poke',merch:'db73d0f6',n:4,media:4.75,n5:3,n4:1,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-09-14',canal:'ifood',loja:'MARMITAS BIGGS 88',cod:'Biggs 10',unidade:'Mercado 88',grupo:'Biggs',categoria:'Marmita e refeição',merch:'fb9fad26',n:3,media:5.00,n5:3,n4:0,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-09-14',canal:'ifood',loja:'REFEICOES BIGGS 88',cod:'Biggs 10',unidade:'Mercado 88',grupo:'Biggs',categoria:'Marmita e refeição',merch:'524a9ef5',n:2,media:5.00,n5:2,n4:0,n3:0,n2:0,n1:0,n123:0,coment:0}
+  ];
+
+  const IF6=(dt,u,lj,cd,gr,ct,nt,tp,tm,v)=>({id:uid(),data:dt,canal:'ifood',unidade:u,loja:lj,cod:cd,grupo:gr,categoria:ct,
+    tipo:tp,tema:tm,nota:nt,verbatim:v,link:'iFood — export de avaliações 14 a 19/09',cliente:'',acao:'',resp:'',prazo:'',status:'aberto',emAgg:true});
+  const regsIfood6=[
+   IF6('2026-09-19','Santo Amaro','BIGGS - SANTO AMARO','Biggs 11','Biggs','Lanches',5,'elogio','','Recomendo topd+ (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-19','','merchant e255c2c8','a identificar','Biggs','Lanches',5,'elogio','','Lanche maravilhoso ! (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo)'),
+   IF6('2026-09-19','Zona Sul / Igapó','CHINA BIGGS - ZONA SUL','Biggs 05','Biggs','Comida chinesa',5,'elogio','','Sempre nota máxima, comida boa demais. (tags do iFood: Comida saborosa, Bem temperada, Boa aparência, Boa embalagem)'),
+   IF6('2026-09-19','Maringá 1730','ISAIAS - REFEICOES','Isaías 01','Isaías','Marmita e refeição',5,'elogio','','Super recomendo! Preço e qualidade (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-19','Higienópolis','BIGGS - JAPA FOOD - AV HIGIENOPOLIS','Biggs 06','Biggs','Japonesa e poke',3,'reclamacao','Preço x porção','Porção pequeno'),
+   IF6('2026-09-19','Centro','BIGGS - CENTRO','Biggs 03','Biggs','Lanches',5,'elogio','','desse jeito vocês vão acabar com meu salário!! sem dúvidas o melhor cachorro quente que eu já comi. Comeria de manhã, tarde e noite se possível. parabéns de verdade! 5 estrelas. Se pudesse dava até 10, meu amigo. (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-19','Maringá / Aterro Igapó','BIGGS - GLEBA PALHANO','Biggs 01','Biggs','Lanches',5,'elogio','','Tudo delicioso, como sempre! 😍😋 (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-19','Higienópolis','CHINA BIGGS - AV HIGIENOPOLIS','Biggs 06','Biggs','Comida chinesa',4,'elogio','','Arroz pode melhorar'),
+   IF6('2026-09-19','Santo Amaro','BIGGS - SANTO AMARO','Biggs 11','Biggs','Lanches',5,'elogio','','Recomendo top d+ (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-19','Maringá 1730','ISAIAS - BURGER','Isaías 01','Isaías','Burger',5,'elogio','','Maravilhoso!! Entrega super rápida, lanche quentinho e saboroso (tags do iFood: Comida saborosa)'),
+   IF6('2026-09-19','Higienópolis','CHINA BIGGS - AV HIGIENOPOLIS','Biggs 06','Biggs','Comida chinesa',5,'elogio','','Excelente recomendo ! Sabor inigualável (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-14','Saul Elkind','BIGGS - REFEICOES - SAUL ELKIND','Biggs 12','Biggs','Marmita e refeição',5,'elogio','','Que comida deliciosa, vocês estão de parabéns. Com certeza comprarei outras vezes. (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-14','Maringá / Aterro Igapó','BIGGS - MARMITAS - AV MARINGA','Biggs 01','Biggs','Marmita e refeição',5,'elogio','','Comida gostosa e saborosa, mas estava muito salgada, não consegui comer toda a comida por causa do sal. (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-14','Jamil Scaff','BIGGS - PIZZARIA - ZONA LESTE','Biggs 07','Biggs','Pizza',1,'reclamacao','Sabor / padrão do produto','A pizza era de queijo e não tinha nem 50% de queijo, muito fraca, mesmo sendo um valor bom de custo benefício, não precisava esculachar, a pizza estava péssima'),
+   IF6('2026-09-14','Winston Churchill / Zona Norte','BIGGS - PASTEL - ZONA NORTE','Biggs 04','Biggs','Pastel',5,'elogio','','Muito bom surpreendeu de mais, porque o preço achei muito caro, mais depois vi o quanto de recheio vem sensacional sem palavras pra esse pastel, Quentinho muito recheio mesmo eu só acho que deveria ser um pouco menos gorduroso mais sério vocês arrasam muito bom. (tags do iFood: Comida saborosa, Boa quantidade, Bons ingredientes)'),
+   IF6('2026-09-14','Aeroporto','BIGGS - AV SANTOS DUMONT','Biggs 02','Biggs','Lanches',5,'elogio','','Lanche top dms, parabens biggs pelo lanche artesanal. Muito saboroso e suculento. (tags do iFood: Comida saborosa)'),
+   IF6('2026-09-14','Maringá 1730','ISAIAS - PIZZAS','Isaías 01','Isaías','Pizza',5,'elogio','','Essa pizza é perfeita, com borda de catupiry então (tags do iFood: Comida saborosa)'),
+   IF6('2026-09-14','Street','BIGGS - PASTEL - CENTRO','Biggs 09','Biggs','Pastel',2,'reclamacao','Temperatura do produto','Pastel frio não gostei'),
+   IF6('2026-09-14','','merchant e255c2c8','a identificar','Biggs','Lanches',4,'reclamacao','Corpo estranho no alimento','Muito bom, porém achei um pelo na comida'),
+   IF6('2026-09-14','','merchant e255c2c8','a identificar','Biggs','Lanches',3,'reclamacao','Sabor / padrão do produto','Muito bom, porém estava bastante salgado! Tô b'),
+   IF6('2026-09-14','Mercado 88','LANCHES BIGGS 88','Biggs 10','Biggs','Lanches',5,'elogio','','Entrega super rápida e o lanche chegou Quentinho (tags do iFood: Bem temperada, Temperatura certa)'),
+   IF6('2026-09-14','Higienópolis','CHINA BIGGS - AV HIGIENOPOLIS','Biggs 06','Biggs','Comida chinesa',5,'elogio','','Gostei bastante. (tags do iFood: Comida saborosa, Bem temperada, Bons ingredientes)'),
+   IF6('2026-09-14','Rob\'s','ROBS','Robs','Rob\'s','Lanches',2,'reclamacao','Sabor / padrão do produto','Batata estava muito salgada não consegui comer'),
+   IF6('2026-09-14','Rob\'s','ROBS','Robs','Rob\'s','Lanches',5,'elogio','','Eu sou suspeito sai de Londrina a 10 anos e sempre lembro do cachorro quente do Rob\'s o melhor de todos, eu sinceramente prefiro o simples cachorro quente pra mim é salsicha e tomate é o lanche entrega isto poucos ingredientes mas uma explosão de sabores maravilhosa,  como eu disse o melhor. (tags do iFood: Comida saborosa, Bem temperada, Boa embalagem)'),
+   IF6('2026-09-14','Maringá / Aterro Igapó','BIGGS - MARMITAS - AV MARINGA','Biggs 01','Biggs','Marmita e refeição',1,'reclamacao','Preço x porção','mandaram um cotoco do frango kkkkkkkkk'),
+   IF6('2026-09-14','Mercado 88','PIZZA BIGGS 88','Biggs 10','Biggs','Pizza',5,'elogio','','A MELHOR PIZZA QUE EU JA COMI NA VIDA, que pizza maravilhosa, recheada, quentinha e saborosa, parabéns, vocês arrasam sempre, volto novamente em breve para mais sabores. (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-14','Rob\'s','ROBS','Robs','Rob\'s','Lanches',5,'elogio','','Lanche gostoso e entrega rápida (tags do iFood: No ponto certo)'),
+   IF6('2026-09-18','Higienópolis','BIGGS - POKE - AV HIGIENOPOLIS','Biggs 06','Biggs','Japonesa e poke',5,'elogio','','MELHOR DO MUNDOOOO!! ❤️❤️❤️ (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo)'),
+   IF6('2026-09-18','Santo Amaro','MARMITAS BIGGS - SANTO AMARO','Biggs 11','Biggs','Marmita e refeição',5,'elogio','','Boa qualidade e quantidade (tags do iFood: Comida saborosa, Bem temperada, Boa aparência)'),
+   IF6('2026-09-18','Maringá / Aterro Igapó','BIGGS - MARMITAS - AV MARINGA','Biggs 01','Biggs','Marmita e refeição',5,'elogio','','Sensacional a carne de panela com couve. Espetacular. (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-18','Rob\'s','ROBS','Robs','Rob\'s','Lanches',5,'elogio','','O x salada é bom demais (tags do iFood: Comida saborosa)'),
+   IF6('2026-09-18','Zona Sul / Igapó','BIGGS - PASTEL - ZONA SUL','Biggs 05','Biggs','Pastel',5,'elogio','','Muito bom obrigado ❤️ (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-18','Jamil Scaff','BIGGS - REFEICOES - ZONA LESTE','Biggs 07','Biggs','Marmita e refeição',4,'elogio','','Já foi boa, arroz papapedi uma marmita média veio metade de uma panqueca, imagina a mini vai vim 1/3 da panqueca'),
+   IF6('2026-09-18','Higienópolis','CHINA BIGGS - AV HIGIENOPOLIS','Biggs 06','Biggs','Comida chinesa',5,'elogio','','Ainda veio com uma resposta do Senhor… Floresça onde Deus te plantar. Obrigada. E comida perfeita tbm, Deus abençoe as mãos de quem preparou, embalou e entregou 🙌🏿 (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-18','','merchant e255c2c8','a identificar','Biggs','Lanches',5,'elogio','','Amei o bilhete q foi colocado, um jeitinho que melhorou minha noite obg pelo seu trabalho pessoal (tags do iFood: Comida saborosa)'),
+   IF6('2026-09-18','Mercado 88','LANCHES BIGGS 88','Biggs 10','Biggs','Lanches',5,'elogio','','Muito gostoso o lanche, fiquei feliz com o recadinho lindo. Obrigado!!! (tags do iFood: Comida saborosa, Boa aparência, Boa embalagem, No ponto certo)'),
+   IF6('2026-09-17','','merchant e255c2c8','a identificar','Biggs','Lanches',5,'elogio','','Que lanche maravilhoso!! Há muito tempo não comia uma lanche assim!!! Estava ótimo, o pão bem prensado como eu gosto. (tags do iFood: Comida saborosa)'),
+   IF6('2026-09-17','Rob\'s','ROBS','Robs','Rob\'s','Lanches',5,'elogio','','Lanche saboroso (tags do iFood: No ponto certo)'),
+   IF6('2026-09-17','Jamil Scaff','BIGGS - JAPA FOOD - ZONA LESTE','Biggs 07','Biggs','Japonesa e poke',5,'elogio','','Amo. Obrigada pelo capricho 🥰🥰🥰🥰 (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-17','Jamil Scaff','BIGGS - JAPA FOOD - ZONA LESTE','Biggs 07','Biggs','Japonesa e poke',5,'elogio','','Amo tudo perfeito (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-17','Maringá / Aterro Igapó','BIGGS - MARMITAS - AV MARINGA','Biggs 01','Biggs','Marmita e refeição',5,'elogio','','tudo maravilhoso, a saladinha estava fresquinha e tudo bem delicia recomendoo (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-17','Jamil Scaff','BIGGS - ZONA LESTE','Biggs 07','Biggs','Lanches',5,'elogio','','Meu vício lanche de chocolate branco comi muito na minha gestação e continua sendo o melhor sempre chega quentinho eu amooooo muito (tags do iFood: Temperatura certa)'),
+   IF6('2026-09-17','Jamil Scaff','CHINA BIGGS - ZONA LESTE','Biggs 07','Biggs','Comida chinesa',5,'elogio','','O melhor rolinho primavera de Londrina !! (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, Embalagem sustentável)'),
+   IF6('2026-09-17','Rob\'s','ROBS','Robs','Rob\'s','Lanches',5,'elogio','','Muito gostoso o lanche e a entrega chegou antes do previsto. (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, Embalagem sustentável)'),
+   IF6('2026-09-17','Saul Elkind','BIGGS - MARMITAS - SAUL ELKIND','Biggs 12','Biggs','Marmita e refeição',4,'elogio','','Pedi duas vezes o lanche estava ótimo mais a duas vezes não veio troco até até agora .'),
+   IF6('2026-09-17','Rob\'s','ROBS','Robs','Rob\'s','Lanches',5,'elogio','','Saiu para entrega em 10 minutos , muito saboroso , recomendo (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-17','Jamil Scaff','BIGGS - ZONA LESTE','Biggs 07','Biggs','Lanches',5,'elogio','','Amo muito bommmm (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-17','Santo Amaro','BIGGS - SANTO AMARO','Biggs 11','Biggs','Lanches',5,'elogio','','Estou sempre pedindo, ótimo restaurante, comida boa e entrega extremamente rápida. Amo, amo e Amo!!! ❤️ (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Temperatura certa)'),
+   IF6('2026-09-16','Jamil Scaff','BIGGS - JAPA FOOD - ZONA LESTE','Biggs 07','Biggs','Japonesa e poke',5,'elogio','','Estão de Parabéns...tudo muito gostoso como sempre...obrigada (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo)'),
+   IF6('2026-09-16','Winston Churchill / Zona Norte','BIGGS - PIZZARIA - ZONA NORTE','Biggs 04','Biggs','Pizza',1,'reclamacao','Sabor / padrão do produto','A pizza de mussarela é horrível. Nadando no molho de tomate, mal tinha mussarela.'),
+   IF6('2026-09-16','Zona Sul / Igapó','BIGGS - BURGER','Biggs 05','Biggs','Burger',5,'elogio','','Ponto da casa é  pra quem gosta de carne mal passada (tags do iFood: Comida saborosa)'),
+   IF6('2026-09-16','Zona Sul / Igapó','CHINA BIGGS - ZONA SUL','Biggs 05','Biggs','Comida chinesa',5,'elogio','','Oi pessoal, a gente sempre gostou do yakissoba de vcs, mas nao ta tao bom qto antes.'),
+   IF6('2026-09-16','Higienópolis','CHINA BIGGS - AV HIGIENOPOLIS','Biggs 06','Biggs','Comida chinesa',5,'elogio','','Yakisoba bem boa (tags do iFood: Bem temperada)'),
+   IF6('2026-09-16','Zona Sul / Igapó','BIGGS - PASTEL - ZONA SUL','Biggs 05','Biggs','Pastel',5,'elogio','','Me surpreende c pastel bem recheado isso porque paguei 0,90 parabéns show (tags do iFood: Boa quantidade)'),
+   IF6('2026-09-16','Santo Amaro','PIZZA BIGGS - SANTO AMARO','Biggs 11','Biggs','Pizza',5,'elogio','','Top muito bom eu gosto muito do lanche (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Bons ingredientes)'),
+   IF6('2026-09-16','Zona Sul / Igapó','BIGGS - ZONA SUL','Biggs 05','Biggs','Lanches',5,'elogio','','Excelente como sempre! (tags do iFood: Comida saborosa)'),
+   IF6('2026-09-16','Maringá / Aterro Igapó','BIGGS - AV MARINGA','Biggs 01','Biggs','Lanches',5,'elogio','','Lanche sempre muito saboroso! (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-16','Jamil Scaff','CHINA BIGGS - ZONA LESTE','Biggs 07','Biggs','Comida chinesa',1,'reclamacao','Sabor / padrão do produto','Parecia está azedo o arroz'),
+   IF6('2026-09-16','Aeroporto','BIGGS - AV SANTOS DUMONT','Biggs 02','Biggs','Lanches',5,'elogio','','Simples e muito gostoso!! (tags do iFood: Comida saborosa, Boa aparência, Boa embalagem, Bons ingredientes)'),
+   IF6('2026-09-16','Winston Churchill / Zona Norte','BIGGS - ZONA NORTE','Biggs 04','Biggs','Lanches',5,'elogio','','Parabéns para equipe   excelente trabalho  e carinho que eh feito cada entrega por isso que sempre compro cm vcs parabéns (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-15','Zona Sul / Igapó','CHINA BIGGS - ZONA SUL','Biggs 05','Biggs','Comida chinesa',5,'elogio','','Que comida PERFEITA!!! Maravilhosa, amei, muito saborosa! (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-15','Winston Churchill / Zona Norte','BIGGS - ZONA NORTE','Biggs 04','Biggs','Lanches',5,'elogio','','Tudo perfeito, como sempre 🤍💭 (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-15','Zona Sul / Igapó','CHINA BIGGS - ZONA SUL','Biggs 05','Biggs','Comida chinesa',5,'elogio','','Melhor restaurante chinês. Yakissoba, frango xadrez, tudo muito bom. (tags do iFood: Comida saborosa, Bem temperada, Bons ingredientes)'),
+   IF6('2026-09-15','Rob\'s','ROBS','Robs','Rob\'s','Lanches',5,'elogio','','Amei, maionese gigante e ainda tinha um bilhete fofinho na caixa. Lanche veio quentinho tbm (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-15','Zona Sul / Igapó','BIGGS - JAPA FOOD - ZONA SUL','Biggs 05','Biggs','Japonesa e poke',5,'elogio','','Estava uma delícia, muito recheio, peixes grandes, só não estava bem montado, quando pegava com o rashi ele desfazia, sempre compro desses de 60 peças do BIGGS, mas achei que dessa vez estava de qualquer jeito, porém estava uma delícia, merece sim 5 estrelas, só mais cuidado na hora de montar! 😊 (tags do iFood: Boa aparência)'),
+   IF6('2026-09-19','Dell Iris · Centro','merchant faaba7c0','Dell Iris','Dell Iris','Marmita e refeição',5,'elogio','','Primeira vez pedindo. Achei a quantidade perfeita para quem não come tanto como eu, a comida estava quentinha e gostosa!! (tags do iFood: Comida saborosa, Bem temperada, Boa aparência, Boa embalagem)'),
+   IF6('2026-09-14','Dell Iris · Gleba Palhano','merchant 665daa81','Dell Iris','Dell Iris','Marmita e refeição',5,'elogio','','Minha primeira vez pedindo e gostei muito! Comida saborosa, é genial a ideia de ser na caixa pela praticidade e bem tudo separadinho. Gostei bastante e pretendo pedir novamente. (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-14','Dell Iris · Centro','merchant faaba7c0','Dell Iris','Dell Iris','Marmita e refeição',5,'elogio','','Frango apimentado perfeito, juro, sem defeito nenhum! Tava tudo uma delícia! Poderiam só enviar um molhinho ou algum temperinho para a salada (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa)'),
+   IF6('2026-09-14','Dell Iris · Centro','merchant faaba7c0','Dell Iris','Dell Iris','Marmita e refeição',3,'reclamacao','Sabor / padrão do produto','Carne de panela e feijão com excesso de sal.'),
+   IF6('2026-09-14','Dell Iris · Centro','merchant faaba7c0','Dell Iris','Dell Iris','Marmita e refeição',3,'reclamacao','Sabor / padrão do produto','Estava gostoso, porém a carne estava bastante salgada (só a carne mesmo, no mais estava saboroso)'),
+   IF6('2026-09-14','Dell Iris · Gleba Palhano','merchant 665daa81','Dell Iris','Dell Iris','Marmita e refeição',1,'reclamacao','Embalagem / transporte','Embalagem molhada da chuva sem nenhuma proteção sendo que é de papelão , pouca mistura dava para contar os pedaços de frango ( estrogonofe)  salada sem tempero avulso sal vinagre molho não recomendo!!!!'),
+   IF6('2026-09-18','Dell Iris · Gleba Palhano','merchant 665daa81','Dell Iris','Dell Iris','Marmita e refeição',5,'elogio','','Muito bom, recomendo. Sabor, temperatura, entrega rápida. (tags do iFood: Comida saborosa, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo)'),
+   IF6('2026-09-18','Dell Iris · Gleba Palhano','merchant 665daa81','Dell Iris','Dell Iris','Marmita e refeição',5,'elogio','','nossa babado mt bom amei mt (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-18','Dell Iris · Centro','merchant faaba7c0','Dell Iris','Dell Iris','Marmita e refeição',5,'elogio','','Uma delicia de comida , com uma apresentação apetitosa , continuem mantendo a mesma qualidade que ficarei sendo cliente assídua, obrigada . (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-18','Dell Iris · Centro','merchant faaba7c0','Dell Iris','Dell Iris','Marmita e refeição',5,'elogio','','Pedi o frango empanado com salada e adorei!! Acredito q fui uma das primeiras clientes porque pedi em torno das 10h da manhã 🤣 Então a comida veio quente, crocante, bem gostosa! Para mim é a quantidade ideal, mas para quem é acostumado a comer marmita grande, pode ser pouco. Salada fresquinha! Amei (tags do iFood: Comida saborosa, Bem temperada, Boa aparência, Boa embalagem)'),
+   IF6('2026-09-17','Dell Iris · Gleba Palhano','merchant 665daa81','Dell Iris','Dell Iris','Marmita e refeição',5,'elogio','','Só uma dica , pouco menos de mostarda (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-16','Dell Iris · Centro','merchant faaba7c0','Dell Iris','Dell Iris','Marmita e refeição',5,'elogio','','A comida é muito boa, sabor e quantidade perfeitos, pedirei sempre (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-15','Dell Iris · Centro','merchant faaba7c0','Dell Iris','Dell Iris','Marmita e refeição',3,'reclamacao','Sabor / padrão do produto','Muito salgado'),
+   IF6('2026-09-15','Dell Iris · Gleba Palhano','merchant 665daa81','Dell Iris','Dell Iris','Marmita e refeição',5,'elogio','','Ameiii estava perfeito (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF6('2026-09-15','Dell Iris · Aeroporto','merchant 20480e5b','Dell Iris','Dell Iris','Marmita e refeição',5,'elogio','','A comida tamanho perfeito e o arroz é o feijão eu deixar para comer no outro dia . Estava perfeito (tags do iFood: Comida saborosa)'),
+   IF6('2026-09-15','Dell Iris · Gleba Palhano','merchant 665daa81','Dell Iris','Dell Iris','Marmita e refeição',5,'elogio','','So o feijão que veio um pouco duro 9 resto ta ótimo')
+  ];
   const IF4=(dt,u,lj,cd,gr,ct,nt,tp,tm,v)=>({id:uid(),data:dt,canal:'ifood',unidade:u,loja:lj,cod:cd,grupo:gr,categoria:ct,
     tipo:tp,tema:tm,nota:nt,verbatim:v,link:'iFood — export de avaliações 31/08 a 06/09',cliente:'',acao:'',resp:'',prazo:'',status:'aberto',emAgg:true});
   const regsIfood4=[
@@ -3051,26 +3406,26 @@ function seed(){
   ];
 
   return {
-    versao:'8.1', sessoes:1, meta:60, metaNota:4.8, modoNps:'todos', snapshotData:'2026-08-27',
+    versao:'9.0', sessoes:1, meta:60, metaNota:4.8, modoNps:'todos', snapshotData:'2026-08-27',
     unidades:UN_PADRAO.map(u=>Object.assign({},u)), temas:TEMAS_PADRAO.slice(),
-    cobertura:{sac:{ativo:false,obs:'Ativo apenas no Biggs 13 · leitura mensal, não semanal'},ifood:{ativo:true,obs:'export oficial por semana · semana 31/08 a 06/09 com 2.765 avaliações em 54 lojas virtuais · inclui as 4 dark kitchens Dell Iris · o merchant e255c2c8 (44 avaliações nesta semana) segue sem nome e sem loja física identificada'},zap:{ativo:false,obs:'sem coleta nesta semana'},social:{ativo:true,obs:'Instagram — directs e comentários · prints de 18/08, 27/08 e 10/09 · semana 31/08 a 06/09 com 5 conversas, 4 delas da Dell Iris sem identificar qual das 4 cozinhas · seguem sem loja: uDantt, Ana Angélica Rodrigues e Bruna Fileto'},card:{ativo:false,obs:'sem coleta nesta semana'},lider:{ativo:false,obs:'sem coleta nesta semana'},google:{ativo:true,obs:'Leitura de 10/09 em 14 fichas · Biggs 07 Jamil Scaff tem avaliação nova mas a FICHA não foi capturada, então o volume dele segue com a leitura de 01/09 · Biggs 04 Winston Churchill e Biggs 05 Zona Sul sem releitura em 10/09 · Mapoli sem ficha e as 4 Dell Iris são dark kitchens sem ficha · PENDENTE: 3 avaliações com texto colapsado em Mais (Sthefan Piccinini, Thiago Henrique Romagnoli e Rian Charles Santos), 1 avaliação do Biggs 05 sem nome, 4 registros do Arthur Thomas e 1 do Saul Elkind sem print, e 5 fichas com avaliação saindo do ar'},trip:{ativo:false,obs:'só 2 fichas com avaliação · 3 sem reivindicação · 13 unidades sem ficha'},'99':{ativo:false,obs:'sem coleta nesta semana'}},
+    cobertura:{sac:{ativo:false,obs:'Ativo apenas no Biggs 13 · leitura mensal, não semanal'},ifood:{ativo:true,obs:'export oficial por semana · semana 14 a 20/09 VEIO INCOMPLETA: o export cobre 14 a 19/09 (6 dias, 1.844 avaliações em 54 lojas virtuais) porque o iFood ainda não tinha liberado o domingo 20/09 · inclui as 4 dark kitchens Dell Iris · o merchant e255c2c8 (58 avaliações nesta semana) segue sem nome e sem loja física identificada, e é dele o caso de corpo estranho (fio de cabelo) de 14/09'},zap:{ativo:false,obs:'sem coleta nesta semana'},social:{ativo:true,obs:'Instagram — directs e comentários · prints de 18/08, 27/08, 10/09, 14/09 e 19/09 · semana 14 a 20/09 com 1 conversa nova (Dani, Winston Churchill / Zona Norte, 19/09), que é desdobramento da avaliação 1 estrela do iFood de 16/09 e NÃO conta como negativa nova · a conversa da Dayane (Dell Iris · Aeroporto) é de 13/09 e ganhou o desfecho: o CX prometeu contato do comercial em 15 dias, prazo até 29/09 · seguem sem loja: uDantt, Ana Angélica Rodrigues e Bruna Fileto'},card:{ativo:false,obs:'sem coleta nesta semana'},lider:{ativo:false,obs:'sem coleta nesta semana'},google:{ativo:true,obs:'Leitura de 21/09 · 75 avaliações na semana 14 a 20/09, em 13 unidades · FECHOU EXATO: Centro +21 · Santo Amaro +16 (e a nota também, 4,41) · Jamil Scaff +3 · Maringá 1730 +2 · Pizzas e Massas +2 · Street +1 · Mercado 88, Saul Elkind e Madre em 0 · NÃO FECHOU: Aterro +1 com 2 novas · Winston Churchill +2 com 1 print · Arthur Thomas +2 com 3 novas · Zona Sul 0 com 1 marcada Novo · SEM FICHA NESTE LOTE: Alphaville e Rob\'s vieram só com a lista, a última leitura de ficha delas é de 15/09 · DOIS PICOS DE VOLUME A CONFERIR COM AS LOJAS: Centro com 21 avaliações em 6 dias, 12 citando o Fabrício e 9 delas no mesmo 16/09; Santo Amaro com 15 avaliações 5 estrelas concentradas em 20/09, numa loja que tinha 154 no total · e um perfil chamado \'Paranagua Biggs\', com o nome da própria loja, deu 5 estrelas no Street em 17/09 · PENDENTE: texto colapsado ou ausente em Sthefan Piccinini, Thiago Henrique Romagnoli, Rian Charles Santos, Reduz Consultoria Empresarial (1 estrela, Jamil Scaff), Victor Turrisi (1 estrela, Maringá 1730) e Lucas Serafim (2 estrelas, Santo Amaro) · as 4 Dell Iris são dark kitchens sem ficha e o Mapoli não tem ficha'},trip:{ativo:false,obs:'só 2 fichas com avaliação · 3 sem reivindicação · 13 unidades sem ficha'},'99':{ativo:false,obs:'sem coleta nesta semana'}},
     google:{
-      'Maringá / Aterro Igapó':{nota:4.4,aval:4395,dt:'2026-09-15',tags:[T('mesa',21),T('promoção',20),T('opções',18),T('ótimos lanches',17)]},
-      'Aeroporto':{nota:4.5,aval:4254,dt:'2026-09-15',tags:[T('promoções',24),T('opções',18),T('ótimos lanches',16),T('frio',14,true)]},
-      'Centro':{nota:4.6,aval:3902,dt:'2026-09-15',tags:[T('hot dog',30),T('ambiente agradável',29),T('pratos prontos',14),T('combos',9)]},
-      'Winston Churchill / Zona Norte':{nota:4.4,aval:3515,dt:'2026-09-01',tags:[T('tempo de espera',28,true),T('pizza',29),T('hot dog',7),T('área espaçosa',5)]},
-      'Zona Sul / Igapó':{nota:4.5,aval:2132,dt:'2026-09-01',tags:[T('pizza',38),T('espaço kids',15),T('yakisoba',3),T('pratos prontos',6)]},
-      'Jamil Scaff':{nota:4.3,aval:768,dt:'2026-09-15',tags:[T('ambiente',21),T('mesas',20),T('frio',16,true),T('pastéis',15)]},
+      'Maringá / Aterro Igapó':{nota:4.4,aval:4396,dt:'2026-09-21',tags:[T('mesa',21),T('promoção',20),T('opções',18),T('ótimos lanches',17)]},
+      'Aeroporto':{nota:4.5,aval:4257,dt:'2026-09-21',tags:[T('promoções',24),T('opções',18),T('ótimos lanches',16),T('frio',14,true)]},
+      'Centro':{nota:4.6,aval:3923,dt:'2026-09-21',tags:[T('hot dog',30),T('ambiente agradável',29),T('pratos prontos',14),T('combos',9)]},
+      'Winston Churchill / Zona Norte':{nota:4.4,aval:3517,dt:'2026-09-21',tags:[T('tempo de espera',28,true),T('pizza',29),T('hot dog',7),T('área espaçosa',5)]},
+      'Zona Sul / Igapó':{nota:4.5,aval:2132,dt:'2026-09-21',tags:[T('pizza',38),T('espaço kids',15),T('yakisoba',3),T('pratos prontos',6)]},
+      'Jamil Scaff':{nota:4.3,aval:771,dt:'2026-09-21',tags:[T('ambiente',21),T('mesas',20),T('frio',16,true),T('pastéis',15)]},
       'Higienópolis':{nota:4.5,aval:689,dt:'2026-09-15',tags:[T('comida japonesa',26),T('ambiente',18),T('pratos',11),T('mesas',11)]},
-      'Pizzas e Massas':{nota:4.2,aval:562,dt:'2026-09-15',tags:[T('rodízio',105),T('doces',22),T('gerente',21),T('atendente',16)]},
-      'Santo Amaro':{nota:4.4,aval:154,dt:'2026-09-10',tags:[T('lanche',8),T('mesas',6),T('educação',5),T('atendente',4)]},
-      'Street':{nota:3.6,aval:128,dt:'2026-09-15',tags:[T('rodízio',14),T('ambiente familiar',12),T('pizza no rodízio',5),T('hot dog',2)]},
-      'Mercado 88':{nota:3.7,aval:57,dt:'2026-09-15',tags:[T('refrigerante',4,true),T('cozinha',4),T('atendente',3),T('ambiente',3)]},
-      'Saul Elkind':{nota:4.1,aval:104,dt:'2026-09-15',tags:[T('gerente',8),T('mesa',5),T('batata',3),T('simpático',3)]},
-      'Arthur Thomas':{nota:4.2,aval:66,dt:'2026-09-10',tags:[T('mesa',8),T('ambiente',7),T('pastel',3),T('frio',3,true)]},
-      'Maringá 1730':{nota:4.3,aval:1157,dt:'2026-09-15',tags:[T('cardápio variado',80),T('poke',31),T('área kids',18),T('petit gateau',6)]},
+      'Pizzas e Massas':{nota:4.2,aval:564,dt:'2026-09-21',tags:[T('rodízio',105),T('doces',22),T('gerente',21),T('atendente',16)]},
+      'Santo Amaro':{nota:4.4,aval:170,dt:'2026-09-21',tags:[T('lanche',8),T('mesas',6),T('educação',5),T('atendente',4)]},
+      'Street':{nota:3.7,aval:129,dt:'2026-09-21',tags:[T('rodízio',14),T('ambiente familiar',12),T('pizza no rodízio',5),T('hot dog',2)]},
+      'Mercado 88':{nota:3.7,aval:57,dt:'2026-09-21',tags:[T('refrigerante',4,true),T('cozinha',4),T('atendente',3),T('ambiente',3)]},
+      'Saul Elkind':{nota:4.1,aval:104,dt:'2026-09-21',tags:[T('gerente',8),T('mesa',5),T('batata',3),T('simpático',3)]},
+      'Arthur Thomas':{nota:4.1,aval:68,dt:'2026-09-21',tags:[T('mesa',8),T('ambiente',7),T('pastel',3),T('frio',3,true)]},
+      'Maringá 1730':{nota:4.3,aval:1159,dt:'2026-09-21',tags:[T('cardápio variado',80),T('poke',31),T('área kids',18),T('petit gateau',6)]},
       'Alphaville':{nota:4.6,aval:275,dt:'2026-09-15',tags:[T('pizza',16),T('poke',3),T('área kids',3),T('garçons educados',2)]},
-      'Madre':{nota:4.3,aval:248,dt:'2026-09-15',tags:[T('poke',9),T('equipe atenciosa',6),T('área kids',3),T('joão lucas',2)]},
+      'Madre':{nota:4.3,aval:248,dt:'2026-09-21',tags:[T('poke',9),T('equipe atenciosa',6),T('área kids',3),T('joão lucas',2)]},
       "Rob's":{nota:4.3,aval:157,dt:'2026-09-15',tags:[T('batata',8),T('ambiente',6),T('mesa',6),T('bisnaga',5)]}
     },
     trip:{
@@ -3080,8 +3435,8 @@ function seed(){
       'Maringá 1730':{nota:null,aval:0,dt:'2026-08-18',status:'ficha existe, 0 avaliações — não reivindicada'},
       'Alphaville':{nota:null,aval:0,dt:'2026-08-18',status:'ficha existe, 0 avaliações — sem gestão do anúncio'}
     },
-    agregados:AGG.concat(AGG2,AGG3,AGG4,AGG5).map(dimensionar), sac:{unidade:'Arthur Thomas',periodo:'mês encerrado em 18/08/2026',matriz:SACM},
-    comentarios:{}, registros:regs.concat(regsIfood,regsIfood2,regsIfood3,regsIfood4,regsIfood5,regsSac)
+    agregados:AGG.concat(AGG2,AGG3,AGG4,AGG5,AGG6).map(dimensionar), sac:{unidade:'Arthur Thomas',periodo:'mês encerrado em 18/08/2026',matriz:SACM},
+    comentarios:{}, registros:regs.concat(regsIfood,regsIfood2,regsIfood3,regsIfood4,regsIfood5,regsIfood6,regsSac)
   };
 }
 
@@ -3169,6 +3524,7 @@ function contar(regs,campo){
    ============================================================ */
 function render(){
   renderFiltros();
+  renderObsSemana();
   const regs=base();
   $('#fCount').textContent=regs.length+' de '+DB.registros.length+' registros';
   $('#tbEv').textContent=regs.length;
@@ -3402,7 +3758,6 @@ function renderAcumulado(){
    '<div class="accG">'+
      '<div class="accI"><i>⭐ nota média geral</i><b style="color:'+cor(G.media)+'">'+G.media.toFixed(2).replace('.',',')+'</b><u>de todas as avaliações com nota</u></div>'+
      '<div class="accI"><i>📚 avaliações</i><b>'+fmtN(G.nEst)+'</b><u>somando todas as semanas</u></div>'+
-     '<div class="accI"><i>🎯 NPS-e geral</i><b>'+(G.npse>0?'+':'')+G.npse+'</b><u>'+fmtN(G.pro)+' promotores · '+fmtN(G.det)+' detratores</u></div>'+
      '<div class="accI"><i>🔴 negativas</i><b style="color:'+(G.det/G.total>0.03?'var(--vermelho)':'var(--ink)')+'">'+fmtN(G.det)+'</b><u>'+(G.det/G.total*100).toFixed(1).replace('.',',')+'% do total · notas 1 a 3</u></div>'+
      '<div class="accI"><i>💬 relatos com texto</i><b>'+fmtN(G.relatos)+'</b><u>'+fmtN(G.prints)+' prints anexados</u></div>'+
      '<div class="accI"><i>🏪 lojas na meta '+Number(DB.metaNota).toFixed(2).replace('.',',')+'</i><b>'+(G.lojas.length-abaixo.length)+'<span style="font-size:14px;color:var(--ink3)"> de '+G.lojas.length+'</span></b><u>'+(abaixo.length?abaixo.length+' abaixo no acumulado':'todas na meta')+'</u></div>'+
@@ -3483,7 +3838,7 @@ function explicarNota(){
   const fora=foraNota.length?'<div class="card" style="padding:11px 13px;margin:10px 0">'+
     '<b>O que NÃO entra nesta nota.</b><br>'+
     foraNota.map(x=>esc(x.c.n)+' — '+x.n+' registro'+(x.n===1?'':'s')+
-      (x.c.esc==='nps'?' <i>(escala 0 a 10, entra só no NPS-e)</i>':' <i>(canal sem nota, entra só como relato)</i>')).join('<br>')+
+      (x.c.esc==='nps'?' <i>(escala 0 a 10, não entra na nota em estrelas)</i>':' <i>(canal sem nota, entra só como relato)</i>')).join('<br>')+
     '</div>':'';
 
   const google='<div class="card" style="padding:11px 13px;margin:10px 0;border-left:3px solid #4285F4">'+
@@ -3520,7 +3875,7 @@ function renderHero(regs){
     d.className='delta '+(v>0.03?'up':v<-0.03?'down':'flat');
     d.textContent=(Math.abs(v)<0.005?'estável':(v>0?'+':'')+v.toFixed(2).replace('.',','))+' vs semana anterior';}
   else{d.className='delta flat';d.textContent=ant.nEst?'semana anterior com base insuficiente':'primeira semana medida';}
-  $('#heroLeitura').innerHTML=C.total?'<b>'+fmtN(C.det)+'</b> avaliações negativas ('+(C.det/C.total*100).toFixed(1)+'%) · <b>'+fmtN(C.pro)+'</b> deram nota máxima · NPS-e '+(C.npse>0?'+':'')+C.npse:'Sem avaliações com nota nos filtros atuais.';
+  $('#heroLeitura').innerHTML=C.total?'<b>'+fmtN(C.det)+'</b> avaliações negativas ('+(C.det/C.total*100).toFixed(1)+'%) · <b>'+fmtN(C.pro)+'</b> deram nota máxima':'Sem avaliações com nota nos filtros atuais.';
   // semáforo positivo / neutro / negativo
   const T=C.total||1;
   const sf=(cls,em,lb,v,id)=>'<button class="sf '+cls+'" data-sf="'+id+'"><span class="lb">'+em+' '+lb+'</span>'+
@@ -3733,7 +4088,7 @@ function renderPorTipo(regs){
     kpiHtml('😍 Promotores',fmtN(C.pro),'5★ ou nota 9–10',null,'t_pro','var(--verde)'),
     kpiHtml('😐 Neutros',fmtN(C.neu),'4★ ou nota 7–8',null,'t_neu','var(--ambar)'),
     kpiHtml('😠 Detratores',fmtN(C.det),'1–3★ ou nota 0–6',null,'t_det','var(--vermelho)'),
-    kpiHtml('🎯 NPS-e do período',C.npse===null?'—':(C.npse>0?'+':'')+C.npse,'(promotores − detratores) ÷ total',null,'t_nps','var(--tinto)')
+    kpiHtml('🔴 % negativas',C.total?((C.det/C.total*100).toFixed(1).replace('.',',')+'%'):'—','notas 1 a 3 sobre o total',null,'t_det2','var(--vermelho)')
   ].join('');
   const mapa={t_rneg:['Relatos negativos',neg],t_rpos:['Relatos positivos',pos],t_sug:['Sugestões',sug],t_sn:['Manifestações sem nota',semNota],
    t_det:['😠 Detratores',regs.filter(r=>classeNota(r)==='det')],
@@ -3762,7 +4117,7 @@ function renderPorLoja(regs){
   const quietas=linhas.filter(x=>!x.C.total&&!x.rs.length);
   const RK=(window.__rk||{R:[],posAnt:{}}), posDe={}; RK.R.forEach(x=>posDe[x.ap]=x.pos);
   const metaN=DB.metaNota||4.8;
-  $('#tbLojas').innerHTML='<thead><tr><th>#</th><th>Loja</th><th>Meta</th><th>Avaliações</th><th>Origem das avaliações</th><th>Nota</th><th>NPS-e</th><th>5★</th><th>4★</th><th>3★</th><th>2★</th><th>1★</th><th>Negativas</th><th>Relatos</th><th>Google acumulado</th></tr></thead><tbody>'+
+  $('#tbLojas').innerHTML='<thead><tr><th>#</th><th>Loja</th><th>Meta</th><th>Avaliações</th><th>Origem das avaliações</th><th>Nota</th><th>5★</th><th>4★</th><th>3★</th><th>2★</th><th>1★</th><th>Negativas</th><th>Relatos</th><th>Google acumulado</th></tr></thead><tbody>'+
    ativas.map(x=>{
      const pctNeg=x.C.total?x.C.det/x.C.total*100:0;
      const pos=posDe[x.u.ap]||null, pa=RK.posAnt[x.u.ap]||null;
@@ -3776,7 +4131,6 @@ function renderPorLoja(regs){
       '<td class="num"><b>'+fmtN(x.C.total)+'</b></td>'+
       '<td>'+origemHtml(composicao(regs,x.u.ap),x.C.total,true)+'</td>'+
       '<td class="num">'+(x.C.media===null?'—':x.C.media.toFixed(2))+'</td>'+
-      '<td class="num" style="color:'+(x.C.npse!==null&&x.C.npse<85?'var(--vermelho)':'var(--ink)')+'">'+(x.C.npse===null?'—':(x.C.npse>0?'+':'')+x.C.npse)+'</td>'+
       [5,4,3,2,1].map(k=>'<td class="num" style="color:'+(k<=3&&x.C.est[k]?'var(--vermelho)':'var(--ink2)')+'">'+(x.C.est[k]||0)+'</td>').join('')+
       '<td class="num" style="color:'+(pctNeg>2?'var(--vermelho)':'var(--ink3)')+'">'+(x.C.total?pctNeg.toFixed(1).replace('.',',')+'%':'—')+'</td>'+
       '<td class="num">'+x.rel.length+(x.neg.length?' <span style="color:var(--vermelho)">('+x.neg.length+' neg.)</span>':'')+'</td>'+
@@ -3801,13 +4155,13 @@ function renderLeitura(regs){
   if(tot.valor!==null){
     const a=npsTotal(ant,semanaAnterior(sem)), v=(a.valor!==null&&a.n>=MIN_BASE)?tot.valor-a.valor:null;
     add(tot.valor>=DB.meta?'positivo':tot.valor>=0?'atencao':'alerta',
-      'NPS de <b>'+(tot.valor>0?'+':'')+tot.valor+'</b> com '+tot.n.toLocaleString('pt-BR')+' avaliações ('+rotuloModo(tot.modo)+')'+
+      '<b>'+tot.n.toLocaleString('pt-BR')+' avaliações</b> com nota ('+rotuloModo(tot.modo)+')'+
       (v===null?(a.n?'. A semana anterior tem apenas '+a.n+' avaliação(ões) — sem base para comparar.':'. É a primeira semana medida, então não há comparação.'):', '+(v===0?'estável':(v>0?'+'+v+' ponto'+(Math.abs(v)===1?'':'s'):v+' ponto'+(Math.abs(v)===1?'':'s'))+' contra a semana anterior')+'.')+
       ' Foram '+tot.D.toLocaleString('pt-BR')+' detrator'+(tot.D===1?'':'es')+' contra '+tot.P.toLocaleString('pt-BR')+' promotor'+(tot.P===1?'':'es')+'.',
       'Avaliações com nota',nps.pro.concat(nps.neu,nps.det));
-  } else add('alerta','Nenhuma avaliação com nota nos filtros atuais — o NPS da semana não pode ser calculado.','',[]);
+  } else add('alerta','Nenhuma avaliação com nota nos filtros atuais — a nota da semana não pode ser calculada.','',[]);
 
-  if(tot.n>0&&tot.n<30) add('atencao','Base amostral de '+tot.n+' avaliações. Abaixo de 30, uma única nota move o NPS em '+(100/tot.n).toFixed(1)+' pontos. Trate a variação da semana como sinal, não como conclusão.','Avaliações com nota',nps.pro.concat(nps.neu,nps.det));
+  if(tot.n>0&&tot.n<30) add('atencao','Base amostral de '+tot.n+' avaliações. Abaixo de 30, uma única nota mexe bastante na média. Trate a variação da semana como sinal, não como conclusão.','Avaliações com nota',nps.pro.concat(nps.neu,nps.det));
 
   // 2. cobertura
   const cobSac=DB.registros.filter(r=>r.canal==='sac'&&segunda(r.data)===sem);
@@ -3853,9 +4207,9 @@ function renderLeitura(regs){
   if(Aif.length){
     const ni=Aif.reduce((s,a)=>s+a.n,0), n5=Aif.reduce((s,a)=>s+a.n5,0), n3=Aif.reduce((s,a)=>s+a.n123,0);
     const npi=Math.round((n5-n3)/ni*100), mi=Aif.reduce((s,a)=>s+a.media*a.n,0)/ni;
-    add('positivo','O iFood fechou a semana com <b>'+ni.toLocaleString('pt-BR')+' avaliações</b>, nota '+mi.toFixed(2)+'/5 e NPS-e '+(npi>0?'+':'')+npi+' — só '+n3+' notas de 1 a 3 ('+(n3/ni*100).toFixed(1)+'%). É o único canal com volume completo, então é a leitura mais confiável da semana.','Avaliações do iFood com comentário',regs.filter(r=>r.canal==='ifood'));
+    add('positivo','O iFood fechou a semana com <b>'+ni.toLocaleString('pt-BR')+' avaliações</b>, nota '+mi.toFixed(2)+'/5 — só '+n3+' notas de 1 a 3 ('+(n3/ni*100).toFixed(1)+'%). É o único canal com volume completo, então é a leitura mais confiável da semana.','Avaliações do iFood com comentário',regs.filter(r=>r.canal==='ifood'));
     const pior=Aif.slice().filter(a=>a.n>=20).sort((a,b)=>(a.n5-a.n123)/a.n-(b.n5-b.n123)/b.n)[0];
-    if(pior)add('atencao','No iFood, a loja virtual com pior NPS-e entre as de volume relevante é <b>'+esc(pior.loja)+'</b>: '+((pior.n5-pior.n123)/pior.n>0?'+':'')+Math.round((pior.n5-pior.n123)/pior.n*100)+' com '+pior.n+' avaliações e '+pior.n123+' notas de 1 a 3.','iFood — '+pior.loja,regs.filter(r=>r.loja===pior.loja));
+    if(pior)add('atencao','No iFood, a loja virtual com maior proporção de notas baixas entre as de volume relevante é <b>'+esc(pior.loja)+'</b>: '+pior.n123+' notas de 1 a 3 em '+pior.n+' avaliações ('+(pior.n123/pior.n*100).toFixed(1).replace('.',',')+'%), nota '+pior.media.toFixed(2)+'.','iFood — '+pior.loja,regs.filter(r=>r.loja===pior.loja));
     const semMapa=Aif.filter(a=>!a.unidade);
     if(semMapa.length)add('atencao',semMapa.length+' lojas virtuais do iFood ('+semMapa.reduce((s,a)=>s+a.n,0).toLocaleString('pt-BR')+' avaliações) ainda não estão ligadas a uma unidade física: '+semMapa.map(a=>a.loja).join(', ')+'. Enquanto isso, esse volume não aparece quando você filtra por unidade. O mapeamento é feito na aba iFood.','',[]);
     const aConf=DB.unidades.filter(u=>u.conf===0&&u.num);
@@ -3879,7 +4233,7 @@ function renderLeitura(regs){
   if(porUnAm.length>=3){
     const maxU=porUnAm[0], minU=porUnAm[porUnAm.length-1];
     if(maxU[1].length>=3*Math.max(1,minU[1].length))
-      add('atencao','A amostra do Google é desigual entre lojas: '+esc(nomeUn(maxU[0]))+' entrou com '+maxU[1].length+' avaliações e '+esc(nomeUn(minU[0]))+' com '+minU[1].length+'. Isso reflete até onde a lista foi lida no print, não o volume real de cada loja. Para comparar unidades entre si, use a nota acumulada do Google; o NPS-e serve para ler o conteúdo, não para ranquear.','Avaliações do Google na semana',regs.filter(r=>r.canal==='google'));
+      add('atencao','A amostra do Google é desigual entre lojas: '+esc(nomeUn(maxU[0]))+' entrou com '+maxU[1].length+' avaliações e '+esc(nomeUn(minU[0]))+' com '+minU[1].length+'. Isso reflete até onde a lista foi lida no print, não o volume real de cada loja. Para comparar unidades entre si, use a nota acumulada da ficha; a amostra da semana serve para ler o conteúdo, não para ranquear.','Avaliações do Google na semana',regs.filter(r=>r.canal==='google'));
   }
   // 6. estrelas
   if(est.baixas.length) add('alerta',est.baixas.length+' avaliação(ões) de 1 a 3 estrelas ficaram públicas nesta semana (Google e marketplaces) — cada uma continua visível para quem pesquisar a loja. Nota média das avaliações com relato: '+est.media.toFixed(2)+'/5.','Avaliações 1–3★',est.baixas);
@@ -4263,7 +4617,7 @@ function linhasHist(){
 }
 function renderHistorico(){
   const H=linhasHist();
-  $('#tbHist').innerHTML='<thead><tr><th>Semana</th><th>Registros</th><th>NPS</th><th>Base 0–10</th><th>Estrelas</th><th>Reclamações</th><th>Elogios</th><th>Tema nº1</th><th>Unidade nº1</th></tr></thead><tbody>'+
+  $('#tbHist').innerHTML='<thead><tr><th>Semana</th><th>Registros</th><th>Base 0–10</th><th>Estrelas</th><th>Reclamações</th><th>Elogios</th><th>Tema nº1</th><th>Unidade nº1</th></tr></thead><tbody>'+
    H.map((x,i)=>{
      const ant=H[i+1];
      const d=(ant&&ant.nps.valor!==null&&x.nps.valor!==null&&ant.nps.n>=MIN_BASE&&x.nps.n>=MIN_BASE)?x.nps.valor-ant.nps.valor:null;
@@ -4437,16 +4791,14 @@ function renderGoogle(regs){
     kpiHtml('⭐ Nota ponderada da rede',pond===null?'—':pond.toFixed(2)+'<small> /5</small>','ponderada pelo volume de cada loja',null,'g_pond'),
     kpiHtml('📚 Avaliações acumuladas',somaAval.toLocaleString('pt-BR'),comDado.length+' de '+DB.unidades.length+' unidades mapeadas',null,'g_vol'),
     kpiHtml('🔻 Lojas abaixo de 4,0',abaixo.length,abaixo.length?abaixo.map(x=>x.u.ap).join(', '):'nenhuma no snapshot',null,'g_baixo',abaixo.length?'var(--vermelho)':''),
-    kpiHtml('🎯 NPS-e da semana',npsRede.valor===null?'—':(npsRede.valor>0?'+':'')+npsRede.valor,'5★ promotor · 4★ neutro · 1–3★ detrator · '+npsRede.n+' avaliações',npsRede.n,'g_npse'),
     kpiHtml('⚠️ 1–3★ na semana',baixasSem.length,'avaliações negativas públicas novas',baixasSem.length,'g_baixas',baixasSem.length?'var(--vermelho)':'')
   ].join('');
   $$('#gKpis .kpi').forEach(b=>{const k=b.dataset.kpi;
-    if(k==='g_npse')b.onclick=()=>abrirEv('NPS-e da semana no Google',npsRede.pro.concat(npsRede.neu,npsRede.det),'5★ / 4★ / 1–3★');
-    else if(k==='g_baixas')b.onclick=()=>abrirEv('Avaliações 1–3★ da semana',baixasSem,'Google');
+    if(k==='g_baixas')b.onclick=()=>abrirEv('Avaliações 1–3★ da semana',baixasSem,'Google');
     else b.onclick=()=>abrirEv('Avaliações do Google na semana',gRegs,'todas as unidades');});
   renderGoogleLojas(gRegs);
   linhas.sort((a,b)=>{const na=a.g?Number(a.g.nota):-1, nb=b.g?Number(b.g.nota):-1;return nb-na;});
-  $('#tbGoogle').innerHTML='<thead><tr><th>Nº</th><th>Unidade</th><th>Nota</th><th>Faixa</th><th>Avaliações</th><th>Lido em</th><th>Amostra da semana</th><th>NPS-e amostra</th><th>1–3★</th><th>Peso na rede</th></tr></thead><tbody>'+
+  $('#tbGoogle').innerHTML='<thead><tr><th>Nº</th><th>Unidade</th><th>Nota</th><th>Faixa</th><th>Avaliações</th><th>Lido em</th><th>Amostra da semana</th><th>1–3★</th><th>Peso na rede</th></tr></thead><tbody>'+
    linhas.map(x=>{
      const f=faixa(x.g?x.g.nota:null);
      const peso=(x.g&&somaAval)?Math.round(Number(x.g.aval)/somaAval*100):null;
@@ -4697,7 +5049,7 @@ function renderTrip(){
     '<div><span class="eyebrow">ficha sem avaliação</span><div style="font-family:var(--disp);font-size:24px;font-weight:700;color:var(--ambar)">'+semAval.length+'</div><div style="color:var(--ink2);font-size:12px">'+(semAval.map(x=>nomeUn(x.u.ap)).join(' · ')||'—')+'</div></div>'+
     '<div><span class="eyebrow">sem ficha</span><div style="font-family:var(--disp);font-size:24px;font-weight:700;color:var(--vermelho)">'+semFicha.length+'</div><div style="color:var(--ink2);font-size:12px">nem existem no TripAdvisor</div></div></div>'+
     '<div style="margin-top:12px;padding-top:11px;border-top:1px solid var(--line2);font-size:12.5px;color:var(--ink2)">Para comparação: no Google a rede tem '+Object.values(DB.google||{}).reduce((s,g)=>s+(g.aval||0),0).toLocaleString('pt-BR')+' avaliações acumuladas. O TripAdvisor responde por '+(totAval?(totAval/(totAval+Object.values(DB.google||{}).reduce((s,g)=>s+(g.aval||0),0))*100).toFixed(1):'0')+'% do acervo público — é um canal de baixo volume, mas as fichas não reivindicadas ficam no ar sem ninguém responder.</div>';
-  $('#tbTrip').innerHTML='<thead><tr><th>Unidade</th><th>Situação</th><th>Nota</th><th>Avaliações</th><th>NPS-e</th><th>Exc.</th><th>Bom</th><th>Méd.</th><th>Ruim</th><th>Horr.</th><th>Subnotas</th></tr></thead><tbody>'+
+  $('#tbTrip').innerHTML='<thead><tr><th>Unidade</th><th>Situação</th><th>Nota</th><th>Avaliações</th><th>Exc.</th><th>Bom</th><th>Méd.</th><th>Ruim</th><th>Horr.</th><th>Subnotas</th></tr></thead><tbody>'+
    linhas.sort((a,b)=>((b.t&&b.t.aval)||0)-((a.t&&a.t.aval)||0)).map(x=>{
      const t=x.t, d=(t&&t.dist)||[null,null,null,null,null];
      const sit=!t?'<span class="bd off">sem ficha</span>':(t.aval?'<span class="bd on">ativa</span>':'<span class="bd an">'+esc(t.status||'sem avaliação')+'</span>');
@@ -4705,7 +5057,6 @@ function renderTrip(){
       (t&&t.aval?'<div style="font-size:10.5px;color:var(--ink3)">lida em '+fmtData(t.dt)+'</div>':'')+'</td>'+
       '<td class="num">'+(t&&t.nota?t.nota.toFixed(1):'—')+'</td>'+
       '<td class="num">'+(t?(t.aval||0):'—')+'</td>'+
-      '<td class="num" style="color:'+(x.npse!==null&&x.npse<50?'var(--vermelho)':'var(--ink)')+'">'+(x.npse===null?'—':(x.npse>0?'+':'')+x.npse)+'</td>'+
       d.map((v,i)=>'<td class="num" style="color:'+(v&&i>=2?'var(--vermelho)':'var(--ink2)')+'">'+(v===null?'—':v)+'</td>').join('')+
       '<td style="font-size:11.5px;color:var(--ink2)">'+(t&&t.sub?Object.entries(t.sub).map(([k,v])=>k+' '+v.toFixed(1)).join(' · '):'—')+'</td></tr>';
    }).join('')+'</tbody>';
@@ -4730,7 +5081,7 @@ function renderIfood(regs){
   $('#ifKpis').innerHTML=[
     kpiHtml('📦 Avaliações na semana',n.toLocaleString('pt-BR'),A.length+' lojas virtuais no export',null,'i_n','var(--tinto)'),
     kpiHtml('⭐ Nota média',media===null?'—':media.toFixed(2)+'<small> /5</small>','ponderada pelo volume de cada loja',null,'i_m',media>=4.8?'var(--verde)':''),
-    kpiHtml('🎯 NPS-e',npse===null?'—':(npse>0?'+':'')+npse,'5★ '+n5+' · 4★ '+n4+' · 1–3★ '+n3,null,'i_nps',npse>=50?'var(--verde)':''),
+    kpiHtml('🟢 Notas máximas',n5.toLocaleString('pt-BR'),n?(n5/n*100).toFixed(1).replace('.',',')+'% deram 5 estrelas · 4★ '+n4+' · 1–3★ '+n3:'—',null,'i_cinco','var(--verde)'),
     kpiHtml('⚠️ Notas 1 a 3',n3,n?(n3/n*100).toFixed(1)+'% do total da semana':'—',n3,'i_baixas',n3?'var(--vermelho)':''),
     kpiHtml('💬 Com comentário',com,n?(com/n*100).toFixed(1)+'% escreveram algo — todas importadas como evidência':'—',evs.length,'i_com'),
     kpiHtml('🔗 Sem unidade física',nSemMapa.toLocaleString('pt-BR'),semMapa.length+' lojas virtuais ainda sem mapeamento',null,'i_map',nSemMapa?'var(--ambar)':'')
@@ -4740,14 +5091,13 @@ function renderIfood(regs){
   $('#ifAviso').innerHTML='<div class="bx"><b>Como ler esta aba.</b> As '+n.toLocaleString('pt-BR')+' avaliações entram no termômetro do Panorama por agregado. As '+com+' que vieram com texto foram importadas uma a uma e estão nas Evidências — as demais são só nota, sem relato. O export não traz o nome do cliente.</div>';
   const ords=A.slice().sort((a,b)=>b.n-a.n);
   const opts=ap=>'<option value="">— mapear —</option>'+DB.unidades.map(u=>'<option value="'+esc(u.ap)+'"'+(u.ap===ap?' selected':'')+'>'+esc(nomeUn(u.ap))+'</option>').join('');
-  $('#tbIfood').innerHTML='<thead><tr><th>Loja virtual (iFood)</th><th>Loja</th><th>Unidade física</th><th>Avaliações</th><th>Nota</th><th>NPS-e</th><th>5★</th><th>4★</th><th>1–3★</th><th>Com texto</th></tr></thead><tbody>'+
+  $('#tbIfood').innerHTML='<thead><tr><th>Loja virtual (iFood)</th><th>Loja</th><th>Unidade física</th><th>Avaliações</th><th>Nota</th><th>5★</th><th>4★</th><th>1–3★</th><th>Com texto</th></tr></thead><tbody>'+
    ords.map(a=>{
      const np=a.n?Math.round((a.n5-a.n123)/a.n*100):null;
      return '<tr><td><b style="font-size:12.5px">'+esc(a.loja)+'</b></td>'+
       '<td class="num" style="font-size:11.5px">'+esc(a.cod||'—')+'</td>'+
       '<td><select data-map="'+esc(a.loja)+'" style="border:1px solid '+(a.unidade?'var(--line)':'var(--tinto)')+';border-radius:5px;padding:3px 5px;font-size:12px;max-width:190px">'+opts(a.unidade)+'</select></td>'+
       '<td class="num">'+a.n+'</td><td class="num">'+a.media.toFixed(2)+'</td>'+
-      '<td class="num" style="color:'+(np>=90?'var(--verde)':np>=70?'var(--ink)':'var(--vermelho)')+'">'+(np===null?'—':(np>0?'+':'')+np)+'</td>'+
       '<td class="num">'+a.n5+'</td><td class="num">'+a.n4+'</td>'+
       '<td class="num" style="color:'+(a.n123?'var(--vermelho)':'var(--ink3)')+'">'+a.n123+'</td>'+
       '<td class="num">'+a.coment+'</td></tr>';
@@ -4787,7 +5137,7 @@ function renderConfig(){
   $('#tbCfgCanais').innerHTML='<thead><tr><th>Canal</th><th>Escala</th><th>Ativo em toda a rede</th><th>Observação de cobertura</th></tr></thead><tbody>'+
    CANAIS.map(c=>{const cb=DB.cobertura[c.id]||{ativo:true,obs:''};
     return '<tr><td><b>'+esc(c.n)+'</b><div style="font-size:11.5px;color:var(--ink3)">'+esc(c.desc)+'</div></td>'+
-     '<td style="font-size:12px;color:var(--ink3)">'+(c.esc==='nps'?'0–10 (entra no NPS)':c.esc==='star'?'1–5 estrelas':'sem nota')+'</td>'+
+     '<td style="font-size:12px;color:var(--ink3)">'+(c.esc==='nps'?'0–10 (escala de nota)':c.esc==='star'?'1–5 estrelas':'sem nota')+'</td>'+
      '<td><input type="checkbox" data-cob="'+c.id+'"'+(cb.ativo?' checked':'')+'></td>'+
      '<td><input data-obs="'+c.id+'" value="'+esc(cb.obs)+'" placeholder="ex.: ativo apenas no Bigg\'s 13" style="width:100%;border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:12.5px"></td></tr>';
    }).join('')+'</tbody>';
@@ -5065,8 +5415,8 @@ function abrirModal(id){
 }
 function ajustarNota(){
   const e=canal($('#mCanal').value).esc, i=$('#mNota'), h=$('#mNotaHelp');
-  if(e==='nps'){i.max=10;i.min=0;i.disabled=false;h.textContent='0 a 10 — entra no cálculo do NPS';}
-  else if(e==='star'){i.max=5;i.min=1;i.disabled=false;h.textContent='1 a 5 estrelas — entra na nota média, não no NPS';}
+  if(e==='nps'){i.max=10;i.min=0;i.disabled=false;h.textContent='0 a 10 — escala de nota do canal';}
+  else if(e==='star'){i.max=5;i.min=1;i.disabled=false;h.textContent='1 a 5 estrelas — entra na nota média da rede';}
   else{i.value='';i.disabled=true;h.textContent='este canal não coleta nota';}
 }
 function salvarRegistro(){
@@ -5118,11 +5468,10 @@ function resumoZap(){
   const primeira=[...new Set(DB.registros.filter(r=>!r.mensal).map(r=>segunda(r.data)))].sort()[0]===filtros.semana;
   if(primeira)L.push('_Primeira semana medida — ainda sem histórico anterior para comparar. A partir daqui, toda semana traz a variação._');
   if(primeira)L.push('');
-  L.push('*NPS:* '+(nps.valor===null?'—':(nps.valor>0?'+':'')+nps.valor)+' ('+nps.n+' avaliações · '+rotuloModo(nps.modo)+')'+((ant.valor!==null&&ant.n>=MIN_BASE)?' | semana anterior: '+(ant.valor>0?'+':'')+ant.valor:''));
   if(est.media!==null)L.push('*Estrelas (novas na semana):* '+est.media.toFixed(1)+'/5 em '+est.n+' avaliações ('+est.baixas.length+' de 1–3★)');
   const Ai=aggCtx().filter(a=>a.canal==='ifood');
   if(Ai.length){const ni=Ai.reduce((s,a)=>s+a.n,0),c5=Ai.reduce((s,a)=>s+a.n5,0),c3=Ai.reduce((s,a)=>s+a.n123,0);
-    L.push('*iFood:* '+ni.toLocaleString('pt-BR')+' avaliações · nota '+(Ai.reduce((s,a)=>s+a.media*a.n,0)/ni).toFixed(2)+'/5 · NPS-e '+(((c5-c3)/ni*100)>0?'+':'')+Math.round((c5-c3)/ni*100)+' · '+c3+' notas 1–3');}
+    L.push('*iFood:* '+ni.toLocaleString('pt-BR')+' avaliações · nota '+(Ai.reduce((s,a)=>s+a.media*a.n,0)/ni).toFixed(2)+'/5 · '+c3+' notas 1–3 ('+(c3/ni*100).toFixed(1).replace('.',',')+'%)');}
   const gg=Object.entries(DB.google||{}).filter(x=>x[1]&&x[1].aval);
   if(gg.length){const sa=gg.reduce((a,x)=>a+Number(x[1].aval),0);
     L.push('*Nota Google acumulada:* '+(gg.reduce((a,x)=>a+Number(x[1].nota)*Number(x[1].aval),0)/sa).toFixed(2)+'/5 ponderada · '+gg.length+' unidades · snapshot '+fmtData(DB.snapshotData));}
@@ -5159,15 +5508,375 @@ async function salvarArquivo(){
   const w=await fileHandle.createWritable();await w.write(JSON.stringify(DB,null,2));await w.close();toast('Salvo em '+fileHandle.name);
 }
 
+
+/* ================================================================
+   PDCA DA SEMANA — a pauta da reunião do gerente geral
+   ----------------------------------------------------------------
+   POR QUE ESTA ABA EXISTE
+   As outras abas respondem "o que aconteceu". Esta responde
+   "o que a gente vai fazer, quem faz e até quando" — e, na semana
+   seguinte, "o que foi combinado funcionou?".
+
+   AS DUAS RÉGUAS DO GOOGLE
+   A ficha do Google é a média de todo o histórico da loja. Uma loja
+   com 4.000 avaliações não muda de 4,4 para 4,8 em uma semana nem
+   com 20 notas 5 — isso é aritmética, não esforço. Por isso o painel
+   mostra as duas coisas em colunas separadas: a FICHA (meta de longo
+   prazo, o número que o cliente vê) e as AVALIAÇÕES NOVAS DA SEMANA
+   (o que o gerente move em 7 dias). A meta de 4,80 vale para a
+   segunda. Na ficha, o painel mostra a distância que falta.
+
+   ONDE O PLANO FICA SALVO
+   Em DB.pdca, junto com o resto do banco, no navegador. Cada ação
+   guarda a semana em que nasceu, então na semana seguinte ela
+   aparece sozinha no bloco CHECK.
+   ================================================================ */
+const PDCA_STATUS=[
+ {k:'aberto', n:'A fazer', cor:'#8B807A'},
+ {k:'andamento', n:'Fazendo', cor:'#C99A1E'},
+ {k:'feito', n:'Feito', cor:'#1F7A5C'},
+ {k:'naoresolveu', n:'Não resolveu', cor:'#C4362F'}
+];
+const pdcaSt=k=>PDCA_STATUS.find(s=>s.k===k)||PDCA_STATUS[0];
+function pdcaLista(){ DB.pdca=DB.pdca||[]; return DB.pdca; }
+function pdcaSalvar(){ salvar(); }
+const pdcaHoje=()=>new Date().toISOString().slice(0,10);
+
+/* nota, volume e reclamações de uma loja numa semana */
+function pdcaLoja(ap,w){
+  const c=contar5(daSemana(w),a=>a.unidade===ap,w);
+  const rec=daSemana(w).filter(r=>r.unidade===ap&&r.tipo==='reclamacao');
+  return {n:c.nEst,m:c.media,neg:c.est[1]+c.est[2]+c.est[3],rec:rec.length};
+}
+/* só as avaliações do Google que entraram NA SEMANA */
+function pdcaGoogleSemana(ap,w){
+  const c=contar5(daSemana(w),a=>a.unidade===ap&&a.canal==='google',w);
+  return {n:c.nEst,m:c.media,neg:c.est[1]+c.est[2]+c.est[3]};
+}
+
+function renderPdca(){
+  const w=filtros.semana, ant=semanaAnterior(w), META=DB.metaNota||4.8;
+  const un=(DB.unidades||[]).map(u=>u.ap);
+  const nf=x=>x===null||x===undefined?'—':x.toFixed(2).replace('.',',');
+  const nf1=x=>x===null||x===undefined?'—':Number(x).toFixed(1).replace('.',',');
+
+  /* ---------- cabeçalho ---------- */
+  const R=contar5(daSemana(w),null,w), RA=contar5(daSemana(ant),null,ant);
+  const dRede=(R.media!==null&&RA.media!==null)?R.media-RA.media:null;
+  const linhas=un.map(ap=>({ap,nome:nomeUn(ap)||ap,s:pdcaLoja(ap,w),a:pdcaLoja(ap,ant),g:DB.google[ap]||null,gs:pdcaGoogleSemana(ap,w)}))
+                 .filter(x=>x.s.n>0);
+  const fora=linhas.filter(x=>x.s.m<META);
+  const abertas=pdcaLista().filter(x=>x.status!=='feito');
+  const vencidas=abertas.filter(x=>x.prazo&&x.prazo<pdcaHoje());
+  $('#pdcaCab').innerHTML=
+    '<div class="card"><div class="cb" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px">'+
+    '<div><span class="eyebrow">semana em pauta</span><div style="font-family:var(--disp);font-size:22px;font-weight:700">'+fmtSemana(w)+'</div></div>'+
+    '<div><span class="eyebrow">nota da rede</span><div style="font-family:var(--disp);font-size:22px;font-weight:700;color:'+(R.media>=META?'var(--verde)':'var(--vermelho)')+'">'+nf(R.media)+'</div>'+
+      '<div style="font-size:12px;color:var(--ink2)">'+(dRede===null?'sem comparação':(dRede>=0?'▲ +':'▼ ')+Math.abs(dRede).toFixed(2).replace('.',',')+' vs semana anterior')+'</div></div>'+
+    '<div><span class="eyebrow">lojas fora da meta '+nf(META)+'</span><div style="font-family:var(--disp);font-size:22px;font-weight:700;color:'+(fora.length?'var(--vermelho)':'var(--verde)')+'">'+fora.length+'</div>'+
+      '<div style="font-size:12px;color:var(--ink2)">de '+linhas.length+' com avaliação</div></div>'+
+    '<div><span class="eyebrow">ações em aberto</span><div style="font-family:var(--disp);font-size:22px;font-weight:700">'+abertas.length+'</div>'+
+      '<div style="font-size:12px;color:'+(vencidas.length?'var(--vermelho)':'var(--ink2)')+'">'+(vencidas.length?vencidas.length+' com prazo vencido':'nenhuma vencida')+'</div></div>'+
+    '</div></div>';
+
+  /* ---------- 1. PLAN: placar ---------- */
+  linhas.sort((a,b)=>(a.s.m===null?9:a.s.m)-(b.s.m===null?9:b.s.m)||b.s.rec-a.s.rec);
+  $('#tbPdcaLojas').innerHTML='<thead><tr><th>Loja</th><th>Nota da semana</th><th>Meta '+nf(META)+'</th><th>vs semana anterior</th><th>Avaliações</th><th>Reclamações</th><th>Ações abertas</th></tr></thead><tbody>'+
+   linhas.map(x=>{
+     const d=(x.s.m!==null&&x.a.m!==null&&x.a.n>=5)?x.s.m-x.a.m:null;
+     const ok=x.s.m>=META;
+     const nAc=pdcaLista().filter(p=>p.loja===x.ap&&p.status!=='feito').length;
+     const rel=pdcaRelatos(x.ap,w), ab=(pdcaAberta===x.ap);
+     return '<tr data-pdcaloja="'+esc(x.ap)+'" style="cursor:pointer" title="clique para abrir o que o cliente escreveu">'+
+      '<td><b>'+(ab?'▾ ':'▸ ')+esc(x.nome)+'</b>'+
+        '<div style="font-size:11px;color:var(--ink3);margin-top:2px">'+
+          ([(rel.rec.length?'<span style="color:var(--vermelho)">'+rel.rec.length+' reclamaç'+(rel.rec.length===1?'ão':'ões')+'</span>':''),
+            (rel.sug.length?'<span style="color:#8a6b12">'+rel.sug.length+' sugest'+(rel.sug.length===1?'ão':'ões')+'</span>':''),
+            (rel.elo.length?'<span style="color:var(--verde)">'+rel.elo.length+' elogio'+(rel.elo.length===1?'':'s')+'</span>':'')
+           ].filter(Boolean).join(' · ')||'nenhum relato com texto')+
+        '</div></td>'+
+      '<td class="num" style="font-weight:700;color:'+(ok?'var(--verde)':'var(--vermelho)')+'">'+nf(x.s.m)+'</td>'+
+      '<td>'+(ok?'<span style="color:var(--verde);font-weight:700">✓ na meta</span>':'<span style="color:var(--vermelho);font-weight:700">▼ falta '+(META-x.s.m).toFixed(2).replace('.',',')+'</span>')+'</td>'+
+      '<td class="num" style="color:'+(d===null?'var(--ink3)':Math.round(d*100)/100>=0.02?'var(--verde)':Math.round(d*100)/100<=-0.02?'var(--vermelho)':'var(--ink2)')+'">'+
+        (d===null?'<span style="font-size:11.5px">base pequena</span>':(function(){var r=Math.round(d*100)/100;return (r>0?'▲ +':r<0?'▼ ':'= ')+Math.abs(r).toFixed(2).replace('.',',');})())+'</td>'+
+      '<td class="num">'+x.s.n+'</td>'+
+      '<td class="num" style="color:'+(x.s.rec?'var(--vermelho)':'var(--ink3)')+'">'+(x.s.rec||'—')+'</td>'+
+      '<td class="num">'+(nAc?nAc:'<span style="color:var(--ink3)">—</span>')+'</td>'+
+     '</tr>'+
+     (ab?('<tr data-pdcadet="'+esc(x.ap)+'"><td colspan="7" style="background:var(--paper2,#fbf9f7);padding:14px 16px">'+
+       '<div style="font-size:12px;color:var(--ink2);margin-bottom:10px">'+
+         '<b>'+esc(x.nome)+'</b> — '+x.s.n+' avaliaç'+(x.s.n===1?'ão':'ões')+' na semana, '+
+         'destas <b>'+(rel.rec.length+rel.sug.length+rel.elo.length)+' vieram com texto</b>'+
+         (rel.semTexto?' e '+rel.semTexto+' com nota mas sem comentário':'')+'. '+
+         'As outras entraram pelo export do iFood só como nota, sem comentário nenhum — por isso não aparecem aqui.'+
+       '</div>'+
+       '<div style="display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start">'+
+         pdcaBloco('🔴 RECLAMAÇÕES','var(--vermelho)',rel.rec,'Nenhuma reclamação nesta semana.',true)+
+         pdcaBloco('💡 SUGESTÕES','#8a6b12',rel.sug,'Nenhuma sugestão nesta semana.',true)+
+         pdcaBloco('💚 ELOGIOS','var(--verde)',rel.elo,'Nenhum elogio com texto nesta semana.',false)+
+       '</div>'+
+       '<div style="font-size:11.5px;color:var(--ink3);margin-top:12px;padding-top:9px;border-top:1px solid var(--line2)">'+
+         '<b>Sugestão</b> é a avaliação de 4 ou 5 estrelas que traz uma ressalva — um "mas", um "poderia", um "só faltou". '+
+         'O cliente não reclamou, mas disse o que arrumar. É o conserto mais barato que existe.'+
+       '</div>'+
+     '</td></tr>'):'');}).join('')+'</tbody>';
+  $('#pdcaLegenda').innerHTML='A nota da semana soma <b>todos os canais</b> com nota que entraram no período — iFood e Google. '+
+    'Lojas sem nenhuma avaliação na semana não aparecem nesta tabela. '+
+    '<b>Base pequena</b> quer dizer que a semana anterior teve menos de 5 avaliações naquela loja: comparar seria inventar movimento.';
+
+  /* ---------- Google: duas réguas ---------- */
+  const gl=linhas.filter(x=>x.g||x.gs.n);
+  gl.sort((a,b)=>((b.g?b.g.nota:-1)-(a.g?a.g.nota:-1)));
+  $('#tbPdcaGoogle').innerHTML='<thead><tr><th>Loja</th><th>📇 Ficha hoje</th><th>Falta para 4,80</th><th>Base da ficha</th>'+
+    '<th>🆕 Avaliações novas na semana</th><th>Nota das novas</th><th>Meta '+nf(META)+' nas novas</th><th>1–3★ novas</th></tr></thead><tbody>'+
+   gl.map(x=>{
+     const fn=x.g?Number(x.g.nota):null;
+     const falta=fn===null?null:(META-fn);
+     const okNovas=x.gs.n?x.gs.m>=META:null;
+     return '<tr>'+
+      '<td><b>'+esc(x.nome)+'</b></td>'+
+      '<td class="num" style="font-weight:700;color:'+(fn===null?'var(--ink3)':fn>=META?'var(--verde)':fn>=4.0?'var(--ink)':'var(--vermelho)')+'">'+(fn===null?'sem ficha':nf1(fn))+'</td>'+
+      '<td class="num" style="color:'+(falta===null?'var(--ink3)':falta<=0?'var(--verde)':falta<=0.3?'var(--ambar-esc,#8a6b12)':'var(--vermelho)')+'">'+
+        (falta===null?'—':falta<=0?'✓ atingida':'+'+falta.toFixed(1).replace('.',','))+'</td>'+
+      '<td class="num" style="color:var(--ink3);font-size:12px">'+(x.g?Number(x.g.aval).toLocaleString('pt-BR')+' aval':'—')+'</td>'+
+      '<td class="num">'+(x.gs.n||'<span style="color:var(--ink3)">nenhuma</span>')+'</td>'+
+      '<td class="num" style="font-weight:700">'+(x.gs.n?nf(x.gs.m):'—')+'</td>'+
+      '<td>'+(x.gs.n?((okNovas?'<span style="color:var(--verde);font-weight:700">✓ na meta</span>':'<span style="color:var(--vermelho);font-weight:700">✗ abaixo</span>')+(x.gs.n<5?'<div style="font-size:11px;color:var(--ink3)">só '+x.gs.n+' avaliaç'+(x.gs.n===1?'ão':'ões')+' — não conclua</div>':'')):'<span style="color:var(--ink3)">sem leitura</span>')+'</td>'+
+      '<td class="num" style="color:'+(x.gs.neg?'var(--vermelho)':'var(--ink3)')+'">'+(x.gs.neg||'—')+'</td>'+
+     '</tr>';}).join('')+'</tbody>';
+  const comFicha=gl.filter(x=>x.g), naMeta=comFicha.filter(x=>Number(x.g.nota)>=META);
+  $('#pdcaGoogleNota').innerHTML='<b>'+naMeta.length+' de '+comFicha.length+' fichas</b> estão em '+nf(META)+' ou acima. '+
+    (naMeta.length?'':'<b>Nenhuma ficha chega na meta hoje</b> — e isso é esperado: a ficha é a média de milhares de avaliações antigas. ')+
+    'A coluna que cobra resultado nesta semana é a <b>nota das avaliações novas</b>. '+
+    'Para a ficha subir 0,1 ponto numa loja com 4.000 avaliações é preciso algo como 900 notas 5 seguidas — por isso a ficha é meta de ano, não de reunião. '+
+    '<b>Cuidado com base pequena:</b> onde entraram menos de 5 avaliações novas, o ✓ ou o ✗ vira sorte — uma única nota decide. Essas linhas vêm marcadas.';
+
+  /* ---------- 2. CHECK ---------- */
+  const daSem=pdcaLista().filter(p=>p.semana===w);
+  const antigas=pdcaLista().filter(p=>p.semana!==w&&p.status!=='feito').sort((a,b)=>(a.prazo||'9')<(b.prazo||'9')?-1:1);
+  const feitas=pdcaLista().filter(p=>p.status==='feito');
+  const kpi=(t,v,s,c)=>'<div class="kpi" style="cursor:default"><i>'+t+'</i><b'+(c?' style="color:'+c+'"':'')+'>'+v+'</b><u>'+s+'</u></div>';
+  $('#pdcaKpisCheck').innerHTML=
+    kpi('📋 Ações em aberto',abertas.length,'de todas as semanas')+
+    kpi('⏰ Com prazo vencido',vencidas.length,'passaram da data combinada',vencidas.length?'var(--vermelho)':'')+
+    kpi('✅ Concluídas',feitas.length,'no histórico inteiro','var(--verde)')+
+    kpi('↩️ Não resolveram',pdcaLista().filter(p=>p.status==='naoresolveu').length,'voltaram para a pauta',pdcaLista().filter(p=>p.status==='naoresolveu').length?'var(--vermelho)':'');
+  $('#tbPdcaCheck').innerHTML=antigas.length?
+    ('<thead><tr><th>Semana</th><th>Loja</th><th>O que foi combinado</th><th>Responsável</th><th>Prazo</th><th>Status</th></tr></thead><tbody>'+
+     antigas.map(p=>{
+       const venc=p.prazo&&p.prazo<pdcaHoje();
+       return '<tr>'+
+        '<td style="font-size:12px;color:var(--ink2)">'+fmtSemana(p.semana)+'</td>'+
+        '<td><b>'+esc(nomeUn(p.loja)||p.loja||'—')+'</b></td>'+
+        '<td style="font-size:12.5px">'+esc(p.acao||'—')+(p.causa?'<div style="color:var(--ink3);font-size:11.5px;margin-top:2px">causa: '+esc(p.causa)+'</div>':'')+'</td>'+
+        '<td style="font-size:12.5px">'+esc(p.resp||'—')+'</td>'+
+        '<td class="num" style="color:'+(venc?'var(--vermelho)':'var(--ink2)')+';font-weight:'+(venc?'700':'400')+'">'+(p.prazo?fmtData(p.prazo)+(venc?' ⚠️':''):'—')+'</td>'+
+        '<td><select data-pdcast="'+p.id+'" style="border:1px solid var(--line);border-radius:5px;padding:3px 5px;font-size:12px">'+
+          PDCA_STATUS.map(s=>'<option value="'+s.k+'"'+(s.k===p.status?' selected':'')+'>'+s.n+'</option>').join('')+'</select></td>'+
+       '</tr>';}).join('')+'</tbody>')
+    : '<tbody><tr><td style="padding:18px;color:var(--ink2)">Nenhuma ação pendente de semanas anteriores. Na primeira reunião isso é normal — a partir da próxima, é aqui que a conversa começa.</td></tr></tbody>';
+
+  /* ---------- 3. ACT ---------- */
+  $('#pdcaNovaLoja').innerHTML='<option value="">— escolha a loja —</option>'+
+    un.map(a=>'<option value="'+esc(a)+'">'+esc(nomeUn(a)||a)+'</option>').join('');
+  const inp=(id,campo,val,ph,tipo)=>'<input '+(tipo?'type="'+tipo+'" ':'')+'data-pdca="'+id+'" data-campo="'+campo+'" value="'+esc(val||'')+'" placeholder="'+ph+'" style="width:100%;border:1px solid var(--line);border-radius:5px;padding:5px 6px;font-size:12.5px;font-family:inherit">';
+  $('#tbPdcaPlano').innerHTML=daSem.length?
+   ('<thead><tr><th style="width:150px">Loja</th><th style="width:190px">O que o cliente reclamou</th><th style="width:190px">Causa raiz</th><th>Ação combinada</th><th style="width:120px">Responsável</th><th style="width:120px">Prazo</th><th style="width:110px">Status</th><th style="width:34px"></th></tr></thead><tbody>'+
+    daSem.map(p=>'<tr>'+
+      '<td><b style="font-size:12.5px">'+esc(nomeUn(p.loja)||p.loja||'—')+'</b></td>'+
+      '<td>'+inp(p.id,'problema',p.problema,'ex: 3 clientes falaram de sal')+'</td>'+
+      '<td>'+inp(p.id,'causa',p.causa,'por que aconteceu')+'</td>'+
+      '<td>'+inp(p.id,'acao',p.acao,'o que vamos fazer')+'</td>'+
+      '<td>'+inp(p.id,'resp',p.resp,'quem')+'</td>'+
+      '<td>'+inp(p.id,'prazo',p.prazo,'','date')+'</td>'+
+      '<td><select data-pdcast="'+p.id+'" style="width:100%;border:1px solid var(--line);border-radius:5px;padding:5px;font-size:12px">'+
+        PDCA_STATUS.map(s=>'<option value="'+s.k+'"'+(s.k===p.status?' selected':'')+'>'+s.n+'</option>').join('')+'</select></td>'+
+      '<td><button class="btn gh" data-pdcadel="'+p.id+'" title="remover" style="padding:3px 7px">✕</button></td>'+
+     '</tr>').join('')+'</tbody>')
+   : '<tbody><tr><td style="padding:18px;color:var(--ink2)">Nenhuma ação lançada para '+fmtSemana(w)+'. Escolha a loja acima e clique em <b>+ nova ação</b>. O quadro do PLAN, logo no topo, já mostra por onde começar.</td></tr></tbody>';
+
+  /* ---------- eventos ---------- */
+  $$('#tbPdcaLojas tr[data-pdcaloja]').forEach(tr=>{
+    tr.onclick=e=>{ if(e.target.closest('button'))return; pdcaToggleLoja(tr.dataset.pdcaloja); };
+  });
+  $$('button[data-pdcaacao]').forEach(bt=>{
+    bt.onclick=e=>{
+      e.stopPropagation();
+      const r=DB.registros.find(x=>x.id===bt.dataset.pdcaacao); if(!r)return;
+      const f=pdcaFala(r);
+      pdcaLista().push({id:uid(),semana:filtros.semana,loja:r.unidade,
+        problema:(r.nota?r.nota+'★ '+fmtData(r.data)+': ':'')+f.slice(0,160),
+        causa:'',acao:'',resp:'',prazo:'',status:'aberto',criado:pdcaHoje()});
+      pdcaSalvar(); renderPdca();
+      const t=$('#tbPdcaPlano'); if(t)t.scrollIntoView({block:'center',behavior:'smooth'});
+      toast('Ação criada com o relato do cliente. Preencha causa, ação, responsável e prazo.');
+    };
+  });
+  $$('#tbPdcaPlano input[data-pdca]').forEach(el=>{
+    el.oninput=()=>{const p=pdcaLista().find(x=>x.id===el.dataset.pdca); if(!p)return;
+      p[el.dataset.campo]=el.value; pdcaSalvar();};
+  });
+  $$('select[data-pdcast]').forEach(el=>{
+    el.onchange=()=>{const p=pdcaLista().find(x=>x.id===el.dataset.pdcast); if(!p)return;
+      p.status=el.value; pdcaSalvar(); renderPdca();};
+  });
+  $$('button[data-pdcadel]').forEach(el=>{
+    el.onclick=()=>{DB.pdca=pdcaLista().filter(x=>x.id!==el.dataset.pdcadel); pdcaSalvar(); renderPdca(); toast('Ação removida.');};
+  });
+}
+
+
+/* ================================================================
+   LUPA DA LOJA NO PDCA
+   ----------------------------------------------------------------
+   Clicar na linha da loja abre, ali mesmo, tudo que o cliente
+   escreveu sobre ela naquela semana — separado em três blocos.
+
+   POR QUE TRÊS E NÃO DOIS
+   O painel sempre teve "reclamação" e "elogio". Só que a nota de
+   5 estrelas com uma ressalva dentro ("tudo ótimo, só achei o pão
+   meio duro") caía em elogio e sumia. É exatamente essa frase que
+   o gerente consegue resolver na semana seguinte sem que ninguém
+   tenha ficado bravo. Por isso existe o bloco SUGESTÃO: nota 4 ou 5
+   com um "mas", um "poderia", um "só faltou".
+
+   A classificação lê a FALA DO CLIENTE, não as anotações que o CX
+   escreve entre colchetes — senão a palavra "melhorar" de uma nota
+   minha viraria sugestão do cliente.
+   ================================================================ */
+function pdcaFala(r){
+  return String(r.verbatim||'')
+    .replace(/\[[^\]]*\]/g,' ')
+    .replace(/\(tags do iFood:[^)]*\)/gi,' ')
+    .replace(/\((?:[^()]*(?:Local Guide|avaliaç|fotos?|R\$|\d\s*\/\s*5|refeição no local|jantar|almoço|entrega)[^()]*)\)/gi,' ')
+    .replace(/\s{2,}/g,' ').trim();
+}
+const PDCA_RESSALVA=/\bmas\b|por[ée]m|contudo|todavia|s[óo] (?:acho|achei|n[ãa]o|falt|senti|que a|uma|mais)|poderia|podia|deveria|sugest|sugiro|\bdica\b|seria (?:bom|legal|melhor)|falt(?:ou|a) (?:um|apenas|s[óo]|mais)|recomendo (?:que|colocar|p[õo]r)|melhorar|atualizar|ponha|coloquem|sinto falta|se (?:tivesse|viesse|puder)|pode melhorar/i;
+
+/* separa os relatos de uma loja numa semana em reclamação / sugestão / elogio */
+function pdcaRelatos(ap,w){
+  const R=daSemana(w).filter(r=>r.unidade===ap);
+  const rec=[],sug=[],elo=[]; let semTexto=0;
+  R.forEach(r=>{
+    const f=pdcaFala(r);
+    const nota=(r.nota===''||r.nota===null||r.nota===undefined)?null:Number(r.nota);
+    const ehRec=r.tipo==='reclamacao'||(nota!==null&&nota<=3);
+    if(ehRec){rec.push(r);return;}
+    if(!f){semTexto++;return;}
+    if(PDCA_RESSALVA.test(f)) sug.push(r); else elo.push(r);
+  });
+  const ord=(a,b)=>(a.data<b.data?1:-1);
+  return {rec:rec.sort(ord), sug:sug.sort(ord), elo:elo.sort(ord), semTexto, total:R.length};
+}
+
+function pdcaItem(r,podeAcao){
+  const f=pdcaFala(r)||'_sem texto — a avaliação existe, mas o comentário não abriu no print_';
+  const nota=(r.nota===''||r.nota===null||r.nota===undefined)?null:Number(r.nota);
+  const c=canal(r.canal);
+  const est=nota===null?'<span style="color:var(--ink3);font-size:11.5px">sem nota</span>'
+    :'<b style="color:'+(nota<=3?'var(--vermelho)':nota===4?'var(--ambar-esc,#8a6b12)':'var(--verde)')+'">'+nota+'★</b>';
+  return '<div style="padding:9px 0;border-bottom:1px solid var(--line2)">'+
+    '<div style="display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;font-size:11.5px;color:var(--ink3)">'+
+      est+'<span>'+fmtData(r.data)+'</span><span>'+esc(c.curto||c.n||r.canal)+'</span>'+
+      (r.cliente?'<span>'+esc(r.cliente)+'</span>':'')+
+      (r.tema?'<span style="color:var(--tinto)">'+esc(r.tema)+'</span>':'')+
+      '<span style="flex:1"></span>'+
+      (podeAcao?'<button class="btn gh" data-pdcaacao="'+r.id+'" style="padding:2px 7px;font-size:11px">+ virar ação</button>':'')+
+    '</div>'+
+    '<div style="font-size:13px;line-height:1.5;margin-top:3px">'+esc(f)+'</div>'+
+  '</div>';
+}
+
+function pdcaBloco(titulo,cor,lista,vazio,podeAcao){
+  return '<div style="flex:1;min-width:260px">'+
+    '<div style="font-weight:800;font-size:12.5px;letter-spacing:.03em;color:'+cor+';padding-bottom:6px;border-bottom:2px solid '+cor+'">'+
+      titulo+' — '+lista.length+'</div>'+
+    (lista.length?lista.map(r=>pdcaItem(r,podeAcao)).join(''):'<div style="padding:12px 0;color:var(--ink3);font-size:12.5px">'+vazio+'</div>')+
+  '</div>';
+}
+
+/* abre/fecha o detalhe de uma loja dentro da tabela do PLAN */
+let pdcaAberta=null;
+function pdcaToggleLoja(ap){
+  pdcaAberta=(pdcaAberta===ap)?null:ap;
+  renderPdca();
+  if(pdcaAberta){
+    const el=document.querySelector('tr[data-pdcadet="'+CSS.escape(ap)+'"]');
+    if(el)el.scrollIntoView({block:'center',behavior:'smooth'});
+  }
+}
+
+/* botões fixos da aba */
+function pdcaBind(){
+  const bt=$('#btPdcaAdd'); if(!bt)return;
+  bt.onclick=()=>{
+    const ap=$('#pdcaNovaLoja').value;
+    if(!ap){toast('Escolha a loja primeiro.');return;}
+    pdcaLista().push({id:uid(),semana:filtros.semana,loja:ap,problema:'',causa:'',acao:'',resp:'',prazo:'',status:'aberto',criado:pdcaHoje()});
+    pdcaSalvar(); renderPdca();
+  };
+  $('#btPdcaCopiar').onclick=()=>{
+    const w=filtros.semana, META=DB.metaNota||4.8;
+    const L=[]; L.push('*ATA — PDCA SEMANAL*'); L.push('_'+fmtSemana(w)+'_'); L.push('');
+    const R=contar5(daSemana(w),null,w);
+    L.push('*Rede em '+(R.media===null?'—':R.media.toFixed(2).replace('.',','))+'* · meta '+META.toFixed(2).replace('.',',')+' · '+R.nEst.toLocaleString('pt-BR')+' avaliações');
+    L.push('');
+    const un=(DB.unidades||[]).map(u=>u.ap);
+    const fora=un.map(ap=>({ap,c:pdcaLoja(ap,w)})).filter(x=>x.c.n>0&&x.c.m<META).sort((a,b)=>a.c.m-b.c.m);
+    if(fora.length){L.push('*FORA DA META*');
+      fora.forEach(x=>L.push('• '+(nomeUn(x.ap)||x.ap)+' — '+x.c.m.toFixed(2).replace('.',',')+' em '+x.c.n+' avaliações · '+x.c.rec+' reclamaç'+(x.c.rec===1?'ão':'ões')));
+      L.push('');}
+    else {L.push('*Todas as lojas com avaliação fecharam na meta.*'); L.push('');}
+    const ant=pdcaLista().filter(p=>p.semana!==w&&p.status!=='feito');
+    if(ant.length){L.push('*PENDENTE DE SEMANAS ANTERIORES*');
+      ant.forEach(p=>L.push('• '+(nomeUn(p.loja)||p.loja)+' — '+(p.acao||'(sem ação escrita)')+' · '+(p.resp||'sem responsável')+' · '+(p.prazo?'prazo '+fmtData(p.prazo):'sem prazo')+' · '+pdcaSt(p.status).n));
+      L.push('');}
+    const novas=pdcaLista().filter(p=>p.semana===w);
+    L.push('*COMBINADO NESTA REUNIÃO*');
+    if(!novas.length) L.push('_Nenhuma ação lançada._');
+    novas.forEach(p=>{
+      L.push('• *'+(nomeUn(p.loja)||p.loja)+'*');
+      if(p.problema)L.push('  _o que aconteceu:_ '+p.problema);
+      if(p.causa)L.push('  _causa:_ '+p.causa);
+      L.push('  _ação:_ '+(p.acao||'—'));
+      L.push('  _'+(p.resp||'sem responsável')+' · '+(p.prazo?'até '+fmtData(p.prazo):'sem prazo')+'_');
+    });
+    const txt=L.join('\n');
+    navigator.clipboard.writeText(txt).then(()=>toast('Ata copiada — é só colar no WhatsApp.'))
+      .catch(()=>{const t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();
+        try{document.execCommand('copy');toast('Ata copiada.');}catch(e){toast('Não consegui copiar. Selecione o texto na tela.');}
+        document.body.removeChild(t);});
+  };
+}
+
 /* ---------- navegação ---------- */
 function trocarAba(t){
   aba=t;
   $$('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
-  ['panorama','buscar','ifood','google','insta','categ','sac','trip','evidencias','acoes','historico','config'].forEach(k=>$('#v-'+k).hidden=(k!==t));
+  ['panorama','buscar','ifood','google','insta','categ','sac','trip','evidencias','pdca','acoes','historico','config'].forEach(k=>$('#v-'+k).hidden=(k!==t));
   $('#filtros').style.display=(t==='config'||t==='buscar')?'none':'';
+  if(t==='pdca')renderPdca();
   if(t==='buscar'){renderBuscar();setTimeout(()=>{const c=$('#bqTexto');if(c&&!busca.q)c.focus();},30);}
 }
 
+/* ----------------------------------------------------------------
+   OBSERVAÇÕES DECLARADAS DE SEMANA
+   Quando uma semana entra incompleta (export que não cobre todos os dias,
+   canal que não foi lido), a ressalva fica gravada aqui e aparece em cima
+   da nota. Assim ninguém compara 6 dias com 7 sem saber.
+   ---------------------------------------------------------------- */
+const OBS_SEMANA={
+ '2026-09-14':'<b>Semana de 6 dias no iFood.</b> O export cobre <b>14 a 19/09</b> — o domingo 20/09 ainda não tinha sido liberado pelo iFood quando o dado foi puxado. '+
+   'Para comparar com a semana anterior, use os mesmos 6 dias: <b>07 a 12/09 foram 1.960 avaliações e 4,90</b>; 14 a 19/09 são <b>1.844 e 4,93</b>. '+
+   'A semana 07 a 13/09 fechada (7 dias) tem 2.275 — <b>não compare esse número com este</b>. '+
+   'O <b>Google está completo</b>: leitura de ficha de 21/09 em 14 unidades, 75 avaliações na semana. '+
+   'A semana fecha em <b>1.919 avaliações e 4,92</b>.'
+};
+function renderObsSemana(){
+  const el=$('#obsSemana'); if(!el)return;
+  const t=OBS_SEMANA[filtros.semana];
+  el.innerHTML=t?('<div style="background:#fff8e6;border:1px solid #e8d48a;border-left:4px solid #c99a1e;border-radius:8px;padding:10px 12px;margin:2px 0 10px;font-size:13px;line-height:1.5;color:#5a4508">⚠️ '+t+'</div>'):'';
+}
 /* ---------- boot ---------- */
 function init(){
   const novo=!carregar();
@@ -5178,6 +5887,7 @@ function init(){
   DB.comentarios=DB.comentarios||{};DB.cobertura=DB.cobertura||{};DB.meta=DB.meta??60;
   DB.google=DB.google||{};DB.metaNota=DB.metaNota||4.8;DB.modoNps=DB.modoNps||'todos';DB.snapshotData=DB.snapshotData||'2026-08-17';
   DB.galeria=DB.galeria||{};DB.prints=DB.prints||{};
+  reidratarPrintsBase();
   /* migra prints das versões antigas, onde a imagem ficava dentro de cada registro */
   const mg=migrarPrints();
   const pb=aplicarPrintsBase();
@@ -5193,8 +5903,18 @@ function init(){
   }
   if(avisos.length)setTimeout(()=>toast(avisos.join(' · ')+'.'),700);
   if(DB.unidades.length&&typeof DB.unidades[0]==='string')DB.unidades=DB.unidades.map(s=>({ap:s,marca:'',num:'',end:''}));
-  filtros.semana=semanasDisponiveis()[0]||segunda('2026-08-10');
-  if(DB.registros.some(r=>segunda(r.data)==='2026-08-10'))filtros.semana='2026-08-10';
+  /* ------------------------------------------------------------
+     QUAL SEMANA ABRE PRIMEIRO
+     A mais recente COM EXPORT DO IFOOD, que é a última semana de fato
+     fechada. Sem essa regra o painel abria numa semana que tem só uma
+     avaliação avulsa do Google (uma que caiu no dia seguinte ao
+     fechamento) e mostrava "5,00 · 1 avaliação" como se fosse a nota
+     da rede. Se nenhuma semana tiver export, cai na mais recente.
+     ------------------------------------------------------------ */
+  const semDisp=semanasDisponiveis();
+  const comIfood=new Set((DB.agregados||[]).filter(a=>a.canal==='ifood').map(a=>a.semana));
+  filtros.semana=semDisp.find(s=>comIfood.has(s))||semDisp[0]||segunda('2026-08-10');
+  pdcaBind();
   salvar();render();chipSessao();
 }
 
