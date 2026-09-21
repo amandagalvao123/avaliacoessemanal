@@ -1032,9 +1032,9 @@ details.rel[open]>summary{border-radius:9px 9px 0 0;border-bottom:none}
    CX | SAL Restaurantes — biblioteca Ragga
    Arquivo único. Sem framework, sem servidor.
    ============================================================ */
-const KEY='cxSal_v63';
+const KEY='cxSal_v64';
 /* chaves anteriores, da mais nova para a mais antiga: a v34 aproveita o que já estava salvo */
-const KEYS_ANT=['cxSal_v62','cxSal_v61','cxSal_v60','cxSal_v59','cxSal_v58','cxSal_v57','cxSal_v56','cxSal_v55','cxSal_v54','cxSal_v53','cxSal_v52','cxSal_v51','cxSal_v50','cxSal_v49','cxSal_v48','cxSal_v47','cxSal_v46','cxSal_v45','cxSal_v44','cxSal_v43','cxSal_v42','cxSal_v41','cxSal_v40','cxSal_v39','cxSal_v38','cxSal_v37','cxSal_v36','cxSal_v35','cxSal_v34','cxSal_v32','cxSal_v31'];
+const KEYS_ANT=['cxSal_v63','cxSal_v62','cxSal_v61','cxSal_v60','cxSal_v59','cxSal_v58','cxSal_v57','cxSal_v56','cxSal_v55','cxSal_v54','cxSal_v53','cxSal_v52','cxSal_v51','cxSal_v50','cxSal_v49','cxSal_v48','cxSal_v47','cxSal_v46','cxSal_v45','cxSal_v44','cxSal_v43','cxSal_v42','cxSal_v41','cxSal_v40','cxSal_v39','cxSal_v38','cxSal_v37','cxSal_v36','cxSal_v35','cxSal_v34','cxSal_v32','cxSal_v31'];
 
 const CANAIS=[
  {id:'sac',   cor:'#E96821', n:'📋 SAC / QR Code das lojas', curto:'📋 SAC / QR',    esc:'nps',  desc:'Avaliações, reclamações, elogios e sugestões.'},
@@ -1194,7 +1194,7 @@ function carregar(){
    SEED_V menor, o painel compara com os dados do arquivo e acrescenta só o que
    falta, sem tocar no que já existe e sem apagar edição nenhuma.
    ============================================================ */
-const SEED_V=21;
+const SEED_V=22;
 function assinaturaReg(r){
   return [r.canal||'', r.data||'', r.unidade||'', r.loja||'',
     String(r.cliente||'').trim().toLowerCase(),
@@ -2411,7 +2411,7 @@ function seed(){
    {semana:'2026-08-31',canal:'ifood',loja:'BIGGS - PASTEL - ZONA LESTE',cod:'Biggs 07',unidade:'Jamil Scaff',grupo:'Biggs',categoria:'Pastel',merch:'60e23206',n:50,media:4.98,n5:49,n4:1,n3:0,n2:0,n1:0,n123:0,coment:4},
    {semana:'2026-08-31',canal:'ifood',loja:'BIGGS - PIZZARIA - ZONA NORTE',cod:'Biggs 04',unidade:'Winston Churchill / Zona Norte',grupo:'Biggs',categoria:'Pizza',merch:'b31feaf1',n:49,media:4.98,n5:48,n4:1,n3:0,n2:0,n1:0,n123:0,coment:1},
    {semana:'2026-08-31',canal:'ifood',loja:'BIGGS - PIZZARIA - ZONA SUL',cod:'Biggs 05',unidade:'Zona Sul / Igapó',grupo:'Biggs',categoria:'Pizza',merch:'ba3e8a59',n:46,media:4.70,n5:39,n4:4,n3:1,n2:0,n1:2,n123:3,coment:5},
-   {semana:'2026-08-31',canal:'ifood',loja:'merchant e255c2c8',cod:'a identificar',unidade:'',grupo:'Biggs',categoria:'Lanches',merch:'e255c2c8',n:44,media:4.93,n5:42,n4:1,n3:1,n2:0,n1:0,n123:1,coment:2},
+   {semana:'2026-08-31',canal:'ifood',loja:'BIGGS - AV ARTHUR THOMAS',cod:'Biggs 13',unidade:'Arthur Thomas',grupo:'Biggs',categoria:'Lanches',merch:'e255c2c8',n:44,media:4.93,n5:42,n4:1,n3:1,n2:0,n1:0,n123:1,coment:2},
    {semana:'2026-08-31',canal:'ifood',loja:'BIGGS - JAPA FOOD - ZONA LESTE',cod:'Biggs 07',unidade:'Jamil Scaff',grupo:'Biggs',categoria:'Japonesa e poke',merch:'341c65c4',n:39,media:4.95,n5:37,n4:2,n3:0,n2:0,n1:0,n123:0,coment:2},
    {semana:'2026-08-31',canal:'ifood',loja:'PIZZA BIGGS - SANTO AMARO',cod:'Biggs 11',unidade:'Santo Amaro',grupo:'Biggs',categoria:'Pizza',merch:'9c419eff',n:38,media:4.97,n5:37,n4:1,n3:0,n2:0,n1:0,n123:0,coment:1},
    {semana:'2026-08-31',canal:'ifood',loja:'BIGGS - REFEICOES - SAUL ELKIND',cod:'Biggs 12',unidade:'Saul Elkind',grupo:'Biggs',categoria:'Marmita e refeição',merch:'ca941556',n:38,media:4.89,n5:34,n4:4,n3:0,n2:0,n1:0,n123:0,coment:2},
@@ -2473,7 +2473,7 @@ function seed(){
    {semana:'2026-09-07',canal:'ifood',loja:'BIGGS - PIZZARIA - ZONA LESTE',cod:'Biggs 07',unidade:'Jamil Scaff',grupo:'Biggs',categoria:'Pizza',merch:'',n:41,media:4.90,n5:38,n4:2,n3:1,n2:0,n1:0,n123:1,coment:2},
    {semana:'2026-09-07',canal:'ifood',loja:'MARMITAS BIGGS - SANTO AMARO',cod:'Biggs 11',unidade:'Santo Amaro',grupo:'Biggs',categoria:'Marmita e refeição',merch:'',n:40,media:4.88,n5:35,n4:5,n3:0,n2:0,n1:0,n123:0,coment:1},
    {semana:'2026-09-07',canal:'ifood',loja:'BIGGS - PASTEL - ZONA LESTE',cod:'Biggs 07',unidade:'Jamil Scaff',grupo:'Biggs',categoria:'Pastel',merch:'',n:40,media:4.90,n5:36,n4:4,n3:0,n2:0,n1:0,n123:0,coment:0},
-   {semana:'2026-09-07',canal:'ifood',loja:'merchant e255c2c8',cod:'a identificar',unidade:'',grupo:'Biggs',categoria:'Lanches',merch:'e255c2c8',n:38,media:5.00,n5:38,n4:0,n3:0,n2:0,n1:0,n123:0,coment:0},
+   {semana:'2026-09-07',canal:'ifood',loja:'BIGGS - AV ARTHUR THOMAS',cod:'Biggs 13',unidade:'Arthur Thomas',grupo:'Biggs',categoria:'Lanches',merch:'e255c2c8',n:38,media:5.00,n5:38,n4:0,n3:0,n2:0,n1:0,n123:0,coment:0},
    {semana:'2026-09-07',canal:'ifood',loja:'BIGGS - PASTEL - ZONA SUL',cod:'Biggs 05',unidade:'Zona Sul / Igapó',grupo:'Biggs',categoria:'Pastel',merch:'',n:37,media:4.97,n5:36,n4:1,n3:0,n2:0,n1:0,n123:0,coment:2},
    {semana:'2026-09-07',canal:'ifood',loja:'BIGGS - JAPA FOOD - AV HIGIENOPOLIS',cod:'Biggs 06',unidade:'Higienópolis',grupo:'Biggs',categoria:'Japonesa e poke',merch:'d20631ce',n:35,media:4.91,n5:32,n4:3,n3:0,n2:0,n1:0,n123:0,coment:2},
    {semana:'2026-09-07',canal:'ifood',loja:'BIGGS - PIZZARIA - ZONA SUL',cod:'Biggs 05',unidade:'Zona Sul / Igapó',grupo:'Biggs',categoria:'Pizza',merch:'',n:34,media:4.79,n5:30,n4:3,n3:0,n2:0,n1:1,n123:1,coment:2},
@@ -2640,7 +2640,7 @@ function seed(){
    {semana:'2026-09-14',canal:'ifood',loja:'ROBS',cod:'Robs',unidade:'Rob\'s',grupo:'Rob\'s',categoria:'Lanches',merch:'56843371',n:65,media:4.92,n5:62,n4:2,n3:0,n2:1,n1:0,n123:1,coment:8},
    {semana:'2026-09-14',canal:'ifood',loja:'merchant 665daa81',cod:'Dell Iris',unidade:'Dell Iris · Gleba Palhano',grupo:'Dell Iris',categoria:'Marmita e refeição',merch:'665daa81',n:62,media:4.84,n5:55,n4:6,n3:0,n2:0,n1:1,n123:1,coment:7},
    {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - AV SANTOS DUMONT',cod:'Biggs 02',unidade:'Aeroporto',grupo:'Biggs',categoria:'Lanches',merch:'f1e7bc12',n:61,media:4.98,n5:60,n4:1,n3:0,n2:0,n1:0,n123:0,coment:2},
-   {semana:'2026-09-14',canal:'ifood',loja:'merchant e255c2c8',cod:'a identificar',unidade:'',grupo:'Biggs',categoria:'Lanches',merch:'e255c2c8',n:58,media:4.91,n5:54,n4:3,n3:1,n2:0,n1:0,n123:1,coment:5},
+   {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - AV ARTHUR THOMAS',cod:'Biggs 13',unidade:'Arthur Thomas',grupo:'Biggs',categoria:'Lanches',merch:'e255c2c8',n:58,media:4.91,n5:54,n4:3,n3:1,n2:0,n1:0,n123:1,coment:5},
    {semana:'2026-09-14',canal:'ifood',loja:'merchant faaba7c0',cod:'Dell Iris',unidade:'Dell Iris · Centro',grupo:'Dell Iris',categoria:'Marmita e refeição',merch:'faaba7c0',n:56,media:4.88,n5:52,n4:1,n3:3,n2:0,n1:0,n123:3,coment:8},
    {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - MARMITAS - AV MARINGA',cod:'Biggs 01',unidade:'Maringá / Aterro Igapó',grupo:'Biggs',categoria:'Marmita e refeição',merch:'629392cf',n:55,media:4.89,n5:52,n4:2,n3:0,n2:0,n1:1,n123:1,coment:4},
    {semana:'2026-09-14',canal:'ifood',loja:'BIGGS - GLEBA PALHANO',cod:'Biggs 01',unidade:'Maringá / Aterro Igapó',grupo:'Biggs',categoria:'Lanches',merch:'51ed2580',n:51,media:4.90,n5:46,n4:5,n3:0,n2:0,n1:0,n123:0,coment:1},
@@ -2690,7 +2690,7 @@ function seed(){
     tipo:tp,tema:tm,nota:nt,verbatim:v,link:'iFood — export de avaliações 14 a 19/09',cliente:'',acao:'',resp:'',prazo:'',status:'aberto',emAgg:true});
   const regsIfood6=[
    IF6('2026-09-19','Santo Amaro','BIGGS - SANTO AMARO','Biggs 11','Biggs','Lanches',5,'elogio','','Recomendo topd+ (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
-   IF6('2026-09-19','','merchant e255c2c8','a identificar','Biggs','Lanches',5,'elogio','','Lanche maravilhoso ! (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo)'),
+   IF6('2026-09-19','Arthur Thomas','BIGGS - AV ARTHUR THOMAS','Biggs 13','Biggs','Lanches',5,'elogio','','Lanche maravilhoso ! (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo)'),
    IF6('2026-09-19','Zona Sul / Igapó','CHINA BIGGS - ZONA SUL','Biggs 05','Biggs','Comida chinesa',5,'elogio','','Sempre nota máxima, comida boa demais. (tags do iFood: Comida saborosa, Bem temperada, Boa aparência, Boa embalagem)'),
    IF6('2026-09-19','Maringá 1730','ISAIAS - REFEICOES','Isaías 01','Isaías','Marmita e refeição',5,'elogio','','Super recomendo! Preço e qualidade (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
    IF6('2026-09-19','Higienópolis','BIGGS - JAPA FOOD - AV HIGIENOPOLIS','Biggs 06','Biggs','Japonesa e poke',3,'reclamacao','Preço x porção','Porção pequeno'),
@@ -2707,8 +2707,8 @@ function seed(){
    IF6('2026-09-14','Aeroporto','BIGGS - AV SANTOS DUMONT','Biggs 02','Biggs','Lanches',5,'elogio','','Lanche top dms, parabens biggs pelo lanche artesanal. Muito saboroso e suculento. (tags do iFood: Comida saborosa)'),
    IF6('2026-09-14','Maringá 1730','ISAIAS - PIZZAS','Isaías 01','Isaías','Pizza',5,'elogio','','Essa pizza é perfeita, com borda de catupiry então (tags do iFood: Comida saborosa)'),
    IF6('2026-09-14','Street','BIGGS - PASTEL - CENTRO','Biggs 09','Biggs','Pastel',2,'reclamacao','Temperatura do produto','Pastel frio não gostei'),
-   IF6('2026-09-14','','merchant e255c2c8','a identificar','Biggs','Lanches',4,'reclamacao','Corpo estranho no alimento','Muito bom, porém achei um pelo na comida'),
-   IF6('2026-09-14','','merchant e255c2c8','a identificar','Biggs','Lanches',3,'reclamacao','Sabor / padrão do produto','Muito bom, porém estava bastante salgado! Tô b'),
+   IF6('2026-09-14','Arthur Thomas','BIGGS - AV ARTHUR THOMAS','Biggs 13','Biggs','Lanches',4,'reclamacao','Corpo estranho no alimento','Muito bom, porém achei um pelo na comida'),
+   IF6('2026-09-14','Arthur Thomas','BIGGS - AV ARTHUR THOMAS','Biggs 13','Biggs','Lanches',3,'reclamacao','Sabor / padrão do produto','Muito bom, porém estava bastante salgado! Tô b'),
    IF6('2026-09-14','Mercado 88','LANCHES BIGGS 88','Biggs 10','Biggs','Lanches',5,'elogio','','Entrega super rápida e o lanche chegou Quentinho (tags do iFood: Bem temperada, Temperatura certa)'),
    IF6('2026-09-14','Higienópolis','CHINA BIGGS - AV HIGIENOPOLIS','Biggs 06','Biggs','Comida chinesa',5,'elogio','','Gostei bastante. (tags do iFood: Comida saborosa, Bem temperada, Bons ingredientes)'),
    IF6('2026-09-14','Rob\'s','ROBS','Robs','Rob\'s','Lanches',2,'reclamacao','Sabor / padrão do produto','Batata estava muito salgada não consegui comer'),
@@ -2723,9 +2723,9 @@ function seed(){
    IF6('2026-09-18','Zona Sul / Igapó','BIGGS - PASTEL - ZONA SUL','Biggs 05','Biggs','Pastel',5,'elogio','','Muito bom obrigado ❤️ (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
    IF6('2026-09-18','Jamil Scaff','BIGGS - REFEICOES - ZONA LESTE','Biggs 07','Biggs','Marmita e refeição',4,'elogio','','Já foi boa, arroz papapedi uma marmita média veio metade de uma panqueca, imagina a mini vai vim 1/3 da panqueca'),
    IF6('2026-09-18','Higienópolis','CHINA BIGGS - AV HIGIENOPOLIS','Biggs 06','Biggs','Comida chinesa',5,'elogio','','Ainda veio com uma resposta do Senhor… Floresça onde Deus te plantar. Obrigada. E comida perfeita tbm, Deus abençoe as mãos de quem preparou, embalou e entregou 🙌🏿 (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
-   IF6('2026-09-18','','merchant e255c2c8','a identificar','Biggs','Lanches',5,'elogio','','Amei o bilhete q foi colocado, um jeitinho que melhorou minha noite obg pelo seu trabalho pessoal (tags do iFood: Comida saborosa)'),
+   IF6('2026-09-18','Arthur Thomas','BIGGS - AV ARTHUR THOMAS','Biggs 13','Biggs','Lanches',5,'elogio','','Amei o bilhete q foi colocado, um jeitinho que melhorou minha noite obg pelo seu trabalho pessoal (tags do iFood: Comida saborosa)'),
    IF6('2026-09-18','Mercado 88','LANCHES BIGGS 88','Biggs 10','Biggs','Lanches',5,'elogio','','Muito gostoso o lanche, fiquei feliz com o recadinho lindo. Obrigado!!! (tags do iFood: Comida saborosa, Boa aparência, Boa embalagem, No ponto certo)'),
-   IF6('2026-09-17','','merchant e255c2c8','a identificar','Biggs','Lanches',5,'elogio','','Que lanche maravilhoso!! Há muito tempo não comia uma lanche assim!!! Estava ótimo, o pão bem prensado como eu gosto. (tags do iFood: Comida saborosa)'),
+   IF6('2026-09-17','Arthur Thomas','BIGGS - AV ARTHUR THOMAS','Biggs 13','Biggs','Lanches',5,'elogio','','Que lanche maravilhoso!! Há muito tempo não comia uma lanche assim!!! Estava ótimo, o pão bem prensado como eu gosto. (tags do iFood: Comida saborosa)'),
    IF6('2026-09-17','Rob\'s','ROBS','Robs','Rob\'s','Lanches',5,'elogio','','Lanche saboroso (tags do iFood: No ponto certo)'),
    IF6('2026-09-17','Jamil Scaff','BIGGS - JAPA FOOD - ZONA LESTE','Biggs 07','Biggs','Japonesa e poke',5,'elogio','','Amo. Obrigada pelo capricho 🥰🥰🥰🥰 (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
    IF6('2026-09-17','Jamil Scaff','BIGGS - JAPA FOOD - ZONA LESTE','Biggs 07','Biggs','Japonesa e poke',5,'elogio','','Amo tudo perfeito (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
@@ -2828,7 +2828,7 @@ function seed(){
    IF4('2026-09-03','Zona Sul / Igapó','BIGGS - ZONA SUL','Biggs 05','Biggs','Lanches',4,'elogio','','Melhorar ainda mais'),
    IF4('2026-09-03','Rob\'s','ROBS','Robs','Rob\'s','Lanches',5,'elogio','Sabor / padrão do produto','bem Saboroso, apesar que eu. Não lir a descrição do produto rsrs porém veio delícioso (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
    IF4('2026-09-03','Jamil Scaff','CHINA BIGGS - ZONA LESTE','Biggs 07','Biggs','Comida chinesa',5,'elogio','','Muito legal as mensagens que estão enviando junto! (tags do iFood: Comida saborosa)'),
-   IF4('2026-09-03','','merchant e255c2c8','a identificar','Biggs','Lanches',5,'elogio','','Pedirei mais vezes, veio do jeito que pedi e muito rápido 👏👏 (tags do iFood: Bons ingredientes)'),
+   IF4('2026-09-03','Arthur Thomas','BIGGS - AV ARTHUR THOMAS','Biggs 13','Biggs','Lanches',5,'elogio','','Pedirei mais vezes, veio do jeito que pedi e muito rápido 👏👏 (tags do iFood: Bons ingredientes)'),
    IF4('2026-09-03','Winston Churchill / Zona Norte','BIGGS - ZONA NORTE','Biggs 04','Biggs','Lanches',1,'reclamacao','','O lanche veio horrível, queijo duro e a salsicha veio gru um nojo'),
    IF4('2026-09-03','Saul Elkind','BIGGS - SAUL ELKIND','Biggs 12','Biggs','Lanches',1,'reclamacao','Preço x porção','O lanche caiu muito a quantidade, nem molho n lanche vem mais. Não recomendo'),
    IF4('2026-09-03','Jamil Scaff','BIGGS - ACAI','Biggs 07','Biggs','Açaí',5,'elogio','','Açaí maravilhoso (tags do iFood: Comida saborosa, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
@@ -2846,7 +2846,7 @@ function seed(){
    IF4('2026-09-03','Santo Amaro','BIGGS - SANTO AMARO','Biggs 11','Biggs','Lanches',3,'reclamacao','','O frango do dog não estava com gosto bom'),
    IF4('2026-09-03','Winston Churchill / Zona Norte','BIGGS - PIZZARIA - ZONA NORTE','Biggs 04','Biggs','Pizza',5,'elogio','','Pizza maravilhosa,obrigado pelo bom trabalho (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
    IF4('2026-09-03','Street','BIGGS - PASTEL - CENTRO','Biggs 09','Biggs','Pastel',5,'elogio','','pastel doce bem recheado e massa com canela, muito bom! (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência)'),
-   IF4('2026-09-03','','merchant e255c2c8','a identificar','Biggs','Lanches',3,'reclamacao','Sabor / padrão do produto','Muito molho no lanche, mais sabor muito bom'),
+   IF4('2026-09-03','Arthur Thomas','BIGGS - AV ARTHUR THOMAS','Biggs 13','Biggs','Lanches',3,'reclamacao','Sabor / padrão do produto','Muito molho no lanche, mais sabor muito bom'),
    IF4('2026-09-03','Higienópolis','CHINA BIGGS - AV HIGIENOPOLIS','Biggs 06','Biggs','Comida chinesa',2,'reclamacao','','Arroz estava duro'),
    IF4('2026-09-04','Rob\'s','ROBS','Robs','Rob\'s','Lanches',5,'elogio','','Lanche muito bom, gostei e comprarei mais vezes (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
    IF4('2026-09-04','Zona Sul / Igapó','BIGGS - JAPA FOOD - ZONA SUL','Biggs 05','Biggs','Japonesa e poke',5,'elogio','','Pedi um Poke pela primeira vez, e amei. Muito bom (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Bons ingredientes, No ponto certo)'),
@@ -3181,7 +3181,7 @@ function seed(){
      Zero duplicata entre eles, conferido pelo ID longo do pedido.
      54 merchants. 46 casaram pelo nome com o de-para do painel; os 4 Dell Iris
      casaram pelo ID do merchant; 3 mudaram de nome no iFood e estao marcados a
-     confirmar; 1 merchant (e255c2c8, 71 avaliacoes) veio SEM NOME e nao tem loja.
+     confirmar; 1 merchant (e255c2c8, 71 avaliacoes) veio SEM NOME no export — identificado em 21/09 como o Biggs 13 · Arthur Thomas.
      Cada linha agora carrega tambem GRUPO (marca) e CATEGORIA (tipo de operacao). ===== */
   /* Deriva GRUPO e CATEGORIA do nome da loja virtual. Vale para as semanas antigas
      também, senão a comparação semana a semana por categoria nasce vazia. */
@@ -3213,7 +3213,7 @@ function seed(){
    {semana:'2026-08-24',canal:'ifood',loja:'BIGGS - PIZZARIA - ZONA NORTE',cod:'Biggs 04',unidade:'Winston Churchill / Zona Norte',grupo:'Biggs',categoria:'Pizza',merch:'b31feaf1',n:82,media:4.84,n5:74,n4:6,n3:0,n2:1,n1:1,n123:2,coment:4},
    {semana:'2026-08-24',canal:'ifood',loja:'BIGGS - SANTO AMARO',cod:'Biggs 11',unidade:'Santo Amaro',grupo:'Biggs',categoria:'Lanches',merch:'4c0c421d',n:77,media:4.95,n5:73,n4:4,n3:0,n2:0,n1:0,n123:0,coment:2},
    {semana:'2026-08-24',canal:'ifood',loja:'CHINA BIGGS - ZONA SUL',cod:'Biggs 05',unidade:'Zona Sul / Igapó',grupo:'Biggs',categoria:'Comida chinesa',merch:'7c668e87',n:74,media:4.91,n5:71,n4:1,n3:1,n2:0,n1:1,n123:2,coment:4},
-   {semana:'2026-08-24',canal:'ifood',loja:'merchant e255c2c8',cod:'a identificar',unidade:'',grupo:'Biggs',categoria:'Lanches',merch:'e255c2c8',n:71,media:4.94,n5:69,n4:1,n3:0,n2:1,n1:0,n123:1,coment:4},
+   {semana:'2026-08-24',canal:'ifood',loja:'BIGGS - AV ARTHUR THOMAS',cod:'Biggs 13',unidade:'Arthur Thomas',grupo:'Biggs',categoria:'Lanches',merch:'e255c2c8',n:71,media:4.94,n5:69,n4:1,n3:0,n2:1,n1:0,n123:1,coment:4},
    {semana:'2026-08-24',canal:'ifood',loja:'BIGGS - CENTRO',cod:'Biggs 03',unidade:'Centro',grupo:'Biggs',categoria:'Lanches',merch:'5bd54d81',n:71,media:4.94,n5:68,n4:2,n3:1,n2:0,n1:0,n123:1,coment:2},
    {semana:'2026-08-24',canal:'ifood',loja:'merchant faaba7c0',cod:'Dell Iris',unidade:'Dell Iris · Centro',grupo:'Dell Iris',categoria:'Marmita e refeição',merch:'faaba7c0',n:66,media:4.76,n5:55,n4:8,n3:1,n2:2,n1:0,n123:3,coment:9},
    {semana:'2026-08-24',canal:'ifood',loja:'BIGGS - MARMITAS - AV MARINGA',cod:'Biggs 01',unidade:'Maringá / Aterro Igapó',grupo:'Biggs',categoria:'Marmita e refeição',merch:'629392cf',n:61,media:4.97,n5:59,n4:2,n3:0,n2:0,n1:0,n123:0,coment:2},
@@ -3282,7 +3282,7 @@ function seed(){
    IF3('2026-08-24','Dell Iris · Centro','','Dell Iris','Dell Iris','Marmita e refeição',2,'reclamacao','Preço x porção','Pouca comida pelo preço'),
    IF3('2026-08-24','Higienópolis','CHINA BIGGS - AV HIGIENOPOLIS','Biggs 06','Biggs','Comida chinesa',2,'reclamacao','Sabor / padrão do produto','O arroz esta cru'),
    IF3('2026-08-24','Saul Elkind','BIGGS - SAUL ELKIND','Biggs 12','Biggs','Lanches',2,'reclamacao','Embalagem / transporte','O frango estava muito molhado e não estava bem temperado igual outras vezes que pedi fora da promoção, a embalagem que envolve o lanche toda desmanchando de tão molhada  sempre peço com vocês. Foi a primeira vez que veio assim. E claro que não é por isso que vou parar de comprar com vocês...'),
-   IF3('2026-08-24','','','a identificar','Biggs','Lanches',2,'reclamacao','Preço x porção','Pizza veio praticamente sem recheio, extremamente fina.'),
+   IF3('2026-08-24','Arthur Thomas','BIGGS - AV ARTHUR THOMAS','Biggs 13','Biggs','Lanches',2,'reclamacao','Preço x porção','Pizza veio praticamente sem recheio, extremamente fina.'),
    IF3('2026-08-24','Mercado 88','PIZZA BIGGS 88','Biggs 10','Biggs','Pizza',2,'reclamacao','Sabor / padrão do produto','Pizza com bacon cru'),
    IF3('2026-08-24','Saul Elkind','BIGGS - SAUL ELKIND','Biggs 12','Biggs','Lanches',2,'reclamacao','Temperatura do produto','Lanche frio estava ruim'),
    IF3('2026-08-24','Jamil Scaff','BIGGS - REFEICOES - ZONA LESTE','Biggs 07','Biggs','Marmita e refeição',2,'reclamacao','','Muita diferença'),
@@ -3361,10 +3361,10 @@ function seed(){
    IF3('2026-08-27','Winston Churchill / Zona Norte','BIGGS - ZONA NORTE','Biggs 04','Biggs','Lanches',5,'elogio','Sabor / padrão do produto','Mto gostoso o lanche e parabéns pela entrega rápida. (tags do iFood: No ponto certo)'),
    IF3('2026-08-27','Maringá 1730','ISAIAS - PIZZAS','Isaías 01','Isaías','Pizza',5,'elogio','','Muito bom! Quando comprei estava na promoção de 39.99, agora 49.99 mas mesmo assim vale a pena comprar, espero que a promoção volte😁 (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
    IF3('2026-08-27','Maringá / Aterro Igapó','BIGGS - AV MARINGA','Biggs 01','Biggs','Lanches',5,'elogio','','Até me entregaram um bilhetinho sobre deus,amém! (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
-   IF3('2026-08-27','','','a identificar','Biggs','Lanches',5,'elogio','','O pastel de carne e o vinagrete é surreal de bom,amei (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
+   IF3('2026-08-27','Arthur Thomas','BIGGS - AV ARTHUR THOMAS','Biggs 13','Biggs','Lanches',5,'elogio','','O pastel de carne e o vinagrete é surreal de bom,amei (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
    IF3('2026-08-27','Higienópolis','CHINA BIGGS - AV HIGIENOPOLIS','Biggs 06','Biggs','Comida chinesa',5,'elogio','Sabor / padrão do produto','Comida muito saborosa! Gosto muito!! (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Bons ingredientes, Temperatura certa, No ponto certo)'),
    IF3('2026-08-27','Zona Sul / Igapó','BIGGS - BURGER','Biggs 05','Biggs','Burger',5,'elogio','Sabor / padrão do produto','Que lanche gostoso e fresquinho. Não sou fã de lanche e hj me deu vontade. Tive sorte de escolher esse. (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
-   IF3('2026-08-27','','','a identificar','Biggs','Lanches',5,'elogio','Embalagem / transporte','Agradeço a linda mensagem na embalagem,as vezes uma boa frase,muda nossa noite💖😊 (tags do iFood: Comida saborosa, Boa aparência, Bons ingredientes, No ponto certo)'),
+   IF3('2026-08-27','Arthur Thomas','BIGGS - AV ARTHUR THOMAS','Biggs 13','Biggs','Lanches',5,'elogio','Embalagem / transporte','Agradeço a linda mensagem na embalagem,as vezes uma boa frase,muda nossa noite💖😊 (tags do iFood: Comida saborosa, Boa aparência, Bons ingredientes, No ponto certo)'),
    IF3('2026-08-27','Maringá / Aterro Igapó','BIGGS - MARMITAS - AV MARINGA','Biggs 01','Biggs','Marmita e refeição',5,'elogio','','10 de 10 parabéns, muito bom. (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
    IF3('2026-08-28','Dell Iris · Aeroporto','','Dell Iris','Dell Iris','Marmita e refeição',5,'elogio','Preço x porção','Bem pequeno, bom aparência (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
    IF3('2026-08-28','Dell Iris · Centro','','Dell Iris','Dell Iris','Marmita e refeição',5,'elogio','Sabor / padrão do produto','Que comida perfeita ❤️❤️ sabor incrível feita com carinho mesmo amei (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
@@ -3374,7 +3374,7 @@ function seed(){
    IF3('2026-08-28','Maringá 1730','ISAIAS - PIZZAS','Isaías 01','Isaías','Pizza',5,'elogio','Sabor / padrão do produto','Muito boa a pizza , recomendo as pizzas , já peguei vários sabores . (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo)'),
    IF3('2026-08-28','Rob\'s','ROBS','Robs','Rob\'s','Lanches',5,'elogio','','Uma D e l i C i a a a a a.... eu amei de novo... amei o recadinho. Obrigada por capricharam no meu pedido vocês são maravilhosos 🥰👏🏼👏🏼👏🏼❤️❤️❤️ (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
    IF3('2026-08-28','Higienópolis','CHINA BIGGS - AV HIGIENOPOLIS','Biggs 06','Biggs','Comida chinesa',5,'elogio','','top, gostei da comida (tags do iFood: Comida saborosa)'),
-   IF3('2026-08-28','','','a identificar','Biggs','Lanches',5,'elogio','Sabor / padrão do produto','Lanche muito saboroso! Deus abençoe pelo bilhete ❤️🙌🏻 (tags do iFood: No ponto certo)'),
+   IF3('2026-08-28','Arthur Thomas','BIGGS - AV ARTHUR THOMAS','Biggs 13','Biggs','Lanches',5,'elogio','Sabor / padrão do produto','Lanche muito saboroso! Deus abençoe pelo bilhete ❤️🙌🏻 (tags do iFood: No ponto certo)'),
    IF3('2026-08-28','Zona Sul / Igapó','BIGGS - PIZZARIA - ZONA SUL','Biggs 05','Biggs','Pizza',5,'elogio','','Excelente pizza (tags do iFood: Comida saborosa, Bem temperada, Boa quantidade, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo)'),
    IF3('2026-08-28','Saul Elkind','BIGGS - REFEICOES - SAUL ELKIND','Biggs 12','Biggs','Marmita e refeição',5,'elogio','Sabor / padrão do produto','Muito saboroso (tags do iFood: Comida saborosa, Bem temperada, Boa aparência, Boa embalagem, No ponto certo)'),
    IF3('2026-08-28','Higienópolis','BIGGS - AV HIGIENOPOLIS','Biggs 06','Biggs','Lanches',5,'elogio','','Muito Bom muito bom (tags do iFood: Comida saborosa, Bem temperada, Boa aparência, Boa embalagem, Bons ingredientes, Temperatura certa, No ponto certo, Embalagem sustentável)'),
@@ -3406,9 +3406,9 @@ function seed(){
   ];
 
   return {
-    versao:'9.0', sessoes:1, meta:60, metaNota:4.8, modoNps:'todos', snapshotData:'2026-08-27',
+    versao:'9.1', sessoes:1, meta:60, metaNota:4.8, modoNps:'todos', snapshotData:'2026-08-27',
     unidades:UN_PADRAO.map(u=>Object.assign({},u)), temas:TEMAS_PADRAO.slice(),
-    cobertura:{sac:{ativo:false,obs:'Ativo apenas no Biggs 13 · leitura mensal, não semanal'},ifood:{ativo:true,obs:'export oficial por semana · semana 14 a 20/09 VEIO INCOMPLETA: o export cobre 14 a 19/09 (6 dias, 1.844 avaliações em 54 lojas virtuais) porque o iFood ainda não tinha liberado o domingo 20/09 · inclui as 4 dark kitchens Dell Iris · o merchant e255c2c8 (58 avaliações nesta semana) segue sem nome e sem loja física identificada, e é dele o caso de corpo estranho (fio de cabelo) de 14/09'},zap:{ativo:false,obs:'sem coleta nesta semana'},social:{ativo:true,obs:'Instagram — directs e comentários · prints de 18/08, 27/08, 10/09, 14/09 e 19/09 · semana 14 a 20/09 com 1 conversa nova (Dani, Winston Churchill / Zona Norte, 19/09), que é desdobramento da avaliação 1 estrela do iFood de 16/09 e NÃO conta como negativa nova · a conversa da Dayane (Dell Iris · Aeroporto) é de 13/09 e ganhou o desfecho: o CX prometeu contato do comercial em 15 dias, prazo até 29/09 · seguem sem loja: uDantt, Ana Angélica Rodrigues e Bruna Fileto'},card:{ativo:false,obs:'sem coleta nesta semana'},lider:{ativo:false,obs:'sem coleta nesta semana'},google:{ativo:true,obs:'Leitura de 21/09 · 75 avaliações na semana 14 a 20/09, em 13 unidades · FECHOU EXATO: Centro +21 · Santo Amaro +16 (e a nota também, 4,41) · Jamil Scaff +3 · Maringá 1730 +2 · Pizzas e Massas +2 · Street +1 · Mercado 88, Saul Elkind e Madre em 0 · NÃO FECHOU: Aterro +1 com 2 novas · Winston Churchill +2 com 1 print · Arthur Thomas +2 com 3 novas · Zona Sul 0 com 1 marcada Novo · SEM FICHA NESTE LOTE: Alphaville e Rob\'s vieram só com a lista, a última leitura de ficha delas é de 15/09 · DOIS PICOS DE VOLUME A CONFERIR COM AS LOJAS: Centro com 21 avaliações em 6 dias, 12 citando o Fabrício e 9 delas no mesmo 16/09; Santo Amaro com 15 avaliações 5 estrelas concentradas em 20/09, numa loja que tinha 154 no total · e um perfil chamado \'Paranagua Biggs\', com o nome da própria loja, deu 5 estrelas no Street em 17/09 · PENDENTE: texto colapsado ou ausente em Sthefan Piccinini, Thiago Henrique Romagnoli, Rian Charles Santos, Reduz Consultoria Empresarial (1 estrela, Jamil Scaff), Victor Turrisi (1 estrela, Maringá 1730) e Lucas Serafim (2 estrelas, Santo Amaro) · as 4 Dell Iris são dark kitchens sem ficha e o Mapoli não tem ficha'},trip:{ativo:false,obs:'só 2 fichas com avaliação · 3 sem reivindicação · 13 unidades sem ficha'},'99':{ativo:false,obs:'sem coleta nesta semana'}},
+    cobertura:{sac:{ativo:false,obs:'Ativo apenas no Biggs 13 · leitura mensal, não semanal'},ifood:{ativo:true,obs:'export oficial por semana · semana 14 a 20/09 VEIO INCOMPLETA: o export cobre 14 a 19/09 (6 dias, 1.844 avaliações em 54 lojas virtuais) porque o iFood ainda não tinha liberado o domingo 20/09 · inclui as 4 dark kitchens Dell Iris · o merchant e255c2c8, que ficou um mês sem nome no export, foi identificado em 21/09 como o Biggs 13 · Arthur Thomas — 211 avaliações voltaram para a unidade, inclusive o caso de corpo estranho (fio de cabelo) de 14/09'},zap:{ativo:false,obs:'sem coleta nesta semana'},social:{ativo:true,obs:'Instagram — directs e comentários · prints de 18/08, 27/08, 10/09, 14/09 e 19/09 · semana 14 a 20/09 com 1 conversa nova (Dani, Winston Churchill / Zona Norte, 19/09), que é desdobramento da avaliação 1 estrela do iFood de 16/09 e NÃO conta como negativa nova · a conversa da Dayane (Dell Iris · Aeroporto) é de 13/09 e ganhou o desfecho: o CX prometeu contato do comercial em 15 dias, prazo até 29/09 · seguem sem loja: uDantt, Ana Angélica Rodrigues e Bruna Fileto'},card:{ativo:false,obs:'sem coleta nesta semana'},lider:{ativo:false,obs:'sem coleta nesta semana'},google:{ativo:true,obs:'Leitura de 21/09 · 75 avaliações na semana 14 a 20/09, em 13 unidades · FECHOU EXATO: Centro +21 · Santo Amaro +16 (e a nota também, 4,41) · Jamil Scaff +3 · Maringá 1730 +2 · Pizzas e Massas +2 · Street +1 · Mercado 88, Saul Elkind e Madre em 0 · NÃO FECHOU: Aterro +1 com 2 novas · Winston Churchill +2 com 1 print · Arthur Thomas +2 com 3 novas · Zona Sul 0 com 1 marcada Novo · SEM FICHA NESTE LOTE: Alphaville e Rob\'s vieram só com a lista, a última leitura de ficha delas é de 15/09 · DOIS PICOS DE VOLUME A CONFERIR COM AS LOJAS: Centro com 21 avaliações em 6 dias, 12 citando o Fabrício e 9 delas no mesmo 16/09; Santo Amaro com 15 avaliações 5 estrelas concentradas em 20/09, numa loja que tinha 154 no total · e um perfil chamado \'Paranagua Biggs\', com o nome da própria loja, deu 5 estrelas no Street em 17/09 · PENDENTE: texto colapsado ou ausente em Sthefan Piccinini, Thiago Henrique Romagnoli, Rian Charles Santos, Reduz Consultoria Empresarial (1 estrela, Jamil Scaff), Victor Turrisi (1 estrela, Maringá 1730) e Lucas Serafim (2 estrelas, Santo Amaro) · as 4 Dell Iris são dark kitchens sem ficha e o Mapoli não tem ficha'},trip:{ativo:false,obs:'só 2 fichas com avaliação · 3 sem reivindicação · 13 unidades sem ficha'},'99':{ativo:false,obs:'sem coleta nesta semana'}},
     google:{
       'Maringá / Aterro Igapó':{nota:4.4,aval:4396,dt:'2026-09-21',tags:[T('mesa',21),T('promoção',20),T('opções',18),T('ótimos lanches',17)]},
       'Aeroporto':{nota:4.5,aval:4257,dt:'2026-09-21',tags:[T('promoções',24),T('opções',18),T('ótimos lanches',16),T('frio',14,true)]},
@@ -5849,6 +5849,30 @@ function pdcaBind(){
   };
 }
 
+
+/* ----------------------------------------------------------------
+   COMO O MERCHANT e255c2c8 FOI IDENTIFICADO — 21/09/2026
+   Ele entrou no painel em 24/08 sem nome de marca, sem nome de loja
+   e sem ID de loja: era o único assim entre os 50 merchants do export.
+   Ficou um mês como "a identificar".
+
+   A prova é o volume semana a semana, que é complementar e nunca
+   se sobrepõe:
+     Arthur Thomas   86 · 71 · —  · —  · —  · —
+     e255c2c8        —  · —  · 71 · 44 · 38 · 58
+   O Arthur Thomas some exatamente na semana em que o e255c2c8
+   aparece (24/08) — que foi quando a coleta passou de print para o
+   export oficial do iFood. Nenhuma outra unidade sumiu nessa troca.
+
+   O cardápio confirma: os comentários do e255c2c8 citam lanche,
+   pastel E pizza, e a ficha do Google desta unidade se chama
+   "Biggs Lanches, Refeições, Pizzas e Pastéis - av. Arthur Thomas".
+   É a única loja Biggs que vende os três numa loja virtual só —
+   todas as outras separam em lojas virtuais por categoria.
+
+   Confirmado pela Amanda em 21/09. Com isso, 211 avaliações voltaram
+   para a unidade e o caso de corpo estranho de 14/09 ganhou cozinha.
+   ---------------------------------------------------------------- */
 /* ---------- navegação ---------- */
 function trocarAba(t){
   aba=t;
